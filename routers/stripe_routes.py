@@ -6,7 +6,7 @@ import models
 import stripe
 import os
 
-stripe.api_key = "sk_test_51TeQXqAzzEsthod42fh8tirNHHO1Kb0rMiwBT4bM7QrJWFR8V8eZ3UhMtBpmBNKclIfEWlPZfxhppltIm6ufNUFp00uS2oqCWJ"
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 PRICES = {
     "pro": "price_pro_monthly",
