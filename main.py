@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine
 import models
-from routers import users, shifts, events, production, history
+from routers import users, shifts, events, production, history, stripe_routes
 
 # Create all database tables
 models.Base.metadata.create_all(bind=engine)
@@ -28,6 +28,7 @@ app.include_router(shifts.router)
 app.include_router(events.router)
 app.include_router(production.router)
 app.include_router(history.router)
+app.include_router(stripe_routes.router)
 
 @app.get("/")
 def root():
