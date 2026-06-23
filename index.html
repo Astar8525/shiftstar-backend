@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ShiftStar — Built for the floor. Understood in the boardroom.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --brand:#534AB7;--brand-dark:#3C3489;--brand-light:#EEEDFE;--brand-mid:#AFA9EC;
+  --teal:#1D9E75;--coral:#D85A30;--amber:#BA7517;
+  --bg:#F8F7FF;--bg2:#FFFFFF;--surface:#EEEDFE;
+  --text:#1A1825;--text2:#4B4768;--text3:#8B88A8;
+  --border:#DDD9F5;
+  --radius:12px;--radius-lg:20px;
+  font-size:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+/* ZOOM CONTROL */
+#zoom-bar{position:fixed;bottom:24px;right:24px;z-index:1000;display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:40px;padding:6px 12px;box-shadow:0 4px 24px rgba(83,74,183,.12)}
+#zoom-bar button{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:16px;font-weight:500;color:var(--brand);display:flex;align-items:center;justify-content:center;transition:background .15s}
+#zoom-bar button:hover{background:var(--brand-light)}
+#zoom-level{font-size:12px;font-weight:500;color:var(--text2);min-width:36px;text-align:center}
+
+/* LANG SELECTOR */
+#lang-bar{position:fixed;bottom:24px;left:24px;z-index:1000;display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:40px;padding:6px 10px;box-shadow:0 4px 24px rgba(83,74,183,.12)}
+#lang-bar select{font-size:12px;font-family:'Inter',sans-serif;border:none;background:transparent;color:var(--brand);font-weight:500;cursor:pointer;outline:none}
+#lang-bar label{font-size:11px;color:var(--text3)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(248,247,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-logo{width:36px;height:36px;background:var(--brand);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.nav-logo svg{width:20px;height:20px;fill:none;stroke:#EEEDFE;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav-name{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:14px;color:var(--text2);text-decoration:none;font-weight:400;transition:color .15s}
+.nav-links a:hover{color:var(--brand)}
+.nav-cta{background:var(--brand);color:#fff;padding:10px 22px;border-radius:40px;font-size:14px;font-weight:500;text-decoration:none;transition:background .15s;border:none;cursor:pointer}
+.nav-cta:hover{background:var(--brand-dark)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(83,74,183,.08) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--brand-light);color:var(--brand);font-size:13px;font-weight:500;padding:6px 14px;border-radius:40px;margin-bottom:28px;border:1px solid var(--brand-mid)}
+.hero-eyebrow span{width:6px;height:6px;border-radius:50%;background:var(--brand);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(40px,6vw,76px);font-weight:800;line-height:1.08;color:var(--text);max-width:900px;margin-bottom:24px;letter-spacing:-1.5px}
+.hero h1 em{font-style:normal;color:var(--brand)}
+.hero-sub{font-size:clamp(16px,2vw,20px);color:var(--text2);max-width:580px;margin:0 auto 40px;font-weight:300;line-height:1.7}
+.hero-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:72px}
+.btn-hero{background:var(--brand);color:#fff;padding:16px 36px;border-radius:40px;font-size:16px;font-weight:500;text-decoration:none;transition:all .2s;box-shadow:0 8px 32px rgba(83,74,183,.3)}
+.btn-hero:hover{background:var(--brand-dark);transform:translateY(-2px);box-shadow:0 12px 40px rgba(83,74,183,.4)}
+.btn-ghost{color:var(--brand);padding:16px 28px;border-radius:40px;font-size:16px;font-weight:500;text-decoration:none;border:1.5px solid var(--brand-mid);transition:all .2s}
+.btn-ghost:hover{background:var(--brand-light)}
+.hero-dash{width:100%;max-width:960px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 24px 80px rgba(83,74,183,.15)}
+.dash-header{background:var(--brand);padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.dash-brand{display:flex;align-items:center;gap:10px}
+.dash-brand-logo{width:28px;height:28px;background:rgba(255,255,255,.2);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.dash-brand-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff}
+.dash-brand-tag{font-size:10px;color:rgba(255,255,255,.7)}
+.dash-pill{background:rgba(255,255,255,.2);color:#fff;font-size:12px;padding:4px 12px;border-radius:20px;font-weight:500}
+.dash-body{padding:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.dash-metric{background:var(--bg);border-radius:10px;padding:14px}
+.dash-metric-label{font-size:11px;color:var(--text3);margin-bottom:4px}
+.dash-metric-val{font-size:22px;font-weight:600;color:var(--text)}
+.dash-metric-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.dash-bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px 20px}
+.dash-panel{background:var(--bg);border-radius:10px;padding:14px}
+.dash-panel-title{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:10px}
+.dash-bar{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.dash-bar-label{font-size:11px;color:var(--text3);width:80px;text-align:right;flex-shrink:0}
+.dash-bar-track{flex:1;background:#E8E6F5;border-radius:3px;height:7px;overflow:hidden}
+.dash-bar-fill{height:100%;border-radius:3px}
+.dash-bar-val{font-size:11px;color:var(--text);font-weight:500;width:30px}
+.dash-ai{background:linear-gradient(135deg,var(--brand-light),#F0EFFE);border:1px solid var(--brand-mid);border-radius:10px;padding:14px}
+.dash-ai-badge{font-size:10px;background:var(--brand);color:#fff;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:8px;font-weight:500}
+.dash-ai-line{font-size:11px;color:var(--text2);margin-bottom:4px;padding-left:10px;border-left:2px solid var(--brand-mid)}
+
+/* SECTIONS */
+section{padding:100px 24px}
+.container{max-width:1100px;margin:0 auto}
+.section-eye{font-size:12px;font-weight:500;color:var(--brand);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,46px);font-weight:800;color:var(--text);margin-bottom:16px;letter-spacing:-1px;line-height:1.1}
+.section-sub{font-size:18px;color:var(--text2);max-width:560px;font-weight:300;line-height:1.7}
+
+/* PROBLEM */
+.problem{background:var(--text)}
+.problem .section-eye{color:var(--brand-mid)}
+.problem .section-title{color:#fff}
+.problem .section-sub{color:rgba(255,255,255,.6)}
+.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+.problem-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:28px;transition:border-color .2s}
+.problem-card:hover{border-color:rgba(83,74,183,.5)}
+.problem-icon{width:44px;height:44px;background:rgba(83,74,183,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.problem-icon svg{width:22px;height:22px;stroke:#AFA9EC;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.problem-card h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:8px}
+.problem-card p{font-size:14px;color:rgba(255,255,255,.5);line-height:1.7}
+
+/* HOW IT WORKS */
+.how{background:var(--bg2)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:56px;position:relative}
+.steps::before{content:'';position:absolute;top:36px;left:15%;right:15%;height:1px;background:var(--border);z-index:0}
+.step{position:relative;z-index:1;text-align:center}
+.step-num{width:72px;height:72px;border-radius:50%;background:var(--brand-light);border:2px solid var(--brand-mid);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--brand)}
+.step h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px}
+.step p{font-size:14px;color:var(--text2);line-height:1.7}
+
+/* FEATURES */
+.features{background:var(--bg)}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px}
+.feature-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all .2s}
+.feature-card:hover{border-color:var(--brand-mid);transform:translateY(-3px);box-shadow:0 12px 40px rgba(83,74,183,.08)}
+.feature-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:18px}
+.feature-card h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
+.feature-card p{font-size:14px;color:var(--text2);line-height:1.7}
+.fi-purple{background:var(--brand-light)}
+.fi-teal{background:#E1F5EE}
+.fi-coral{background:#FAECE7}
+.fi-amber{background:#FAEEDA}
+.fi-blue{background:#E6F1FB}
+.fi-pink{background:#FBEAF0}
+
+/* AI SECTION */
+.ai-section{background:var(--brand);position:relative;overflow:hidden}
+.ai-section::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:rgba(255,255,255,.04);border-radius:50%}
+.ai-section .section-eye{color:var(--brand-mid)}
+.ai-section .section-title{color:#fff}
+.ai-section .section-sub{color:rgba(255,255,255,.7)}
+.ai-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px;max-width:680px}
+.ai-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:22px;transition:background .2s}
+.ai-card:hover{background:rgba(255,255,255,.12)}
+.ai-card h4{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:6px}
+.ai-card p{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6}
+
+/* PROOF */
+.proof{background:var(--bg2)}
+.proof-inner{background:var(--brand-light);border:1px solid var(--brand-mid);border-radius:var(--radius-lg);padding:56px;text-align:center;max-width:760px;margin:0 auto}
+.proof-quote{font-family:'Syne',sans-serif;font-size:clamp(20px,3vw,28px);font-weight:700;color:var(--text);line-height:1.4;margin-bottom:24px}
+.proof-attr{font-size:14px;color:var(--text2)}
+.proof-attr strong{color:var(--brand);font-weight:500}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:64px;text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:var(--brand);line-height:1}
+.stat-label{font-size:14px;color:var(--text2);margin-top:6px}
+
+/* PRICING */
+.pricing{background:var(--bg)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px;align-items:start}
+.price-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;transition:all .2s}
+.price-card:hover{box-shadow:0 12px 40px rgba(83,74,183,.08)}
+.price-card.featured{border:2px solid var(--brand);background:var(--brand-light)}
+.price-badge{font-size:11px;background:var(--brand);color:#fff;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:16px;font-weight:500}
+.price-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px}
+.price-amount{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:var(--text);margin:16px 0 4px}
+.price-amount span{font-size:16px;font-weight:400;color:var(--text2)}
+.price-desc{font-size:13px;color:var(--text2);margin-bottom:24px}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.price-features li{font-size:14px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.price-features li::before{content:'✓';color:var(--teal);font-weight:600;flex-shrink:0}
+.price-btn{display:block;text-align:center;padding:12px;border-radius:40px;font-size:14px;font-weight:500;text-decoration:none;transition:all .2s;cursor:pointer}
+.price-btn-solid{background:var(--brand);color:#fff;border:none}
+.price-btn-solid:hover{background:var(--brand-dark)}
+.price-btn-outline{background:transparent;color:var(--brand);border:1.5px solid var(--brand-mid)}
+.price-btn-outline:hover{background:var(--brand-light)}
+
+/* CTA */
+.cta-section{background:var(--text);text-align:center;padding:100px 24px}
+.cta-section .section-title{color:#fff;margin-bottom:16px}
+.cta-section .section-sub{color:rgba(255,255,255,.6);margin:0 auto 40px}
+.cta-section .btn-hero{box-shadow:0 8px 32px rgba(83,74,183,.4)}
+
+/* FOOTER */
+footer{background:var(--text);border-top:1px solid rgba(255,255,255,.06);padding:40px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-brand{display:flex;align-items:center;gap:10px}
+.footer-brand-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff}
+.footer-tag{font-size:12px;color:rgba(255,255,255,.4)}
+.footer-links{display:flex;gap:24px}
+.footer-links a{font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;transition:color .15s}
+.footer-links a:hover{color:rgba(255,255,255,.8)}
+
+/* ANIMATIONS */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  nav{padding:14px 20px}
+  .nav-links{display:none}
+  .problem-grid,.steps,.feature-grid,.pricing-grid{grid-template-columns:1fr}
+  .steps::before{display:none}
+  .ai-cards{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,1fr);gap:16px}
+  .dash-body{grid-template-columns:1fr 1fr}
+  .dash-bottom{grid-template-columns:1fr}
+  footer{flex-direction:column;align-items:flex-start}
+  #zoom-bar{bottom:72px}
+}
+</style>
+</head>
+<body>
+
+<!-- ZOOM BAR -->
+<div id="zoom-bar" role="toolbar" aria-label="Zoom controls">
+  <button onclick="adjustZoom(-10)" aria-label="Zoom out">−</button>
+  <span id="zoom-level">100%</span>
+  <button onclick="adjustZoom(10)" aria-label="Zoom in">+</button>
+  <button onclick="resetZoom()" aria-label="Reset zoom" style="font-size:11px;width:auto;padding:0 8px;border-radius:20px">Reset</button>
+</div>
+
+<!-- LANG BAR -->
+<div id="lang-bar" role="complementary" aria-label="Language selector">
+  <label for="lang-select">🌐</label>
+  <select id="lang-select" onchange="setLang(this.value)" aria-label="Select language">
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+    <option value="pt">Português</option>
+    <option value="zh">中文</option>
+    <option value="ja">日本語</option>
+  </select>
+</div>
+
+<!-- NAV -->
+<nav role="navigation" aria-label="Main navigation">
+  <div class="nav-brand">
+    <div class="nav-logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <span class="nav-name">ShiftStar</span>
+  </div>
+  <div class="nav-links">
+    <a href="#problem" data-i18n="nav.problem">The Problem</a>
+    <a href="#features" data-i18n="nav.features">Features</a>
+    <a href="#ai" data-i18n="nav.ai">AI Helper</a>
+    <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+  </div>
+  <a href="#pricing" class="nav-cta" data-i18n="nav.cta">Get ShiftStar</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="hero-heading">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-eyebrow" aria-label="Status indicator">
+    <span aria-hidden="true"></span>
+    <span data-i18n="hero.eyebrow">Manufacturing shift intelligence — now live</span>
+  </div>
+  <h1 id="hero-heading" data-i18n="hero.h1">Built for the <em>floor.</em><br/>Understood in the <em>boardroom.</em></h1>
+  <p class="hero-sub" data-i18n="hero.sub">ShiftStar tracks every shift in real time — OEE, downtime, events, and trends — then generates the reports your plant manager actually needs.</p>
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-hero" data-i18n="hero.cta1">Get ShiftStar free</a>
+    <a href="#features" class="btn-ghost" data-i18n="hero.cta2">See how it works</a>
+  </div>
+
+  <!-- DASHBOARD PREVIEW -->
+  <div class="hero-dash" role="img" aria-label="ShiftStar dashboard preview">
+    <div class="dash-header">
+      <div class="dash-brand">
+        <div class="dash-brand-logo" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EEEDFE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="dash-brand-name">ShiftStar</div>
+          <div class="dash-brand-tag" data-i18n="dash.tagline">Built for the floor. Understood in the boardroom.</div>
+        </div>
+      </div>
+      <div class="dash-pill" data-i18n="dash.shift">Shift A — 68% complete</div>
+    </div>
+    <div class="dash-body">
+      <div class="dash-metric"><div class="dash-metric-label" data-i18n="dash.oee">OEE</div><div class="dash-metric-val" style="color:#1D9E75">87.2%</div><div class="dash-metric-sub" data-i18n="dash.ontarget">✓ On target</div></div>
+      <div class="dash-metric"><div class="dash-metric-label" data-i18n="dash.throughput">Throughput</div><div class="dash-metric-val">1,340</div><div class="dash-metric-sub" data-i18n="dash.units">good units</div></div>
+      <div class="dash-metric"><div class="dash-metric-label" data-i18n="dash.defect">Defect rate</div><div class="dash-metric-val" style="color:#1D9E75">1.8%</div><div class="dash-metric-sub" data-i18n="dash.spec">Spec ≤ 2.5%</div></div>
+      <div class="dash-metric"><div class="dash-metric-label" data-i18n="dash.downtime">Downtime</div><div class="dash-metric-val" style="color:#BA7517">22 min</div><div class="dash-metric-sub" data-i18n="dash.thisshift">this shift</div></div>
+    </div>
+    <div class="dash-bottom">
+      <div class="dash-panel">
+        <div class="dash-panel-title" data-i18n="dash.causes">Downtime by cause</div>
+        <div class="dash-bar"><span class="dash-bar-label" data-i18n="cause.mechanical">Mechanical</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:55%;background:#D85A30"></div></div><span class="dash-bar-val">12m</span></div>
+        <div class="dash-bar"><span class="dash-bar-label" data-i18n="cause.changeover">Changeover</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:45%;background:#1D9E75"></div></div><span class="dash-bar-val">10m</span></div>
+        <div class="dash-bar"><span class="dash-bar-label" data-i18n="cause.material">Material</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:20%;background:#BA7517"></div></div><span class="dash-bar-val">4m</span></div>
+      </div>
+      <div class="dash-ai">
+        <div class="dash-ai-badge">✦ ShiftStar AI</div>
+        <div class="dash-ai-line" data-i18n="ai.preview1">Line 3 mechanical fault — 3rd occurrence this week. Check PM schedule.</div>
+        <div class="dash-ai-line" style="margin-top:6px" data-i18n="ai.preview2">OEE trending up +4.2% vs last 7 shifts. Changeover reduction working.</div>
+        <div class="dash-ai-line" style="margin-top:6px" data-i18n="ai.preview3">Handoff note ready for incoming supervisor.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem" aria-labelledby="problem-heading">
+  <div class="container">
+    <p class="section-eye" data-i18n="problem.eye">The problem</p>
+    <h2 class="section-title" id="problem-heading" data-i18n="problem.title">Every shift, critical information disappears.</h2>
+    <p class="section-sub" data-i18n="problem.sub">The outgoing supervisor is tired. The handoff is two minutes. Half of what matters never gets said.</p>
+    <div class="problem-grid">
+      <div class="problem-card fade-up">
+        <div class="problem-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3 data-i18n="p1.title">Lost handoff information</h3>
+        <p data-i18n="p1.body">Machines running rough, quality holds, pending calls — forgotten before the incoming supervisor even reaches the floor.</p>
+      </div>
+      <div class="problem-card fade-up">
+        <div class="problem-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+        </div>
+        <h3 data-i18n="p2.title">OEE calculated too late</h3>
+        <p data-i18n="p2.body">Monday morning spreadsheets tell you what went wrong last week. ShiftStar tells you while you can still fix it.</p>
+      </div>
+      <div class="problem-card fade-up">
+        <div class="problem-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3 data-i18n="p3.title">No visibility into trends</h3>
+        <p data-i18n="p3.body">When the same machine faults three shifts in a row, someone should catch it before it becomes a full stoppage.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how" aria-labelledby="how-heading">
+  <div class="container" style="text-align:center">
+    <p class="section-eye" data-i18n="how.eye">How it works</p>
+    <h2 class="section-title" id="how-heading" data-i18n="how.title">Up and running in two minutes.</h2>
+    <p class="section-sub" style="margin:0 auto" data-i18n="how.sub">No IT department. No installation. No training week. Just open it and start tracking.</p>
+    <div class="steps">
+      <div class="step fade-up">
+        <div class="step-num" aria-hidden="true">1</div>
+        <h3 data-i18n="step1.title">Configure your shifts</h3>
+        <p data-i18n="step1.body">Set your shift names, start and end times. ShiftStar automatically detects which shift is active — including overnight shifts.</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num" aria-hidden="true">2</div>
+        <h3 data-i18n="step2.title">Log events as they happen</h3>
+        <p data-i18n="step2.body">Tap "+ Log event" when downtime hits. Machine, duration, cause, notes. Ten seconds to capture what would otherwise be lost.</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num" aria-hidden="true">3</div>
+        <h3 data-i18n="step3.title">Get your report and handoff</h3>
+        <p data-i18n="step3.body">At shift end, ShiftStar AI writes your summary, your handoff note, and your corrective actions. One tap. Done.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features" id="features" aria-labelledby="features-heading">
+  <div class="container">
+    <p class="section-eye" data-i18n="feat.eye">Features</p>
+    <h2 class="section-title" id="features-heading" data-i18n="feat.title">Everything a supervisor needs. Nothing they don't.</h2>
+    <div class="feature-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-purple" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#534AB7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h3 data-i18n="f1.title">Live shift detection</h3>
+        <p data-i18n="f1.body">Automatically knows which shift is active, tracks progress in real time, and handles overnight shift wraparound without setup.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-teal" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3 data-i18n="f2.title">Real OEE calculation</h3>
+        <p data-i18n="f2.body">Import your SAP or MRP export and get Availability × Performance × Quality calculated from your actual numbers, not estimates.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-coral" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D85A30" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <h3 data-i18n="f3.title">Downtime event logging</h3>
+        <p data-i18n="f3.body">Log any event in seconds — machine, cause category, duration, notes. Builds a real audit trail that survives shift change.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-amber" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#BA7517" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3 data-i18n="f4.title">Multi-shift trend analysis</h3>
+        <p data-i18n="f4.body">OEE trending across 7, 14, or 30 shifts. Downtime Pareto. Shift-over-shift comparison. See what's really costing you.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-blue" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#185FA5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h3 data-i18n="f5.title">AI-powered handoff notes</h3>
+        <p data-i18n="f5.body">ShiftStar AI writes the shift handoff automatically from your logged data. The incoming supervisor gets everything they need before they step on the floor.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon fi-pink" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#D4537E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3 data-i18n="f6.title">Built by a supervisor</h3>
+        <p data-i18n="f6.body">12 years of production floor experience went into every design decision. ShiftStar speaks your language because it was built by someone who lived the problem.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI SECTION -->
+<section class="ai-section" id="ai" aria-labelledby="ai-heading">
+  <div class="container">
+    <p class="section-eye" data-i18n="ai.eye">ShiftStar AI</p>
+    <h2 class="section-title" id="ai-heading" data-i18n="ai.title">The shift intelligence layer that changes everything.</h2>
+    <p class="section-sub" data-i18n="ai.sub">Not just data. Decisions. ShiftStar AI reads your actual shift data and tells you what it means and what to do about it.</p>
+    <div class="ai-cards">
+      <div class="ai-card fade-up">
+        <h4 data-i18n="aic1.title">End-of-shift digest</h4>
+        <p data-i18n="aic1.body">Plain-English summary of what happened, what it cost you, and the one number your plant manager will ask about.</p>
+      </div>
+      <div class="ai-card fade-up">
+        <h4 data-i18n="aic2.title">Automatic handoff note</h4>
+        <p data-i18n="aic2.body">Everything the incoming supervisor needs — open issues, machines to watch, quality holds — written automatically from your event log.</p>
+      </div>
+      <div class="ai-card fade-up">
+        <h4 data-i18n="aic3.title">Root cause flags</h4>
+        <p data-i18n="aic3.body">When mechanical faults spike three shifts in a row, ShiftStar calls it out before it becomes a full stoppage.</p>
+      </div>
+      <div class="ai-card fade-up">
+        <h4 data-i18n="aic4.title">Corrective action priorities</h4>
+        <p data-i18n="aic4.body">Not "improve maintenance." Specific: "Schedule PM on Line 3 conveyor drive before next shift." Actionable, ordered by impact.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="proof" id="proof" aria-labelledby="proof-heading">
+  <div class="container">
+    <p class="section-eye" style="text-align:center" data-i18n="proof.eye">Built from experience</p>
+    <h2 class="section-title" id="proof-heading" style="text-align:center;margin:0 auto 48px" data-i18n="proof.title">From someone who stood where you stand.</h2>
+    <div class="proof-inner">
+      <p class="proof-quote" data-i18n="proof.quote">"The biggest problem wasn't the downtime. It was that nobody knew about it until it was too late to do anything. ShiftStar is the tool I wished I had on every shift."</p>
+      <p class="proof-attr"><strong data-i18n="proof.name">Anthony</strong> <span data-i18n="proof.role">— Production Supervisor, 12 years on the floor. Creator of ShiftStar.</span></p>
+    </div>
+    <div class="stats">
+      <div class="fade-up"><div class="stat-num">85%</div><div class="stat-label" data-i18n="stat1">OEE target ShiftStar helps you hit</div></div>
+      <div class="fade-up"><div class="stat-num">&lt;2min</div><div class="stat-label" data-i18n="stat2">To generate a full shift summary report</div></div>
+      <div class="fade-up"><div class="stat-num">0</div><div class="stat-label" data-i18n="stat3">Installation required. Open a browser and go.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing" aria-labelledby="pricing-heading">
+  <div class="container">
+    <p class="section-eye" style="text-align:center" data-i18n="price.eye">Pricing</p>
+    <h2 class="section-title" id="pricing-heading" style="text-align:center;margin:0 auto 12px" data-i18n="price.title">Start free. Scale when you're ready.</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto" data-i18n="price.sub">No credit card required to get started.</p>
+    <div class="pricing-grid">
+      <div class="price-card fade-up">
+        <div class="price-name" data-i18n="tier1.name">Starter</div>
+        <div class="price-amount">$0<span data-i18n="price.mo">/mo</span></div>
+        <p class="price-desc" data-i18n="tier1.desc">For supervisors who want to try ShiftStar on their floor today.</p>
+        <ul class="price-features">
+          <li data-i18n="tier1.f1">Live shift detection</li>
+          <li data-i18n="tier1.f2">Downtime event logging</li>
+          <li data-i18n="tier1.f3">OEE calculation</li>
+          <li data-i18n="tier1.f4">Shift summary reports</li>
+          <li data-i18n="tier1.f5">7-shift trend history</li>
+        </ul>
+        <a href="#" class="price-btn price-btn-outline" data-i18n="tier1.cta">Get started free</a>
+      </div>
+      <div class="price-card featured fade-up">
+        <span class="price-badge" data-i18n="tier2.badge">Most popular</span>
+        <div class="price-name" data-i18n="tier2.name">Pro</div>
+        <div class="price-amount">$49<span data-i18n="price.mo">/mo</span></div>
+        <p class="price-desc" data-i18n="tier2.desc">For supervisors and plant managers who need the full picture.</p>
+        <ul class="price-features">
+          <li data-i18n="tier2.f1">Everything in Starter</li>
+          <li data-i18n="tier2.f2">ShiftStar AI — all features</li>
+          <li data-i18n="tier2.f3">Unlimited shift history</li>
+          <li data-i18n="tier2.f4">CSV import from SAP / MRP</li>
+          <li data-i18n="tier2.f5">Downtime Pareto analysis</li>
+          <li data-i18n="tier2.f6">AI handoff notes</li>
+        </ul>
+        <a href="#" class="price-btn price-btn-solid" data-i18n="tier2.cta">Start Pro free for 14 days</a>
+      </div>
+      <div class="price-card fade-up">
+        <div class="price-name" data-i18n="tier3.name">Plant</div>
+        <div class="price-amount" style="font-size:28px;margin:16px 0 4px" data-i18n="tier3.amount">Contact us</div>
+        <p class="price-desc" data-i18n="tier3.desc">For multi-line facilities, shared dashboards, and ERP integrations.</p>
+        <ul class="price-features">
+          <li data-i18n="tier3.f1">Everything in Pro</li>
+          <li data-i18n="tier3.f2">Multi-supervisor access</li>
+          <li data-i18n="tier3.f3">Shared shift data</li>
+          <li data-i18n="tier3.f4">ERP / SAP live integration</li>
+          <li data-i18n="tier3.f5">Custom onboarding</li>
+          <li data-i18n="tier3.f6">Priority support</li>
+        </ul>
+        <a href="mailto:hello@shiftstar.io" class="price-btn price-btn-outline" data-i18n="tier3.cta">Talk to us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" aria-labelledby="cta-heading">
+  <div class="container">
+    <h2 class="section-title" id="cta-heading" data-i18n="cta.title">Your next shift starts with ShiftStar.</h2>
+    <p class="section-sub" data-i18n="cta.sub">No installation. No IT ticket. Open a browser and start tracking in two minutes.</p>
+    <a href="#pricing" class="btn-hero" data-i18n="cta.btn">Get ShiftStar free</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer role="contentinfo">
+  <div class="footer-brand">
+    <div class="nav-logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#EEEDFE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <div>
+      <div class="footer-brand-name">ShiftStar</div>
+      <div class="footer-tag" data-i18n="hero.h1-short">Built for the floor. Understood in the boardroom.</div>
+    </div>
+  </div>
+  <div class="footer-links">
+    <a href="#features" data-i18n="nav.features">Features</a>
+    <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+    <a href="mailto:hello@shiftstar.io" data-i18n="footer.contact">Contact</a>
+    <a href="https://github.com/Astar8525" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <div class="footer-tag" data-i18n="footer.copy">© 2026 ShiftStar. All rights reserved.</div>
+</footer>
+
+<script>
+// === ZOOM ===
+let zoomLevel = 100;
+function adjustZoom(delta) {
+  zoomLevel = Math.min(150, Math.max(70, zoomLevel + delta));
+  document.documentElement.style.fontSize = (zoomLevel / 100) * 16 + 'px';
+  document.getElementById('zoom-level').textContent = zoomLevel + '%';
+  localStorage.setItem('ss_zoom', zoomLevel);
+}
+function resetZoom() {
+  zoomLevel = 100;
+  document.documentElement.style.fontSize = '16px';
+  document.getElementById('zoom-level').textContent = '100%';
+  localStorage.removeItem('ss_zoom');
+}
+const savedZoom = localStorage.getItem('ss_zoom');
+if (savedZoom) {
+  zoomLevel = parseInt(savedZoom);
+  document.documentElement.style.fontSize = (zoomLevel / 100) * 16 + 'px';
+  document.getElementById('zoom-level').textContent = zoomLevel + '%';
+}
+
+// === LANGUAGE ===
+const STRINGS = {
+  en: {
+    'nav.problem': 'The Problem', 'nav.features': 'Features', 'nav.ai': 'AI Helper', 'nav.pricing': 'Pricing', 'nav.cta': 'Get ShiftStar',
+    'hero.eyebrow': 'Manufacturing shift intelligence — now live',
+    'hero.h1': 'Built for the <em>floor.</em><br/>Understood in the <em>boardroom.</em>',
+    'hero.h1-short': 'Built for the floor. Understood in the boardroom.',
+    'hero.sub': 'ShiftStar tracks every shift in real time — OEE, downtime, events, and trends — then generates the reports your plant manager actually needs.',
+    'hero.cta1': 'Get ShiftStar free', 'hero.cta2': 'See how it works',
+    'dash.tagline': 'Built for the floor. Understood in the boardroom.', 'dash.shift': 'Shift A — 68% complete',
+    'dash.oee': 'OEE', 'dash.ontarget': '✓ On target', 'dash.throughput': 'Throughput', 'dash.units': 'good units',
+    'dash.defect': 'Defect rate', 'dash.spec': 'Spec ≤ 2.5%', 'dash.downtime': 'Downtime', 'dash.thisshift': 'this shift',
+    'dash.causes': 'Downtime by cause', 'cause.mechanical': 'Mechanical', 'cause.changeover': 'Changeover', 'cause.material': 'Material',
+    'ai.preview1': 'Line 3 mechanical fault — 3rd occurrence this week. Check PM schedule.',
+    'ai.preview2': 'OEE trending up +4.2% vs last 7 shifts. Changeover reduction working.',
+    'ai.preview3': 'Handoff note ready for incoming supervisor.',
+    'problem.eye': 'The problem', 'problem.title': 'Every shift, critical information disappears.',
+    'problem.sub': 'The outgoing supervisor is tired. The handoff is two minutes. Half of what matters never gets said.',
+    'p1.title': 'Lost handoff information', 'p1.body': 'Machines running rough, quality holds, pending calls — forgotten before the incoming supervisor even reaches the floor.',
+    'p2.title': 'OEE calculated too late', 'p2.body': 'Monday morning spreadsheets tell you what went wrong last week. ShiftStar tells you while you can still fix it.',
+    'p3.title': 'No visibility into trends', 'p3.body': 'When the same machine faults three shifts in a row, someone should catch it before it becomes a full stoppage.',
+    'how.eye': 'How it works', 'how.title': 'Up and running in two minutes.', 'how.sub': 'No IT department. No installation. No training week. Just open it and start tracking.',
+    'step1.title': 'Configure your shifts', 'step1.body': 'Set your shift names, start and end times. ShiftStar automatically detects which shift is active.',
+    'step2.title': 'Log events as they happen', 'step2.body': 'Tap "+ Log event" when downtime hits. Machine, duration, cause, notes. Ten seconds to capture what would otherwise be lost.',
+    'step3.title': 'Get your report and handoff', 'step3.body': 'At shift end, ShiftStar AI writes your summary, your handoff note, and corrective actions. One tap. Done.',
+    'feat.eye': 'Features', 'feat.title': 'Everything a supervisor needs. Nothing they don\'t.',
+    'f1.title': 'Live shift detection', 'f1.body': 'Automatically knows which shift is active, tracks progress in real time, and handles overnight shift wraparound.',
+    'f2.title': 'Real OEE calculation', 'f2.body': 'Import your SAP or MRP export and get Availability × Performance × Quality from your actual numbers.',
+    'f3.title': 'Downtime event logging', 'f3.body': 'Log any event in seconds — machine, cause, duration, notes. Builds a real audit trail that survives shift change.',
+    'f4.title': 'Multi-shift trend analysis', 'f4.body': 'OEE trending across 7, 14, or 30 shifts. Downtime Pareto. Shift-over-shift comparison.',
+    'f5.title': 'AI-powered handoff notes', 'f5.body': 'ShiftStar AI writes the shift handoff automatically. The incoming supervisor gets everything before they step on the floor.',
+    'f6.title': 'Built by a supervisor', 'f6.body': '12 years of production floor experience went into every design decision. ShiftStar speaks your language.',
+    'ai.eye': 'ShiftStar AI', 'ai.title': 'The shift intelligence layer that changes everything.',
+    'ai.sub': 'Not just data. Decisions. ShiftStar AI reads your actual shift data and tells you what it means.',
+    'aic1.title': 'End-of-shift digest', 'aic1.body': 'Plain-English summary of what happened, what it cost you, and the one number your plant manager will ask about.',
+    'aic2.title': 'Automatic handoff note', 'aic2.body': 'Everything the incoming supervisor needs — open issues, machines to watch, quality holds — written automatically.',
+    'aic3.title': 'Root cause flags', 'aic3.body': 'When mechanical faults spike three shifts in a row, ShiftStar calls it out before it becomes a full stoppage.',
+    'aic4.title': 'Corrective action priorities', 'aic4.body': 'Specific and actionable. "Schedule PM on Line 3 conveyor drive before next shift." Ordered by impact.',
+    'proof.eye': 'Built from experience', 'proof.title': 'From someone who stood where you stand.',
+    'proof.quote': '"The biggest problem wasn\'t the downtime. It was that nobody knew about it until it was too late to do anything. ShiftStar is the tool I wished I had on every shift."',
+    'proof.name': 'Anthony', 'proof.role': '— Production Supervisor, 12 years on the floor. Creator of ShiftStar.',
+    'stat1': 'OEE target ShiftStar helps you hit', 'stat2': 'To generate a full shift summary report', 'stat3': 'Installation required. Open a browser and go.',
+    'price.eye': 'Pricing', 'price.title': 'Start free. Scale when you\'re ready.', 'price.sub': 'No credit card required to get started.', 'price.mo': '/mo',
+    'tier1.name': 'Starter', 'tier1.desc': 'For supervisors who want to try ShiftStar on their floor today.',
+    'tier1.f1': 'Live shift detection', 'tier1.f2': 'Downtime event logging', 'tier1.f3': 'OEE calculation', 'tier1.f4': 'Shift summary reports', 'tier1.f5': '7-shift trend history', 'tier1.cta': 'Get started free',
+    'tier2.badge': 'Most popular', 'tier2.name': 'Pro', 'tier2.desc': 'For supervisors and plant managers who need the full picture.',
+    'tier2.f1': 'Everything in Starter', 'tier2.f2': 'ShiftStar AI — all features', 'tier2.f3': 'Unlimited shift history', 'tier2.f4': 'CSV import from SAP / MRP', 'tier2.f5': 'Downtime Pareto analysis', 'tier2.f6': 'AI handoff notes', 'tier2.cta': 'Start Pro free for 14 days',
+    'tier3.name': 'Plant', 'tier3.amount': 'Contact us', 'tier3.desc': 'For multi-line facilities, shared dashboards, and ERP integrations.',
+    'tier3.f1': 'Everything in Pro', 'tier3.f2': 'Multi-supervisor access', 'tier3.f3': 'Shared shift data', 'tier3.f4': 'ERP / SAP live integration', 'tier3.f5': 'Custom onboarding', 'tier3.f6': 'Priority support', 'tier3.cta': 'Talk to us',
+    'cta.title': 'Your next shift starts with ShiftStar.', 'cta.sub': 'No installation. No IT ticket. Open a browser and start tracking in two minutes.', 'cta.btn': 'Get ShiftStar free',
+    'footer.contact': 'Contact', 'footer.copy': '© 2026 ShiftStar. All rights reserved.'
+  },
+  es: {
+    'nav.problem': 'El Problema', 'nav.features': 'Funciones', 'nav.ai': 'Asistente IA', 'nav.pricing': 'Precios', 'nav.cta': 'Obtener ShiftStar',
+    'hero.eyebrow': 'Inteligencia de turno para manufactura — en vivo',
+    'hero.h1': 'Diseñado para el <em>piso.</em><br/>Entendido en la <em>sala de juntas.</em>',
+    'hero.h1-short': 'Diseñado para el piso. Entendido en la sala de juntas.',
+    'hero.sub': 'ShiftStar rastrea cada turno en tiempo real — OEE, tiempo de inactividad, eventos y tendencias — y genera los reportes que su gerente de planta realmente necesita.',
+    'hero.cta1': 'Obtener ShiftStar gratis', 'hero.cta2': 'Ver cómo funciona',
+    'dash.tagline': 'Diseñado para el piso. Entendido en la sala de juntas.', 'dash.shift': 'Turno A — 68% completado',
+    'dash.oee': 'OEE', 'dash.ontarget': '✓ En objetivo', 'dash.throughput': 'Producción', 'dash.units': 'unidades buenas',
+    'dash.defect': 'Tasa de defectos', 'dash.spec': 'Espec ≤ 2.5%', 'dash.downtime': 'Tiempo muerto', 'dash.thisshift': 'este turno',
+    'dash.causes': 'Tiempo muerto por causa', 'cause.mechanical': 'Mecánico', 'cause.changeover': 'Cambio', 'cause.material': 'Material',
+    'ai.preview1': 'Línea 3 falla mecánica — 3er ocurrencia esta semana. Revisar PM.',
+    'ai.preview2': 'OEE subiendo +4.2% vs últimos 7 turnos. Reducción de cambios funcionando.',
+    'ai.preview3': 'Nota de entrega lista para el supervisor entrante.',
+    'problem.eye': 'El problema', 'problem.title': 'Cada turno, información crítica desaparece.',
+    'problem.sub': 'El supervisor saliente está cansado. La entrega dura dos minutos. La mitad de lo importante nunca se dice.',
+    'p1.title': 'Información de entrega perdida', 'p1.body': 'Máquinas con problemas, retenciones de calidad, llamadas pendientes — olvidadas antes de que el supervisor llegue al piso.',
+    'p2.title': 'OEE calculado demasiado tarde', 'p2.body': 'Las hojas de cálculo del lunes te dicen lo que salió mal la semana pasada. ShiftStar te lo dice mientras puedes arreglarlo.',
+    'p3.title': 'Sin visibilidad de tendencias', 'p3.body': 'Cuando la misma máquina falla tres turnos seguidos, alguien debería detectarlo antes de que se convierta en una parada total.',
+    'how.eye': 'Cómo funciona', 'how.title': 'Funcionando en dos minutos.', 'how.sub': 'Sin departamento de TI. Sin instalación. Sin semana de capacitación.',
+    'step1.title': 'Configura tus turnos', 'step1.body': 'Establece nombres, horas de inicio y fin. ShiftStar detecta automáticamente qué turno está activo.',
+    'step2.title': 'Registra eventos al momento', 'step2.body': 'Toca "+ Registrar evento" cuando ocurra tiempo muerto. Máquina, duración, causa, notas. Diez segundos.',
+    'step3.title': 'Obtén tu reporte y entrega', 'step3.body': 'Al final del turno, ShiftStar IA escribe tu resumen, nota de entrega y acciones correctivas. Un toque. Listo.',
+    'feat.eye': 'Funciones', 'feat.title': 'Todo lo que un supervisor necesita. Nada más.',
+    'f1.title': 'Detección de turno en vivo', 'f1.body': 'Sabe automáticamente qué turno está activo y maneja turnos nocturnos sin configuración.',
+    'f2.title': 'Cálculo real de OEE', 'f2.body': 'Importa tu exportación de SAP o MRP y obtén Disponibilidad × Rendimiento × Calidad de tus números reales.',
+    'f3.title': 'Registro de eventos de tiempo muerto', 'f3.body': 'Registra cualquier evento en segundos. Construye un registro de auditoría real que sobrevive al cambio de turno.',
+    'f4.title': 'Análisis de tendencias multi-turno', 'f4.body': 'Tendencia de OEE en 7, 14 o 30 turnos. Pareto de tiempo muerto. Comparación turno a turno.',
+    'f5.title': 'Notas de entrega con IA', 'f5.body': 'ShiftStar IA escribe la entrega de turno automáticamente. El supervisor entrante recibe todo.',
+    'f6.title': 'Construido por un supervisor', 'f6.body': '12 años de experiencia en el piso de producción en cada decisión de diseño.',
+    'ai.eye': 'ShiftStar IA', 'ai.title': 'La capa de inteligencia de turno que cambia todo.',
+    'ai.sub': 'No solo datos. Decisiones. ShiftStar IA lee tus datos reales y te dice qué significan.',
+    'aic1.title': 'Resumen fin de turno', 'aic1.body': 'Resumen en lenguaje simple de lo que pasó, cuánto costó y el número que tu gerente preguntará.',
+    'aic2.title': 'Nota de entrega automática', 'aic2.body': 'Todo lo que el supervisor entrante necesita — escrito automáticamente de tu registro.',
+    'aic3.title': 'Alertas de causa raíz', 'aic3.body': 'Cuando las fallas mecánicas suben tres turnos seguidos, ShiftStar lo detecta antes de un paro total.',
+    'aic4.title': 'Prioridades de acción correctiva', 'aic4.body': 'Específico y accionable. Ordenado por impacto.',
+    'proof.eye': 'Construido desde la experiencia', 'proof.title': 'De alguien que estuvo donde tú estás.',
+    'proof.quote': '"El mayor problema no era el tiempo muerto. Era que nadie lo sabía hasta que era demasiado tarde. ShiftStar es la herramienta que deseé tener en cada turno."',
+    'proof.name': 'Anthony', 'proof.role': '— Supervisor de Producción, 12 años en el piso. Creador de ShiftStar.',
+    'stat1': 'Objetivo de OEE que ShiftStar te ayuda a alcanzar', 'stat2': 'Para generar un reporte completo de turno', 'stat3': 'Instalación requerida. Abre un navegador y empieza.',
+    'price.eye': 'Precios', 'price.title': 'Empieza gratis. Escala cuando estés listo.', 'price.sub': 'No se requiere tarjeta de crédito.', 'price.mo': '/mes',
+    'tier1.name': 'Básico', 'tier1.desc': 'Para supervisores que quieren probar ShiftStar hoy.',
+    'tier1.f1': 'Detección de turno en vivo', 'tier1.f2': 'Registro de tiempo muerto', 'tier1.f3': 'Cálculo de OEE', 'tier1.f4': 'Reportes de turno', 'tier1.f5': 'Historial de 7 turnos', 'tier1.cta': 'Empezar gratis',
+    'tier2.badge': 'Más popular', 'tier2.name': 'Pro', 'tier2.desc': 'Para supervisores y gerentes que necesitan el panorama completo.',
+    'tier2.f1': 'Todo en Básico', 'tier2.f2': 'ShiftStar IA — todas las funciones', 'tier2.f3': 'Historial ilimitado', 'tier2.f4': 'Importación CSV de SAP/MRP', 'tier2.f5': 'Análisis Pareto', 'tier2.f6': 'Notas de entrega con IA', 'tier2.cta': 'Probar Pro gratis 14 días',
+    'tier3.name': 'Planta', 'tier3.amount': 'Contáctanos', 'tier3.desc': 'Para instalaciones multi-línea e integraciones ERP.',
+    'tier3.f1': 'Todo en Pro', 'tier3.f2': 'Acceso multi-supervisor', 'tier3.f3': 'Datos de turno compartidos', 'tier3.f4': 'Integración ERP/SAP en vivo', 'tier3.f5': 'Incorporación personalizada', 'tier3.f6': 'Soporte prioritario', 'tier3.cta': 'Habla con nosotros',
+    'cta.title': 'Tu próximo turno empieza con ShiftStar.', 'cta.sub': 'Sin instalación. Sin ticket de TI. Abre un navegador y empieza en dos minutos.', 'cta.btn': 'Obtener ShiftStar gratis',
+    'footer.contact': 'Contacto', 'footer.copy': '© 2026 ShiftStar. Todos los derechos reservados.'
+  },
+  fr: {
+    'nav.problem': 'Le Problème', 'nav.features': 'Fonctions', 'nav.ai': 'Assistant IA', 'nav.pricing': 'Tarifs', 'nav.cta': 'Obtenir ShiftStar',
+    'hero.eyebrow': 'Intelligence de quart pour la fabrication — en direct',
+    'hero.h1': 'Conçu pour le <em>terrain.</em><br/>Compris en <em>salle de direction.</em>',
+    'hero.h1-short': 'Conçu pour le terrain. Compris en salle de direction.',
+    'hero.sub': 'ShiftStar suit chaque quart en temps réel — TRG, arrêts, événements et tendances — puis génère les rapports dont votre directeur d\'usine a vraiment besoin.',
+    'hero.cta1': 'Obtenir ShiftStar gratuitement', 'hero.cta2': 'Voir comment ça marche',
+    'dash.tagline': 'Conçu pour le terrain. Compris en salle de direction.', 'dash.shift': 'Quart A — 68% terminé',
+    'dash.oee': 'TRG', 'dash.ontarget': '✓ Dans l\'objectif', 'dash.throughput': 'Production', 'dash.units': 'bonnes unités',
+    'dash.defect': 'Taux de défauts', 'dash.spec': 'Spec ≤ 2.5%', 'dash.downtime': 'Arrêts', 'dash.thisshift': 'ce quart',
+    'dash.causes': 'Arrêts par cause', 'cause.mechanical': 'Mécanique', 'cause.changeover': 'Changement', 'cause.material': 'Matériau',
+    'ai.preview1': 'Ligne 3 panne mécanique — 3e occurrence cette semaine. Vérifier PM.',
+    'ai.preview2': 'TRG en hausse +4.2% vs 7 derniers quarts.',
+    'ai.preview3': 'Note de passation prête pour le superviseur entrant.',
+    'problem.eye': 'Le problème', 'problem.title': 'À chaque quart, des informations critiques disparaissent.',
+    'problem.sub': 'Le superviseur sortant est fatigué. La passation dure deux minutes. La moitié de ce qui compte n\'est jamais dit.',
+    'p1.title': 'Informations de passation perdues', 'p1.body': 'Machines en mauvais état, blocages qualité, appels en attente — oubliés avant que le superviseur entrant atteigne le terrain.',
+    'p2.title': 'TRG calculé trop tard', 'p2.body': 'Les feuilles de calcul du lundi vous disent ce qui s\'est mal passé la semaine dernière. ShiftStar vous le dit pendant que vous pouvez encore agir.',
+    'p3.title': 'Aucune visibilité sur les tendances', 'p3.body': 'Quand la même machine tombe en panne trois quarts de suite, quelqu\'un devrait le détecter avant un arrêt complet.',
+    'how.eye': 'Comment ça marche', 'how.title': 'Opérationnel en deux minutes.', 'how.sub': 'Pas de service informatique. Pas d\'installation. Pas de semaine de formation.',
+    'step1.title': 'Configurez vos quarts', 'step1.body': 'Définissez les noms, heures de début et de fin. ShiftStar détecte automatiquement le quart actif.',
+    'step2.title': 'Enregistrez les événements', 'step2.body': 'Appuyez sur "+ Enregistrer événement" lors d\'un arrêt. Machine, durée, cause, notes. Dix secondes.',
+    'step3.title': 'Obtenez votre rapport', 'step3.body': 'En fin de quart, ShiftStar IA écrit votre résumé, note de passation et actions correctives. Un seul geste.',
+    'feat.eye': 'Fonctions', 'feat.title': 'Tout ce dont un superviseur a besoin. Rien de plus.',
+    'f1.title': 'Détection de quart en direct', 'f1.body': 'Sait automatiquement quel quart est actif et gère les quarts de nuit.',
+    'f2.title': 'Calcul réel du TRG', 'f2.body': 'Importez votre export SAP ou MRP et obtenez Disponibilité × Performance × Qualité de vos vrais chiffres.',
+    'f3.title': 'Journal des arrêts', 'f3.body': 'Enregistrez tout événement en secondes. Construit une piste d\'audit réelle.',
+    'f4.title': 'Analyse des tendances multi-quarts', 'f4.body': 'Tendance TRG sur 7, 14 ou 30 quarts. Pareto des arrêts. Comparaison quart à quart.',
+    'f5.title': 'Notes de passation IA', 'f5.body': 'ShiftStar IA rédige la passation automatiquement. Le superviseur entrant reçoit tout.',
+    'f6.title': 'Conçu par un superviseur', 'f6.body': '12 ans d\'expérience sur le terrain dans chaque décision de conception.',
+    'ai.eye': 'ShiftStar IA', 'ai.title': 'La couche d\'intelligence qui change tout.',
+    'ai.sub': 'Pas seulement des données. Des décisions. ShiftStar IA lit vos données réelles.',
+    'aic1.title': 'Bilan de fin de quart', 'aic1.body': 'Résumé en langage simple de ce qui s\'est passé, ce que ça a coûté.',
+    'aic2.title': 'Note de passation automatique', 'aic2.body': 'Tout ce que le superviseur entrant doit savoir — rédigé automatiquement.',
+    'aic3.title': 'Alertes causes profondes', 'aic3.body': 'Quand les pannes méchaniques augmentent trois quarts de suite, ShiftStar le signale.',
+    'aic4.title': 'Priorités d\'actions correctives', 'aic4.body': 'Spécifique et actionnable. Classé par impact.',
+    'proof.eye': 'Construit depuis l\'expérience', 'proof.title': 'Par quelqu\'un qui était à votre place.',
+    'proof.quote': '"Le plus grand problème n\'était pas les arrêts. C\'était que personne ne le savait avant qu\'il soit trop tard. ShiftStar est l\'outil que j\'aurais voulu avoir."',
+    'proof.name': 'Anthony', 'proof.role': '— Superviseur de Production, 12 ans sur le terrain. Créateur de ShiftStar.',
+    'stat1': 'Objectif TRG que ShiftStar vous aide à atteindre', 'stat2': 'Pour générer un rapport complet de quart', 'stat3': 'Installation requise. Ouvrez un navigateur et commencez.',
+    'price.eye': 'Tarifs', 'price.title': 'Commencez gratuitement. Évoluez quand vous êtes prêt.', 'price.sub': 'Aucune carte de crédit requise.', 'price.mo': '/mois',
+    'tier1.name': 'Débutant', 'tier1.desc': 'Pour les superviseurs qui veulent essayer ShiftStar aujourd\'hui.',
+    'tier1.f1': 'Détection de quart en direct', 'tier1.f2': 'Journal des arrêts', 'tier1.f3': 'Calcul TRG', 'tier1.f4': 'Rapports de quart', 'tier1.f5': 'Historique 7 quarts', 'tier1.cta': 'Commencer gratuitement',
+    'tier2.badge': 'Le plus populaire', 'tier2.name': 'Pro', 'tier2.desc': 'Pour les superviseurs et directeurs qui ont besoin de la vue complète.',
+    'tier2.f1': 'Tout en Débutant', 'tier2.f2': 'ShiftStar IA — toutes fonctions', 'tier2.f3': 'Historique illimité', 'tier2.f4': 'Import CSV SAP/MRP', 'tier2.f5': 'Analyse Pareto', 'tier2.f6': 'Notes de passation IA', 'tier2.cta': 'Essayer Pro 14 jours gratuitement',
+    'tier3.name': 'Usine', 'tier3.amount': 'Contactez-nous', 'tier3.desc': 'Pour les installations multi-lignes et intégrations ERP.',
+    'tier3.f1': 'Tout en Pro', 'tier3.f2': 'Accès multi-superviseur', 'tier3.f3': 'Données partagées', 'tier3.f4': 'Intégration ERP/SAP en direct', 'tier3.f5': 'Intégration personnalisée', 'tier3.f6': 'Support prioritaire', 'tier3.cta': 'Nous contacter',
+    'cta.title': 'Votre prochain quart commence avec ShiftStar.', 'cta.sub': 'Sans installation. Sans ticket informatique. Ouvrez un navigateur en deux minutes.', 'cta.btn': 'Obtenir ShiftStar gratuitement',
+    'footer.contact': 'Contact', 'footer.copy': '© 2026 ShiftStar. Tous droits réservés.'
+  },
+  de: {
+    'nav.problem': 'Das Problem', 'nav.features': 'Funktionen', 'nav.ai': 'KI-Helfer', 'nav.pricing': 'Preise', 'nav.cta': 'ShiftStar holen',
+    'hero.eyebrow': 'Schichtintelligenz für die Fertigung — jetzt live',
+    'hero.h1': 'Gebaut für die <em>Fertigung.</em><br/>Verstanden im <em>Vorstandszimmer.</em>',
+    'hero.h1-short': 'Gebaut für die Fertigung. Verstanden im Vorstandszimmer.',
+    'hero.sub': 'ShiftStar verfolgt jede Schicht in Echtzeit — OEE, Ausfallzeiten, Ereignisse und Trends — und erstellt die Berichte, die Ihr Werksleiter wirklich braucht.',
+    'hero.cta1': 'ShiftStar kostenlos holen', 'hero.cta2': 'Wie es funktioniert',
+    'dash.tagline': 'Gebaut für die Fertigung. Verstanden im Vorstandszimmer.', 'dash.shift': 'Schicht A — 68% abgeschlossen',
+    'dash.oee': 'OEE', 'dash.ontarget': '✓ Im Ziel', 'dash.throughput': 'Durchsatz', 'dash.units': 'Gutteile',
+    'dash.defect': 'Fehlerquote', 'dash.spec': 'Spec ≤ 2.5%', 'dash.downtime': 'Ausfallzeit', 'dash.thisshift': 'diese Schicht',
+    'dash.causes': 'Ausfallzeit nach Ursache', 'cause.mechanical': 'Mechanisch', 'cause.changeover': 'Rüsten', 'cause.material': 'Material',
+    'ai.preview1': 'Linie 3 mechanischer Fehler — 3. Vorkommnis diese Woche. PM prüfen.',
+    'ai.preview2': 'OEE steigt +4.2% vs letzte 7 Schichten.',
+    'ai.preview3': 'Übergabenotiz für eingehenden Supervisor bereit.',
+    'problem.eye': 'Das Problem', 'problem.title': 'Bei jeder Schicht verschwinden kritische Informationen.',
+    'problem.sub': 'Der abgehende Supervisor ist müde. Die Übergabe dauert zwei Minuten. Die Hälfte des Wichtigen wird nie gesagt.',
+    'p1.title': 'Verlorene Übergabeinformationen', 'p1.body': 'Maschinen mit Problemen, Qualitätssperren, ausstehende Anrufe — vergessen bevor der Supervisor die Halle erreicht.',
+    'p2.title': 'OEE zu spät berechnet', 'p2.body': 'Montag-Tabellen zeigen was letzte Woche falsch lief. ShiftStar sagt es Ihnen solange Sie noch handeln können.',
+    'p3.title': 'Keine Trendsichtbarkeit', 'p3.body': 'Wenn dieselbe Maschine drei Schichten hintereinander ausfällt, sollte jemand es bemerken bevor es zum Totalstillstand kommt.',
+    'how.eye': 'Wie es funktioniert', 'how.title': 'In zwei Minuten einsatzbereit.', 'how.sub': 'Keine IT-Abteilung. Keine Installation. Keine Schulungswoche.',
+    'step1.title': 'Schichten konfigurieren', 'step1.body': 'Namen, Start- und Endzeiten festlegen. ShiftStar erkennt automatisch welche Schicht aktiv ist.',
+    'step2.title': 'Ereignisse sofort erfassen', 'step2.body': 'Tippen Sie auf "+ Ereignis erfassen" bei Ausfall. Maschine, Dauer, Ursache, Notizen. Zehn Sekunden.',
+    'step3.title': 'Bericht und Übergabe erhalten', 'step3.body': 'Am Schichtende schreibt ShiftStar KI Ihre Zusammenfassung, Übergabenotiz und Korrekturmaßnahmen.',
+    'feat.eye': 'Funktionen', 'feat.title': 'Alles was ein Supervisor braucht. Nichts mehr.',
+    'f1.title': 'Live-Schichterkennung', 'f1.body': 'Weiß automatisch welche Schicht aktiv ist, einschließlich Nachtschichten.',
+    'f2.title': 'Echter OEE-Berechnung', 'f2.body': 'SAP- oder MRP-Export importieren und Verfügbarkeit × Leistung × Qualität aus echten Zahlen berechnen.',
+    'f3.title': 'Ausfallzeiten-Protokollierung', 'f3.body': 'Jedes Ereignis in Sekunden erfassen. Erstellt ein echtes Prüfprotokoll.',
+    'f4.title': 'Mehrschicht-Trendanalyse', 'f4.body': 'OEE-Trend über 7, 14 oder 30 Schichten. Ausfallzeit-Pareto. Schichtvergleich.',
+    'f5.title': 'KI-gestützte Übergabenotizen', 'f5.body': 'ShiftStar KI schreibt die Schichtübergabe automatisch.',
+    'f6.title': 'Von einem Supervisor gebaut', 'f6.body': '12 Jahre Produktionserfahrung in jeder Designentscheidung.',
+    'ai.eye': 'ShiftStar KI', 'ai.title': 'Die Schichtintelligenzschicht die alles verändert.',
+    'ai.sub': 'Nicht nur Daten. Entscheidungen. ShiftStar KI liest Ihre echten Schichtdaten.',
+    'aic1.title': 'Schichtabschluss-Digest', 'aic1.body': 'Klare Zusammenfassung was passiert ist und was es gekostet hat.',
+    'aic2.title': 'Automatische Übergabenotiz', 'aic2.body': 'Alles was der eingehende Supervisor wissen muss — automatisch geschrieben.',
+    'aic3.title': 'Ursachen-Flags', 'aic3.body': 'Wenn mechanische Fehler drei Schichten hintereinander steigen, meldet ShiftStar es.',
+    'aic4.title': 'Korrekturmaßnahmen-Prioritäten', 'aic4.body': 'Spezifisch und umsetzbar. Nach Wirkung geordnet.',
+    'proof.eye': 'Aus Erfahrung gebaut', 'proof.title': 'Von jemandem der dort stand wo Sie stehen.',
+    'proof.quote': '"Das größte Problem war nicht die Ausfallzeit. Es war dass niemand davon wusste bis es zu spät war. ShiftStar ist das Werkzeug das ich mir bei jeder Schicht gewünscht hätte."',
+    'proof.name': 'Anthony', 'proof.role': '— Produktionssupervisor, 12 Jahre auf dem Shopfloor. Entwickler von ShiftStar.',
+    'stat1': 'OEE-Ziel das ShiftStar Ihnen hilft zu erreichen', 'stat2': 'Für einen vollständigen Schichtbericht', 'stat3': 'Installation erforderlich. Browser öffnen und loslegen.',
+    'price.eye': 'Preise', 'price.title': 'Kostenlos starten. Skalieren wenn bereit.', 'price.sub': 'Keine Kreditkarte erforderlich.', 'price.mo': '/Mo',
+    'tier1.name': 'Starter', 'tier1.desc': 'Für Supervisoren die ShiftStar heute ausprobieren möchten.',
+    'tier1.f1': 'Live-Schichterkennung', 'tier1.f2': 'Ausfallzeiten-Protokollierung', 'tier1.f3': 'OEE-Berechnung', 'tier1.f4': 'Schichtberichte', 'tier1.f5': '7-Schicht-Verlauf', 'tier1.cta': 'Kostenlos starten',
+    'tier2.badge': 'Am beliebtesten', 'tier2.name': 'Pro', 'tier2.desc': 'Für Supervisoren und Werksleiter die das vollständige Bild brauchen.',
+    'tier2.f1': 'Alles in Starter', 'tier2.f2': 'ShiftStar KI — alle Funktionen', 'tier2.f3': 'Unbegrenzter Verlauf', 'tier2.f4': 'CSV-Import von SAP/MRP', 'tier2.f5': 'Ausfallzeit-Pareto', 'tier2.f6': 'KI-Übergabenotizen', 'tier2.cta': 'Pro 14 Tage kostenlos testen',
+    'tier3.name': 'Werk', 'tier3.amount': 'Kontakt aufnehmen', 'tier3.desc': 'Für Mehrlinien-Anlagen und ERP-Integrationen.',
+    'tier3.f1': 'Alles in Pro', 'tier3.f2': 'Multi-Supervisor-Zugang', 'tier3.f3': 'Geteilte Schichtdaten', 'tier3.f4': 'Live ERP/SAP-Integration', 'tier3.f5': 'Individuelle Einrichtung', 'tier3.f6': 'Prioritätssupport', 'tier3.cta': 'Mit uns sprechen',
+    'cta.title': 'Ihre nächste Schicht beginnt mit ShiftStar.', 'cta.sub': 'Keine Installation. Kein IT-Ticket. Browser öffnen und in zwei Minuten loslegen.', 'cta.btn': 'ShiftStar kostenlos holen',
+    'footer.contact': 'Kontakt', 'footer.copy': '© 2026 ShiftStar. Alle Rechte vorbehalten.'
+  },
+  pt: {
+    'nav.problem': 'O Problema', 'nav.features': 'Recursos', 'nav.ai': 'Assistente IA', 'nav.pricing': 'Preços', 'nav.cta': 'Obter ShiftStar',
+    'hero.eyebrow': 'Inteligência de turno para manufatura — ao vivo',
+    'hero.h1': 'Feito para o <em>chão de fábrica.</em><br/>Entendido na <em>diretoria.</em>',
+    'hero.h1-short': 'Feito para o chão de fábrica. Entendido na diretoria.',
+    'hero.sub': 'ShiftStar acompanha cada turno em tempo real — OEE, paradas, eventos e tendências — e gera os relatórios que seu gerente de planta realmente precisa.',
+    'hero.cta1': 'Obter ShiftStar grátis', 'hero.cta2': 'Ver como funciona',
+    'dash.tagline': 'Feito para o chão de fábrica. Entendido na diretoria.', 'dash.shift': 'Turno A — 68% concluído',
+    'dash.oee': 'OEE', 'dash.ontarget': '✓ Na meta', 'dash.throughput': 'Produção', 'dash.units': 'unidades boas',
+    'dash.defect': 'Taxa de defeito', 'dash.spec': 'Espec ≤ 2.5%', 'dash.downtime': 'Paradas', 'dash.thisshift': 'neste turno',
+    'dash.causes': 'Paradas por causa', 'cause.mechanical': 'Mecânico', 'cause.changeover': 'Setup', 'cause.material': 'Material',
+    'ai.preview1': 'Linha 3 falha mecânica — 3ª ocorrência esta semana. Verificar PM.',
+    'ai.preview2': 'OEE subindo +4.2% vs últimos 7 turnos.',
+    'ai.preview3': 'Nota de passagem pronta para o supervisor entrante.',
+    'problem.eye': 'O problema', 'problem.title': 'A cada turno, informações críticas desaparecem.',
+    'problem.sub': 'O supervisor saindo está cansado. A passagem dura dois minutos. Metade do que importa nunca é dito.',
+    'p1.title': 'Informações de passagem perdidas', 'p1.body': 'Máquinas com problemas, bloqueios de qualidade, ligações pendentes — esquecidos antes de o supervisor chegar ao chão.',
+    'p2.title': 'OEE calculado tarde demais', 'p2.body': 'Planilhas de segunda-feira dizem o que deu errado na semana passada. ShiftStar diz enquanto você ainda pode agir.',
+    'p3.title': 'Sem visibilidade de tendências', 'p3.body': 'Quando a mesma máquina falha três turnos seguidos, alguém deveria perceber antes de uma parada total.',
+    'how.eye': 'Como funciona', 'how.title': 'Funcionando em dois minutos.', 'how.sub': 'Sem TI. Sem instalação. Sem semana de treinamento.',
+    'step1.title': 'Configure seus turnos', 'step1.body': 'Defina nomes, horários de início e fim. ShiftStar detecta automaticamente o turno ativo.',
+    'step2.title': 'Registre eventos ao vivo', 'step2.body': 'Toque em "+ Registrar evento" durante uma parada. Máquina, duração, causa, notas. Dez segundos.',
+    'step3.title': 'Obtenha seu relatório', 'step3.body': 'No fim do turno, ShiftStar IA escreve seu resumo, nota de passagem e ações corretivas.',
+    'feat.eye': 'Recursos', 'feat.title': 'Tudo que um supervisor precisa. Nada além.',
+    'f1.title': 'Detecção de turno ao vivo', 'f1.body': 'Sabe automaticamente qual turno está ativo e lida com turnos noturnos.',
+    'f2.title': 'Cálculo real de OEE', 'f2.body': 'Importe seu export do SAP ou MRP e obtenha Disponibilidade × Desempenho × Qualidade dos seus números reais.',
+    'f3.title': 'Registro de paradas', 'f3.body': 'Registre qualquer evento em segundos. Constrói uma trilha de auditoria real.',
+    'f4.title': 'Análise de tendências multi-turno', 'f4.body': 'Tendência de OEE em 7, 14 ou 30 turnos. Pareto de paradas. Comparação turno a turno.',
+    'f5.title': 'Notas de passagem com IA', 'f5.body': 'ShiftStar IA escreve a passagem de turno automaticamente.',
+    'f6.title': 'Construído por um supervisor', 'f6.body': '12 anos de experiência no chão de fábrica em cada decisão de design.',
+    'ai.eye': 'ShiftStar IA', 'ai.title': 'A camada de inteligência que muda tudo.',
+    'ai.sub': 'Não apenas dados. Decisões. ShiftStar IA lê seus dados reais de turno.',
+    'aic1.title': 'Resumo de fim de turno', 'aic1.body': 'Resumo em linguagem simples do que aconteceu e quanto custou.',
+    'aic2.title': 'Nota de passagem automática', 'aic2.body': 'Tudo que o supervisor entrante precisa — escrito automaticamente.',
+    'aic3.title': 'Alertas de causa raiz', 'aic3.body': 'Quando falhas mecânicas sobem três turnos seguidos, ShiftStar detecta antes de uma parada total.',
+    'aic4.title': 'Prioridades de ações corretivas', 'aic4.body': 'Específico e acionável. Ordenado por impacto.',
+    'proof.eye': 'Construído da experiência', 'proof.title': 'De alguém que esteve onde você está.',
+    'proof.quote': '"O maior problema não era a parada. Era que ninguém sabia até que fosse tarde demais. ShiftStar é a ferramenta que eu desejei ter em cada turno."',
+    'proof.name': 'Anthony', 'proof.role': '— Supervisor de Produção, 12 anos no chão de fábrica. Criador do ShiftStar.',
+    'stat1': 'Meta de OEE que ShiftStar ajuda você a atingir', 'stat2': 'Para gerar um relatório completo de turno', 'stat3': 'Instalação necessária. Abra um navegador e comece.',
+    'price.eye': 'Preços', 'price.title': 'Comece grátis. Escale quando estiver pronto.', 'price.sub': 'Sem cartão de crédito necessário.', 'price.mo': '/mês',
+    'tier1.name': 'Básico', 'tier1.desc': 'Para supervisores que querem experimentar ShiftStar hoje.',
+    'tier1.f1': 'Detecção de turno ao vivo', 'tier1.f2': 'Registro de paradas', 'tier1.f3': 'Cálculo de OEE', 'tier1.f4': 'Relatórios de turno', 'tier1.f5': 'Histórico de 7 turnos', 'tier1.cta': 'Começar grátis',
+    'tier2.badge': 'Mais popular', 'tier2.name': 'Pro', 'tier2.desc': 'Para supervisores e gerentes que precisam do quadro completo.',
+    'tier2.f1': 'Tudo no Básico', 'tier2.f2': 'ShiftStar IA — todos os recursos', 'tier2.f3': 'Histórico ilimitado', 'tier2.f4': 'Importação CSV do SAP/MRP', 'tier2.f5': 'Análise Pareto', 'tier2.f6': 'Notas de passagem com IA', 'tier2.cta': 'Experimentar Pro grátis por 14 dias',
+    'tier3.name': 'Planta', 'tier3.amount': 'Fale conosco', 'tier3.desc': 'Para instalações multi-linha e integrações ERP.',
+    'tier3.f1': 'Tudo no Pro', 'tier3.f2': 'Acesso multi-supervisor', 'tier3.f3': 'Dados de turno compartilhados', 'tier3.f4': 'Integração ERP/SAP ao vivo', 'tier3.f5': 'Integração personalizada', 'tier3.f6': 'Suporte prioritário', 'tier3.cta': 'Falar conosco',
+    'cta.title': 'Seu próximo turno começa com ShiftStar.', 'cta.sub': 'Sem instalação. Sem ticket de TI. Abra um navegador e comece em dois minutos.', 'cta.btn': 'Obter ShiftStar grátis',
+    'footer.contact': 'Contato', 'footer.copy': '© 2026 ShiftStar. Todos os direitos reservados.'
+  },
+  zh: {
+    'nav.problem': '问题所在', 'nav.features': '功能', 'nav.ai': 'AI助手', 'nav.pricing': '定价', 'nav.cta': '获取ShiftStar',
+    'hero.eyebrow': '制造业班次智能 — 实时在线',
+    'hero.h1': '为<em>车间</em>而建。<br/>在<em>董事会</em>中清晰呈现。',
+    'hero.h1-short': '为车间而建。在董事会中清晰呈现。',
+    'hero.sub': 'ShiftStar实时跟踪每个班次的OEE、停机时间、事件和趋势，为您的工厂经理生成真正需要的报告。',
+    'hero.cta1': '免费获取ShiftStar', 'hero.cta2': '了解工作原理',
+    'dash.tagline': '为车间而建。在董事会中清晰呈现。', 'dash.shift': 'A班 — 已完成68%',
+    'dash.oee': 'OEE', 'dash.ontarget': '✓ 达到目标', 'dash.throughput': '产量', 'dash.units': '合格件数',
+    'dash.defect': '缺陷率', 'dash.spec': '规格 ≤ 2.5%', 'dash.downtime': '停机时间', 'dash.thisshift': '本班次',
+    'dash.causes': '停机原因分析', 'cause.mechanical': '机械', 'cause.changeover': '换型', 'cause.material': '材料',
+    'ai.preview1': '3线机械故障 — 本周第3次。检查预防性维护计划。',
+    'ai.preview2': 'OEE比过去7个班次提升+4.2%。换型减少效果显著。',
+    'ai.preview3': '交接班说明已为下一班主管准备就绪。',
+    'problem.eye': '问题所在', 'problem.title': '每个班次，关键信息正在消失。',
+    'problem.sub': '下班的主管很疲惫。交接班只有两分钟。重要信息有一半从未被说出口。',
+    'p1.title': '交接信息丢失', 'p1.body': '设备运行异常、质量保留、待处理电话——在上班主管到达车间之前就被遗忘了。',
+    'p2.title': 'OEE计算太晚', 'p2.body': '周一早上的电子表格告诉你上周哪里出了问题。ShiftStar在你还能处理时就告诉你。',
+    'p3.title': '趋势缺乏可见性', 'p3.body': '当同一台设备连续三个班次出现故障，应该有人在全线停产之前发现它。',
+    'how.eye': '工作原理', 'how.title': '两分钟内运行就绪。', 'how.sub': '无需IT部门。无需安装。无需培训周。',
+    'step1.title': '配置您的班次', 'step1.body': '设置班次名称、开始和结束时间。ShiftStar自动检测当前活跃班次。',
+    'step2.title': '实时记录事件', 'step2.body': '停机时点击"+ 记录事件"。设备、时长、原因、备注。十秒钟完成。',
+    'step3.title': '获取报告和交接', 'step3.body': '班次结束时，ShiftStar AI自动编写摘要、交接说明和纠正措施。一键完成。',
+    'feat.eye': '功能', 'feat.title': '主管所需的一切。仅此而已。',
+    'f1.title': '实时班次检测', 'f1.body': '自动识别当前活跃班次，实时跟踪进度，处理跨夜班次。',
+    'f2.title': '真实OEE计算', 'f2.body': '导入SAP或MRP导出数据，从真实数字计算可用性×性能×质量。',
+    'f3.title': '停机事件记录', 'f3.body': '几秒内记录任何事件。建立真实的审计记录。',
+    'f4.title': '多班次趋势分析', 'f4.body': '7、14或30个班次的OEE趋势。停机帕累托图。班次对比分析。',
+    'f5.title': 'AI驱动的交接说明', 'f5.body': 'ShiftStar AI自动编写班次交接内容。上班主管上岗前获取所有信息。',
+    'f6.title': '由主管打造', 'f6.body': '12年生产车间经验融入每个设计决策。',
+    'ai.eye': 'ShiftStar AI', 'ai.title': '改变一切的班次智能层。',
+    'ai.sub': '不只是数据。是决策。ShiftStar AI读取您的真实班次数据并告诉您它意味着什么。',
+    'aic1.title': '班次结束摘要', 'aic1.body': '用简单语言总结发生了什么、成本多少以及工厂经理会问的那个关键数字。',
+    'aic2.title': '自动交接说明', 'aic2.body': '上班主管需要知道的一切——未解决问题、需关注设备、质量保留——自动编写。',
+    'aic3.title': '根本原因标识', 'aic3.body': '当机械故障连续三个班次飙升，ShiftStar在全线停产前发出警报。',
+    'aic4.title': '纠正措施优先级', 'aic4.body': '具体且可执行。按影响程度排序。',
+    'proof.eye': '来自经验的构建', 'proof.title': '来自曾经站在您位置的人。',
+    'proof.quote': '"最大的问题不是停机时间。而是没有人知道，直到为时已晚。ShiftStar是我希望在每个班次都能拥有的工具。"',
+    'proof.name': 'Anthony', 'proof.role': '— 生产主管，12年车间经验，ShiftStar创始人。',
+    'stat1': 'ShiftStar帮助您达到的OEE目标', 'stat2': '生成完整班次摘要报告的时间', 'stat3': '无需安装。打开浏览器即可开始。',
+    'price.eye': '定价', 'price.title': '免费开始。准备好时再扩展。', 'price.sub': '开始使用无需信用卡。', 'price.mo': '/月',
+    'tier1.name': '入门版', 'tier1.desc': '适合今天想在车间试用ShiftStar的主管。',
+    'tier1.f1': '实时班次检测', 'tier1.f2': '停机事件记录', 'tier1.f3': 'OEE计算', 'tier1.f4': '班次摘要报告', 'tier1.f5': '7班次趋势历史', 'tier1.cta': '免费开始',
+    'tier2.badge': '最受欢迎', 'tier2.name': '专业版', 'tier2.desc': '适合需要完整视图的主管和工厂经理。',
+    'tier2.f1': '包含入门版全部功能', 'tier2.f2': 'ShiftStar AI — 全部功能', 'tier2.f3': '无限班次历史', 'tier2.f4': 'SAP/MRP CSV导入', 'tier2.f5': '停机帕累托分析', 'tier2.f6': 'AI交接说明', 'tier2.cta': '免费试用专业版14天',
+    'tier3.name': '工厂版', 'tier3.amount': '联系我们', 'tier3.desc': '适合多线设施、共享仪表板和ERP集成。',
+    'tier3.f1': '包含专业版全部功能', 'tier3.f2': '多主管访问', 'tier3.f3': '共享班次数据', 'tier3.f4': 'ERP/SAP实时集成', 'tier3.f5': '定制化入职', 'tier3.f6': '优先支持', 'tier3.cta': '与我们交流',
+    'cta.title': '您的下一个班次从ShiftStar开始。', 'cta.sub': '无需安装。无需IT工单。打开浏览器，两分钟内开始跟踪。', 'cta.btn': '免费获取ShiftStar',
+    'footer.contact': '联系我们', 'footer.copy': '© 2026 ShiftStar。保留所有权利。'
+  },
+  ja: {
+    'nav.problem': '課題', 'nav.features': '機能', 'nav.ai': 'AIアシスタント', 'nav.pricing': '料金', 'nav.cta': 'ShiftStartを入手',
+    'hero.eyebrow': '製造業向けシフトインテリジェンス — ライブ稼働中',
+    'hero.h1': '<em>現場</em>のために作られ、<br/><em>役員室</em>で理解される。',
+    'hero.h1-short': '現場のために作られ、役員室で理解される。',
+    'hero.sub': 'ShiftStarは各シフトをリアルタイムで追跡し、OEE、ダウンタイム、イベント、トレンドを記録して、工場長が本当に必要とするレポートを生成します。',
+    'hero.cta1': 'ShiftStarを無料で入手', 'hero.cta2': '仕組みを見る',
+    'dash.tagline': '現場のために作られ、役員室で理解される。', 'dash.shift': 'シフトA — 68%完了',
+    'dash.oee': 'OEE', 'dash.ontarget': '✓ 目標達成', 'dash.throughput': 'スループット', 'dash.units': '良品数',
+    'dash.defect': '不良率', 'dash.spec': '仕様 ≤ 2.5%', 'dash.downtime': 'ダウンタイム', 'dash.thisshift': '今シフト',
+    'dash.causes': '原因別ダウンタイム', 'cause.mechanical': '機械', 'cause.changeover': '段取り', 'cause.material': '材料',
+    'ai.preview1': 'ライン3機械故障 — 今週3回目。PMスケジュールを確認。',
+    'ai.preview2': 'OEEが過去7シフト比+4.2%上昇。段取り削減が効果的。',
+    'ai.preview3': '引き継ぎメモが次のスーパーバイザー向けに準備完了。',
+    'problem.eye': '課題', 'problem.title': 'シフトごとに重要な情報が消えている。',
+    'problem.sub': '退勤するスーパーバイザーは疲れている。引き継ぎは2分間。重要なことの半分は言われないまま終わる。',
+    'p1.title': '引き継ぎ情報の消失', 'p1.body': '問題のある機械、品質保留、未対応の連絡 — 次のスーパーバイザーが現場に着く前に忘れられる。',
+    'p2.title': 'OEEの計算が遅すぎる', 'p2.body': '月曜日のスプレッドシートは先週何が悪かったかを教えてくれる。ShiftStarはまだ対処できる間に教えてくれる。',
+    'p3.title': 'トレンドの可視化なし', 'p3.body': '同じ機械が3シフト連続で故障する時、完全停止になる前に誰かが気づくべきだ。',
+    'how.eye': '仕組み', 'how.title': '2分で稼働開始。', 'how.sub': 'ITは不要。インストール不要。トレーニング週間も不要。',
+    'step1.title': 'シフトを設定', 'step1.body': 'シフト名、開始・終了時刻を設定。ShiftStarがアクティブなシフトを自動検出。',
+    'step2.title': 'リアルタイムでイベントを記録', 'step2.body': 'ダウンタイム発生時に"+ イベント記録"をタップ。機械、時間、原因、メモ。10秒で完了。',
+    'step3.title': 'レポートと引き継ぎを受け取る', 'step3.body': 'シフト終了時、ShiftStar AIが要約、引き継ぎメモ、是正措置を自動作成。',
+    'feat.eye': '機能', 'feat.title': 'スーパーバイザーに必要なすべて。それ以上はなし。',
+    'f1.title': 'ライブシフト検出', 'f1.body': 'アクティブなシフトを自動認識し、夜勤シフトも対応。',
+    'f2.title': '実際のOEE計算', 'f2.body': 'SAP/MRPエクスポートをインポートし、実際の数値から可用性×性能×品質を計算。',
+    'f3.title': 'ダウンタイムイベント記録', 'f3.body': 'あらゆるイベントを数秒で記録。シフト交代を超えて残る監査証跡を構築。',
+    'f4.title': 'マルチシフトトレンド分析', 'f4.body': '7、14、30シフトにわたるOEEトレンド。ダウンタイムパレート。シフト比較。',
+    'f5.title': 'AI引き継ぎメモ', 'f5.body': 'ShiftStar AIがシフト引き継ぎを自動作成。次のスーパーバイザーが現場に着く前に必要なすべてを。',
+    'f6.title': 'スーパーバイザーが作った', 'f6.body': '12年間の生産現場経験がすべての設計判断に込められている。',
+    'ai.eye': 'ShiftStar AI', 'ai.title': 'すべてを変えるシフトインテリジェンス層。',
+    'ai.sub': 'データだけでなく、意思決定。ShiftStar AIが実際のシフトデータを読み取り、意味を教えてくれる。',
+    'aic1.title': 'シフト終了ダイジェスト', 'aic1.body': '何が起きたか、コストはいくらか、工場長が聞く数字を平易な言葉で要約。',
+    'aic2.title': '自動引き継ぎメモ', 'aic2.body': '次のスーパーバイザーが必要なすべて — 未解決問題、要注意機械 — 自動作成。',
+    'aic3.title': '根本原因フラグ', 'aic3.body': '機械故障が3シフト連続で急増すると、完全停止前にShiftStarが警告。',
+    'aic4.title': '是正措置優先順位', 'aic4.body': '具体的で実行可能。影響度順に並べられる。',
+    'proof.eye': '経験から生まれた', 'proof.title': 'あなたがいた場所に立っていた人から。',
+    'proof.quote': '"最大の問題はダウンタイムではなかった。手遅れになるまで誰も知らないことだった。ShiftStarは毎シフトで欲しかったツールだ。"',
+    'proof.name': 'Anthony', 'proof.role': '— 生産スーパーバイザー、12年の現場経験。ShiftStar創設者。',
+    'stat1': 'ShiftStarが達成を支援するOEE目標', 'stat2': '完全なシフト要約レポートを生成する時間', 'stat3': 'インストール不要。ブラウザを開いてスタート。',
+    'price.eye': '料金', 'price.title': '無料で始める。準備ができたらスケール。', 'price.sub': 'クレジットカード不要。', 'price.mo': '/月',
+    'tier1.name': 'スターター', 'tier1.desc': '今日現場でShiftStarを試したいスーパーバイザー向け。',
+    'tier1.f1': 'ライブシフト検出', 'tier1.f2': 'ダウンタイム記録', 'tier1.f3': 'OEE計算', 'tier1.f4': 'シフト要約レポート', 'tier1.f5': '7シフト履歴', 'tier1.cta': '無料で始める',
+    'tier2.badge': '最も人気', 'tier2.name': 'Pro', 'tier2.desc': '完全な状況把握が必要なスーパーバイザーと工場長向け。',
+    'tier2.f1': 'スターターのすべて', 'tier2.f2': 'ShiftStar AI — 全機能', 'tier2.f3': '無制限の履歴', 'tier2.f4': 'SAP/MRP CSVインポート', 'tier2.f5': 'ダウンタイムパレート分析', 'tier2.f6': 'AI引き継ぎメモ', 'tier2.cta': 'Proを14日間無料体験',
+    'tier3.name': '工場', 'tier3.amount': 'お問い合わせ', 'tier3.desc': '複数ライン施設とERP統合向け。',
+    'tier3.f1': 'Proのすべて', 'tier3.f2': 'マルチスーパーバイザーアクセス', 'tier3.f3': '共有シフトデータ', 'tier3.f4': 'ERP/SAPライブ統合', 'tier3.f5': 'カスタムオンボーディング', 'tier3.f6': '優先サポート', 'tier3.cta': 'お問い合わせ',
+    'cta.title': '次のシフトはShiftStarから始まる。', 'cta.sub': 'インストール不要。ITチケット不要。ブラウザを開いて2分で追跡開始。', 'cta.btn': 'ShiftStarを無料で入手',
+    'footer.contact': 'お問い合わせ', 'footer.copy': '© 2026 ShiftStar. 全著作権所有。'
+  }
+};
+
+let currentLang = localStorage.getItem('ss_lang') || 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('ss_lang', lang);
+  document.documentElement.lang = lang;
+  document.getElementById('lang-select').value = lang;
+  const strings = STRINGS[lang] || STRINGS.en;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (strings[key] !== undefined) {
+      if (el.tagName === 'H1' || (el.tagName === 'H2' && el.closest('.hero'))) {
+        el.innerHTML = strings[key];
+      } else {
+        el.textContent = strings[key];
+      }
+    }
+  });
+}
+
+// Init language
+setLang(currentLang);
+
+// === SCROLL ANIMATIONS ===
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
