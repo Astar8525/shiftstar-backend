@@ -1,65 +1,521 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Developer Portfolio</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="script.js" defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ShiftStar — Built for the floor. Understood in the boardroom.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --brand:#534AB7;--brand-dark:#3C3489;--brand-light:#EEEDFE;--brand-mid:#AFA9EC;
+  --teal:#1D9E75;--coral:#D85A30;--amber:#BA7517;--pink:#D4537E;
+  --bg:#F8F7FF;--bg2:#FFFFFF;
+  --text:#1A1825;--text2:#4B4768;--text3:#8B88A8;
+  --border:#DDD9F5;
+  --radius:12px;--radius-lg:20px;
+  font-size:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+
+#zoom-bar{position:fixed;bottom:24px;right:24px;z-index:1000;display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:40px;padding:6px 12px;box-shadow:0 4px 24px rgba(83,74,183,.12)}
+#zoom-bar button{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:16px;font-weight:500;color:var(--brand);display:flex;align-items:center;justify-content:center;}
+#zoom-bar button:hover{background:var(--brand-light)}
+#zoom-level{font-size:12px;font-weight:500;color:var(--text2);min-width:36px;text-align:center}
+
+#lang-bar{position:fixed;bottom:24px;left:24px;z-index:1000;display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:40px;padding:6px 10px;box-shadow:0 4px 24px rgba(83,74,183,.12)}
+#lang-bar select{font-size:12px;font-family:'Inter',sans-serif;border:none;background:transparent;color:var(--brand);font-weight:500;cursor:pointer;outline:none}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;background:rgba(248,247,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-brand{display:flex;align-items:center;gap:10px}
+.nav-logo{width:36px;height:36px;background:var(--brand);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.nav-logo svg{width:20px;height:20px;fill:none;stroke:#EEEDFE;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.nav-name{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text)}
+.nav-links{display:flex;align-items:center;gap:32px}
+.nav-links a{font-size:14px;color:var(--text2);text-decoration:none;}
+.nav-links a:hover{color:var(--brand)}
+.nav-cta{background:var(--brand);color:#fff;padding:10px 22px;border-radius:40px;font-size:14px;font-weight:500;text-decoration:none;cursor:pointer;border:none;font-family:'Inter',sans-serif}
+.nav-cta:hover{background:var(--brand-dark)}
+
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(83,74,183,.08) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--brand-light);color:var(--brand);font-size:13px;font-weight:500;padding:6px 14px;border-radius:40px;margin-bottom:28px;border:1px solid var(--brand-mid)}
+.hero-eyebrow span{width:6px;height:6px;border-radius:50%;background:var(--brand);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(40px,6vw,76px);font-weight:800;line-height:1.08;color:var(--text);max-width:900px;margin-bottom:24px;letter-spacing:-1.5px}
+.hero h1 em{font-style:normal;color:var(--brand)}
+.hero-sub{font-size:clamp(16px,2vw,20px);color:var(--text2);max-width:580px;margin:0 auto 40px;font-weight:300;line-height:1.7}
+.hero-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;margin-bottom:72px}
+.btn-hero{background:var(--brand);color:#fff;padding:16px 36px;border-radius:40px;font-size:16px;font-weight:500;text-decoration:none;box-shadow:0 8px 32px rgba(83,74,183,.3);cursor:pointer;border:none;font-family:'Inter',sans-serif}
+.btn-hero:hover{background:var(--brand-dark)}
+.btn-ghost{color:var(--brand);padding:16px 28px;border-radius:40px;font-size:16px;font-weight:500;text-decoration:none;border:1.5px solid var(--brand-mid);}
+.btn-ghost:hover{background:var(--brand-light)}
+
+.hero-dash{width:100%;max-width:960px;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 24px 80px rgba(83,74,183,.15)}
+.dash-header{background:var(--brand);padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
+.dash-brand{display:flex;align-items:center;gap:10px}
+.dash-brand-logo{width:28px;height:28px;background:rgba(255,255,255,.2);border-radius:7px;display:flex;align-items:center;justify-content:center}
+.dash-brand-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff}
+.dash-brand-tag{font-size:10px;color:rgba(255,255,255,.7)}
+.dash-pill{background:rgba(255,255,255,.2);color:#fff;font-size:12px;padding:4px 12px;border-radius:20px;font-weight:500}
+.dash-user{font-size:11px;color:rgba(255,255,255,.7);background:rgba(255,255,255,.1);padding:3px 10px;border-radius:20px}
+.dash-body{padding:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.dash-metric{background:var(--bg);border-radius:10px;padding:14px}
+.dash-metric-label{font-size:11px;color:var(--text3);margin-bottom:4px}
+.dash-metric-val{font-size:22px;font-weight:600;color:var(--text)}
+.dash-metric-sub{font-size:10px;color:var(--text3);margin-top:2px}
+.dash-bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px 20px}
+.dash-panel{background:var(--bg);border-radius:10px;padding:14px}
+.dash-panel-title{font-size:12px;font-weight:500;color:var(--text2);margin-bottom:10px}
+.dash-bar{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.dash-bar-label{font-size:11px;color:var(--text3);width:80px;text-align:right;flex-shrink:0}
+.dash-bar-track{flex:1;background:#E8E6F5;border-radius:3px;height:7px;overflow:hidden}
+.dash-bar-fill{height:100%;border-radius:3px}
+.dash-bar-val{font-size:11px;color:var(--text);font-weight:500;width:30px}
+.dash-ai{background:linear-gradient(135deg,var(--brand-light),#F0EFFE);border:1px solid var(--brand-mid);border-radius:10px;padding:14px}
+.dash-ai-badge{font-size:10px;background:var(--brand);color:#fff;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:8px;font-weight:500}
+.dash-ai-line{font-size:11px;color:var(--text2);margin-bottom:4px;padding-left:10px;border-left:2px solid var(--brand-mid)}
+.dash-sync{font-size:11px;color:var(--teal);background:#E1F5EE;padding:6px 14px;text-align:center;border-top:1px solid #B3E5D4}
+
+section{padding:100px 24px}
+.container{max-width:1100px;margin:0 auto}
+.section-eye{font-size:12px;font-weight:500;color:var(--brand);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(28px,4vw,46px);font-weight:800;color:var(--text);margin-bottom:16px;letter-spacing:-1px;line-height:1.1}
+.section-sub{font-size:18px;color:var(--text2);max-width:560px;font-weight:300;line-height:1.7}
+
+.products{background:var(--brand-light);border-top:1px solid var(--brand-mid);border-bottom:1px solid var(--brand-mid)}
+.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:48px}
+.product-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;}
+.product-card.flagship{border-color:var(--brand-mid);border-width:2px}
+.product-badge{font-size:11px;background:var(--brand);color:#fff;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:14px;font-weight:500}
+.product-badge.soon{background:var(--amber)}
+.product-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px}
+.product-desc{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px}
+.product-features{list-style:none;display:flex;flex-direction:column;gap:7px}
+.product-features li{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.product-features li::before{content:'✓';color:var(--teal);font-weight:600;flex-shrink:0}
+
+.problem{background:var(--text)}
+.problem .section-eye{color:var(--brand-mid)}
+.problem .section-title{color:#fff}
+.problem .section-sub{color:rgba(255,255,255,.6)}
+.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+.problem-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:28px;}
+.problem-icon{width:44px;height:44px;background:rgba(83,74,183,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:22px}
+.problem-card h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:8px}
+.problem-card p{font-size:14px;color:rgba(255,255,255,.5);line-height:1.7}
+
+.how{background:var(--bg2)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:56px;position:relative}
+.steps::before{content:'';position:absolute;top:36px;left:15%;right:15%;height:1px;background:var(--border);z-index:0}
+.step{position:relative;z-index:1;text-align:center}
+.step-num{width:72px;height:72px;border-radius:50%;background:var(--brand-light);border:2px solid var(--brand-mid);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--brand)}
+.step h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px}
+.step p{font-size:14px;color:var(--text2);line-height:1.7}
+
+.features{background:var(--bg)}
+.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px}
+.feature-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:28px;}
+.feature-card:hover{border-color:var(--brand-mid);}
+.feature-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:22px}
+.feature-card h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px}
+.feature-card p{font-size:14px;color:var(--text2);line-height:1.7}
+.fi-purple{background:var(--brand-light)}
+.fi-teal{background:#E1F5EE}
+.fi-coral{background:#FAECE7}
+.fi-amber{background:#FAEEDA}
+.fi-blue{background:#E6F1FB}
+.fi-pink{background:#FBEAF0}
+
+.ai-section{background:var(--brand);position:relative;overflow:hidden}
+.ai-section::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;background:rgba(255,255,255,.04);border-radius:50%}
+.ai-section .section-eye{color:var(--brand-mid)}
+.ai-section .section-title{color:#fff}
+.ai-section .section-sub{color:rgba(255,255,255,.7)}
+.ai-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:48px;max-width:680px}
+.ai-card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:22px;}
+.ai-card h4{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:6px}
+.ai-card p{font-size:13px;color:rgba(255,255,255,.6);line-height:1.6}
+
+.proof{background:var(--bg2)}
+.proof-inner{background:var(--brand-light);border:1px solid var(--brand-mid);border-radius:var(--radius-lg);padding:56px;text-align:center;max-width:760px;margin:0 auto}
+.proof-quote{font-family:'Syne',sans-serif;font-size:clamp(20px,3vw,28px);font-weight:700;color:var(--text);line-height:1.4;margin-bottom:24px}
+.proof-attr{font-size:14px;color:var(--text2)}
+.proof-attr strong{color:var(--brand);font-weight:500}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:64px;text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:var(--brand);line-height:1}
+.stat-label{font-size:14px;color:var(--text2);margin-top:6px}
+
+.pricing{background:var(--bg)}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px;align-items:start}
+.price-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;}
+.price-card.featured{border:2px solid var(--brand);background:var(--brand-light)}
+.price-badge{font-size:11px;background:var(--brand);color:#fff;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:16px;font-weight:500}
+.price-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:4px}
+.price-amount{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;color:var(--text);margin:16px 0 4px;line-height:1}
+.price-amount span{font-size:14px;font-weight:400;color:var(--text2)}
+.price-users{font-size:12px;color:var(--brand);font-weight:500;margin-bottom:8px}
+.price-desc{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.price-features li{font-size:13px;color:var(--text2);display:flex;align-items:flex-start;gap:8px;line-height:1.4}
+.price-features li::before{content:'✓';color:var(--teal);font-weight:600;flex-shrink:0;margin-top:1px}
+.price-btn{display:block;text-align:center;padding:11px;border-radius:40px;font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;font-family:'Inter',sans-serif;width:100%;border:none}
+.price-btn-solid{background:var(--brand);color:#fff;}
+.price-btn-solid:hover{background:var(--brand-dark)}
+.price-btn-outline{background:transparent;color:var(--brand);border:1.5px solid var(--brand-mid);}
+.price-btn-outline:hover{background:var(--brand-light)}
+.price-note{font-size:11px;color:var(--text3);text-align:center;margin-top:10px}
+
+.cta-section{background:var(--text);text-align:center;padding:100px 24px}
+.cta-section .section-title{color:#fff;margin-bottom:16px}
+.cta-section .section-sub{color:rgba(255,255,255,.6);margin:0 auto 40px}
+
+footer{background:var(--text);border-top:1px solid rgba(255,255,255,.06);padding:40px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-brand-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff}
+.footer-tag{font-size:12px;color:rgba(255,255,255,.4)}
+.footer-links{display:flex;gap:24px}
+.footer-links a{font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;}
+.footer-links a:hover{color:rgba(255,255,255,.8)}
+
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  nav{padding:14px 20px}
+  .nav-links{display:none}
+  .problem-grid,.steps,.feature-grid,.pricing-grid,.product-grid{grid-template-columns:1fr}
+  .steps::before{display:none}
+  .ai-cards{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(3,1fr);gap:16px}
+  .dash-body{grid-template-columns:1fr 1fr}
+  .dash-bottom{grid-template-columns:1fr}
+  footer{flex-direction:column;align-items:flex-start}
+  #zoom-bar{bottom:72px}
+}
+</style>
 </head>
 <body>
 
-  <header>
-    <div id="profile-name">Anthony Norman</div>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#projects">Project Details</a>
-      <a href="#skills">Skills</a>
-      <a href="#recommendations">Recommendations</a>
-      <i class="fas fa-home" id="home-icon"></i>
-    </nav>
-  </header>
+<div id="zoom-bar">
+  <button onclick="adjZoom(-10)">−</button>
+  <span id="zoom-level">100%</span>
+  <button onclick="adjZoom(10)">+</button>
+  <button onclick="resetZoom()" style="font-size:10px;width:auto;padding:0 8px;border-radius:20px">Reset</button>
+</div>
 
-  <section id="about">
-    <h2>About Me</h2>
-    <img src="https://scontent-ord5-2.xx.fbcdn.net/v/t39.30808-6/482199409_8651680594933781_9136273564598650264_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_ohc=J9F-Lrb4nOwQ7kNvwENUHk3&_nc_oc=Adky44BzywaRMRAm57Oie7TURL94KnaYADbuU2yRKMFyn1aArDmXM9MTODeSl4WfrNE&_nc_zt=23&_nc_ht=scontent-ord5-2.xx&_nc_gid=mQKLBzQpzTB0K1vb7LSSBQ&oh=00_AfK9GnYGY61JGj4Jz58P2MultHrLoBypH0CWs4VZjBxsZA&oe=683A3180" alt="Profile" class="profile-img">
-    <p>Hello! My name is Anthony and I'm new to learning about HTML, CSS and Javascript.</p>
-  </section>
+<div id="lang-bar">
+  <label for="lang-select" style="font-size:14px">🌐</label>
+  <select id="lang-select" onchange="setLang(this.value)">
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+    <option value="pt">Português</option>
+    <option value="zh">中文</option>
+    <option value="ja">日本語</option>
+  </select>
+</div>
 
-  <section id="skills">
-    <h2>Skills</h2>
-    <div class="skills-container">
-      <div class="skill"><img src="html-logo.png"><span>HTML</span></div>
-      <div class="skill"><img src="css-logo.png"><span>CSS</span></div>
-      <div class="skill"><img src="js-logo.png"><span>JavaScript</span></div>
-      <div class="skill"><img src="git-logo.png"><span>Git</span></div>
-      <div class="skill"><img src="react-logo.png"><span>React</span></div>
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
     </div>
-  </section>
+    <span class="nav-name">ShiftStar</span>
+  </div>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#features">Features</a>
+    <a href="#ai">AI Helper</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+  <button class="nav-cta" onclick="goToApp('free')">Get started free</button>
+</nav>
 
-  <section id="projects">
-    <h2>Project Details</h2>
-    <div class="project">Project 1: Weather App</div>
-    <div class="project">Project 2: Todo List</div>
-    <div class="project">Project 3: Portfolio Website</div>
-  </section>
-
-  <section id="recommendations">
-    <h2>Recommendations</h2>
-    <div id="recommendation-list">
-      <div class="recommendation">Jane: Great work ethic and detail-oriented.</div>
-      <div class="recommendation">John: Excellent front-end skills.</div>
-      <div class="recommendation">Sarah: A pleasure to collaborate with.</div>
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-eyebrow"><span></span><span>Manufacturing shift intelligence — live and connected</span></div>
+  <h1>Built for the <em>floor.</em><br/>Understood in the <em>boardroom.</em></h1>
+  <p class="hero-sub">ShiftStar is a cloud-based shift intelligence platform that tracks OEE, logs downtime, surfaces trends, and generates AI-powered reports your whole team can access in real time.</p>
+  <div class="hero-actions">
+    <button class="btn-hero" onclick="goToApp('free')">Start free — no credit card</button>
+    <a href="#features" class="btn-ghost">See how it works</a>
+  </div>
+  <div class="hero-dash">
+    <div class="dash-header">
+      <div class="dash-brand">
+        <div class="dash-brand-logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EEEDFE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div><div class="dash-brand-name">ShiftStar</div><div class="dash-brand-tag">Built for the floor. Understood in the boardroom.</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="dash-pill">Shift A — 68% complete</div>
+        <div class="dash-user">Anthony · admin</div>
+      </div>
     </div>
+    <div class="dash-body">
+      <div class="dash-metric"><div class="dash-metric-label">OEE</div><div class="dash-metric-val" style="color:#1D9E75">87.2%</div><div class="dash-metric-sub">✓ On target</div></div>
+      <div class="dash-metric"><div class="dash-metric-label">Throughput</div><div class="dash-metric-val">1,340</div><div class="dash-metric-sub">good units</div></div>
+      <div class="dash-metric"><div class="dash-metric-label">Defect rate</div><div class="dash-metric-val" style="color:#1D9E75">1.8%</div><div class="dash-metric-sub">Spec ≤ 2.5%</div></div>
+      <div class="dash-metric"><div class="dash-metric-label">Downtime</div><div class="dash-metric-val" style="color:#BA7517">22 min</div><div class="dash-metric-sub">this shift</div></div>
+    </div>
+    <div class="dash-bottom">
+      <div class="dash-panel">
+        <div class="dash-panel-title">Downtime by cause</div>
+        <div class="dash-bar"><span class="dash-bar-label">Mechanical</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:55%;background:#D85A30"></div></div><span class="dash-bar-val">12m</span></div>
+        <div class="dash-bar"><span class="dash-bar-label">Changeover</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:45%;background:#1D9E75"></div></div><span class="dash-bar-val">10m</span></div>
+        <div class="dash-bar"><span class="dash-bar-label">Material</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:20%;background:#BA7517"></div></div><span class="dash-bar-val">4m</span></div>
+      </div>
+      <div class="dash-ai">
+        <div class="dash-ai-badge">✦ ShiftStar AI</div>
+        <div class="dash-ai-line">Line 3 mechanical fault — 3rd occurrence this week. Check PM schedule.</div>
+        <div class="dash-ai-line" style="margin-top:6px">OEE trending up +4.2% vs last 7 shifts.</div>
+        <div class="dash-ai-line" style="margin-top:6px">Handoff note ready for incoming supervisor.</div>
+      </div>
+    </div>
+    <div class="dash-sync">● Connected — data syncing across your team in real time</div>
+  </div>
+</section>
 
-    <form id="recommendation-form">
-      <input type="text" id="new-rec" placeholder="Add a recommendation..." required>
-      <button type="submit">Submit</button>
-    </form>
-  </section>
+<section class="products" id="products">
+  <div class="container">
+    <p class="section-eye">The ShiftStar platform</p>
+    <h2 class="section-title">One brand. Multiple tools. One industry.</h2>
+    <p class="section-sub">ShiftStar is built for operations teams who need real visibility into what's happening on the floor.</p>
+    <div class="product-grid">
+      <div class="product-card flagship fade-up">
+        <span class="product-badge">Live now</span>
+        <div class="product-name">ShiftStar Operations</div>
+        <div class="product-desc">The manufacturing shift intelligence platform. Real-time OEE, downtime event logging, AI-powered handoff notes, trend analysis, and shift summary reports — all connected to a shared database your whole team can access.</div>
+        <ul class="product-features">
+          <li>Live shift detection and progress tracking</li>
+          <li>Real OEE from SAP / MRP data imports</li>
+          <li>Downtime event logging with cause categories</li>
+          <li>AI shift digest, handoff notes, and corrective actions</li>
+          <li>Multi-shift trend analysis and Pareto breakdown</li>
+          <li>Multi-user with role-based access</li>
+        </ul>
+      </div>
+      <div class="product-card fade-up">
+        <span class="product-badge soon">Coming soon</span>
+        <div class="product-name">ShiftStar Schedule</div>
+        <div class="product-desc">Intelligent workforce scheduling for operations teams. Rotating shifts, coverage alerts, approval workflows — built for any industry with complex staffing needs.</div>
+        <ul class="product-features">
+          <li>Dynamic shift scheduling and rotation management</li>
+          <li>Coverage gap alerts and auto-fill suggestions</li>
+          <li>Manager approval workflows</li>
+          <li>Works for manufacturing, healthcare, retail, logistics</li>
+          <li>Integrates with ShiftStar Operations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-  <div id="popup" class="hidden">Thank you for submitting a recommendation!</div>
+<section class="problem" id="problem">
+  <div class="container">
+    <p class="section-eye">The problem</p>
+    <h2 class="section-title">Every shift, critical information disappears.</h2>
+    <p class="section-sub">The outgoing supervisor is tired. The handoff is two minutes. Half of what matters never gets said.</p>
+    <div class="problem-grid">
+      <div class="problem-card fade-up"><div class="problem-icon">⏱</div><h3>Lost handoff information</h3><p>Machines running rough, quality holds, pending calls — forgotten before the incoming supervisor reaches the floor.</p></div>
+      <div class="problem-card fade-up"><div class="problem-icon">📊</div><h3>OEE calculated too late</h3><p>Monday morning spreadsheets tell you what went wrong last week. ShiftStar tells you while you can still fix it.</p></div>
+      <div class="problem-card fade-up"><div class="problem-icon">📉</div><h3>No visibility into trends</h3><p>When the same machine faults three shifts in a row, someone should catch it before it becomes a full stoppage.</p></div>
+    </div>
+  </div>
+</section>
 
+<section class="how" id="how">
+  <div class="container" style="text-align:center">
+    <p class="section-eye">How it works</p>
+    <h2 class="section-title">Your team is up and running in minutes.</h2>
+    <p class="section-sub" style="margin:0 auto">No IT department. No installation. Create an account and start tracking.</p>
+    <div class="steps">
+      <div class="step fade-up"><div class="step-num">1</div><h3>Create your account</h3><p>Sign up with your company name and invite your team. Every user gets their own login. Your data is isolated to your company.</p></div>
+      <div class="step fade-up"><div class="step-num">2</div><h3>Configure and log</h3><p>Set your shift schedule in two minutes. Log downtime events as they happen — machine, cause, duration, notes.</p></div>
+      <div class="step fade-up"><div class="step-num">3</div><h3>Reports and handoffs — automatic</h3><p>At shift end, ShiftStar AI writes your summary, handoff note, and corrective actions. One tap. Done.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="container">
+    <p class="section-eye">Features</p>
+    <h2 class="section-title">Everything your team needs. Nothing they don't.</h2>
+    <div class="feature-grid">
+      <div class="feature-card fade-up"><div class="feature-icon fi-purple">⭐</div><h3>Live shift detection</h3><p>Automatically knows which shift is active, tracks progress in real time, handles overnight wraparound.</p></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-teal">📈</div><h3>Real OEE calculation</h3><p>Import your SAP or MRP export and get Availability × Performance × Quality from your actual production numbers.</p></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-coral">📋</div><h3>Downtime event logging</h3><p>Log any event in seconds. Machine, cause, duration, notes. Builds a real audit trail in your company database.</p></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-amber">📊</div><h3>Multi-shift trend analysis</h3><p>OEE trending across 7, 14, or 30 shifts. Downtime Pareto. Shift-over-shift comparison.</p></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-blue">💬</div><h3>AI-powered handoff notes</h3><p>ShiftStar AI writes the shift handoff automatically. The incoming supervisor gets everything before they step on the floor.</p></div>
+      <div class="feature-card fade-up"><div class="feature-icon fi-pink">👥</div><h3>Real multi-user access</h3><p>Every user has their own secure login. Supervisors, managers, and admins each see what they need.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="ai-section" id="ai">
+  <div class="container">
+    <p class="section-eye">ShiftStar AI</p>
+    <h2 class="section-title">The shift intelligence layer that changes everything.</h2>
+    <p class="section-sub">Not just data. Decisions. ShiftStar AI reads your actual shift data and tells you what it means.</p>
+    <div class="ai-cards">
+      <div class="ai-card fade-up"><h4>End-of-shift digest</h4><p>Plain-English summary of what happened, what it cost you, and the one number your plant manager will ask about.</p></div>
+      <div class="ai-card fade-up"><h4>Automatic handoff note</h4><p>Everything the incoming supervisor needs — open issues, machines to watch — written automatically.</p></div>
+      <div class="ai-card fade-up"><h4>Root cause flags</h4><p>When mechanical faults spike three shifts in a row, ShiftStar calls it out before it becomes a full stoppage.</p></div>
+      <div class="ai-card fade-up"><h4>Corrective action priorities</h4><p>Specific and actionable. Ordered by impact. Not vague advice.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="proof" id="proof">
+  <div class="container">
+    <p class="section-eye" style="text-align:center">Built from experience</p>
+    <h2 class="section-title" style="text-align:center;margin:0 auto 48px">From someone who stood where you stand.</h2>
+    <div class="proof-inner">
+      <p class="proof-quote">"The biggest problem wasn't the downtime. It was that nobody knew about it until it was too late to do anything. ShiftStar is the tool I wished I had on every shift."</p>
+      <p class="proof-attr"><strong>Anthony</strong> — Production Supervisor, 12 years on the floor. Founder, ShiftStar LLC.</p>
+    </div>
+    <div class="stats">
+      <div class="fade-up"><div class="stat-num">85%</div><div class="stat-label">OEE target ShiftStar helps you hit</div></div>
+      <div class="fade-up"><div class="stat-num">&lt;2min</div><div class="stat-label">To generate a full shift summary report</div></div>
+      <div class="fade-up"><div class="stat-num">7</div><div class="stat-label">Languages supported out of the box</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="container">
+    <p class="section-eye" style="text-align:center">Pricing</p>
+    <h2 class="section-title" style="text-align:center;margin:0 auto 12px">Start free. Scale as your team grows.</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto">No credit card required to get started. Upgrade when you're ready.</p>
+    <div class="pricing-grid">
+
+      <div class="price-card fade-up">
+        <div class="price-name">Starter</div>
+        <div class="price-amount">$0<span>/mo</span></div>
+        <div class="price-users">1 user</div>
+        <p class="price-desc">For supervisors who want to try ShiftStar on their floor today.</p>
+        <ul class="price-features">
+          <li>Live shift detection</li>
+          <li>Downtime event logging</li>
+          <li>OEE calculation</li>
+          <li>Shift summary reports</li>
+          <li>7-shift trend history</li>
+        </ul>
+        <button class="price-btn price-btn-outline" onclick="goToApp('free')">Get started free</button>
+      </div>
+
+      <div class="price-card featured fade-up">
+        <span class="price-badge">Most popular</span>
+        <div class="price-name">Pro</div>
+        <div class="price-amount">$49<span>/mo</span></div>
+        <div class="price-users">Up to 3 users</div>
+        <p class="price-desc">For supervisors and plant managers who need the full picture.</p>
+        <ul class="price-features">
+          <li>Everything in Starter</li>
+          <li>ShiftStar AI — all features</li>
+          <li>Unlimited shift history</li>
+          <li>CSV import from SAP / MRP</li>
+          <li>Downtime Pareto analysis</li>
+          <li>AI handoff notes</li>
+        </ul>
+        <button class="price-btn price-btn-solid" onclick="goToApp('pro')">Start Pro free for 14 days</button>
+        <p class="price-note">No credit card required</p>
+      </div>
+
+      <div class="price-card fade-up">
+        <div class="price-name">Team</div>
+        <div class="price-amount">$149<span>/mo</span></div>
+        <div class="price-users">Up to 10 users</div>
+        <p class="price-desc">For mid-size facilities with multiple supervisors and lines.</p>
+        <ul class="price-features">
+          <li>Everything in Pro</li>
+          <li>Up to 10 team members</li>
+          <li>Manager dashboard view</li>
+          <li>Shared event log across supervisors</li>
+          <li>Multi-line tracking</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="price-btn price-btn-outline" onclick="goToApp('team')">Start Team free for 14 days</button>
+      </div>
+
+      <div class="price-card fade-up">
+        <div class="price-name">Plant</div>
+        <div class="price-amount" style="font-size:24px;margin:16px 0 4px">Custom</div>
+        <div class="price-users">Unlimited users</div>
+        <p class="price-desc">For multi-facility operations, ERP integrations, and white label deployments.</p>
+        <ul class="price-features">
+          <li>Everything in Team</li>
+          <li>Unlimited users and facilities</li>
+          <li>ERP / SAP live integration</li>
+          <li>White label — your brand</li>
+          <li>Custom onboarding</li>
+          <li>SLA guarantee</li>
+        </ul>
+        <a href="mailto:anthonynorman85@gmail.com" class="price-btn price-btn-outline">Contact us</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <h2 class="section-title">Your next shift starts with ShiftStar.</h2>
+    <p class="section-sub">No installation. No IT ticket. Create your account and start tracking in two minutes.</p>
+    <button class="btn-hero" onclick="goToApp('free')">Get ShiftStar free</button>
+  </div>
+</section>
+
+<footer>
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#EEEDFE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+    <div>
+      <div class="footer-brand-name">ShiftStar LLC</div>
+      <div class="footer-tag">Built for the floor. Understood in the boardroom.</div>
+    </div>
+  </div>
+  <div class="footer-links">
+    <a href="#products">Products</a>
+    <a href="#pricing">Pricing</a>
+    <a href="/privacy">Privacy Policy</a>
+    <a href="mailto:anthonynorman85@gmail.com">Contact</a>
+    <a href="https://github.com/Astar8525" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <div class="footer-tag">© 2026 ShiftStar LLC. All rights reserved.</div>
+</footer>
+
+<script>
+const DASHBOARD_URL = 'https://web-production-f21c8.up.railway.app/dashboard';
+
+function goToApp(tier) {
+  if (tier === 'free') {
+    window.location.href = DASHBOARD_URL;
+  } else {
+    window.location.href = DASHBOARD_URL + '?upgrade=' + tier;
+  }
+}
+
+let zoom = parseInt(localStorage.getItem('ss_lp_zoom') || '100');
+function adjZoom(d) { zoom = Math.min(150, Math.max(70, zoom + d)); applyZoom(); }
+function resetZoom() { zoom = 100; applyZoom(); }
+function applyZoom() { document.documentElement.style.fontSize = (zoom / 100) * 16 + 'px'; document.getElementById('zoom-level').textContent = zoom + '%'; localStorage.setItem('ss_lp_zoom', zoom); }
+applyZoom();
+
+function setLang(lang) { localStorage.setItem('ss_lp_lang', lang); }
+const savedLang = localStorage.getItem('ss_lp_lang') || 'en';
+document.getElementById('lang-select').value = savedLang;
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i * 80); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
