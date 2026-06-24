@@ -6,7 +6,7 @@ import models
 import stripe
 import os
 
-stripe.api_key = "sk_live_yourfullkeyhere"
+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
 
 router = APIRouter(prefix="/stripe", tags=["stripe"])
 
