@@ -40,6 +40,10 @@ def serve_landing():
 def serve_privacy():
     return FileResponse("privacy.html")
 
+@app.get("/terms")
+def serve_terms():
+    return FileResponse("terms.html")
+
 @app.get("/health")
 def health():
     return {"status": "healthy"}
