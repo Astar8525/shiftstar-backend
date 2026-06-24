@@ -299,6 +299,7 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
     <div class="live-time" id="live-clock"></div>
     <div class="user-pill" id="user-pill">—</div>
     <button class="hdr-btn" onclick="toggleConfig()"><i class="ti ti-settings"></i> Shifts</button>
+    <button class="hdr-btn" onclick="startCheckout('pro')" style="background:rgba(29,158,117,.25);border-color:rgba(29,158,117,.4)"><i class="ti ti-star"></i> Upgrade</button>
     <button class="hdr-btn hdr-btn-accent" onclick="openModal()"><i class="ti ti-plus"></i> Log event</button>
     <button class="hdr-btn" onclick="doLogout()"><i class="ti ti-logout"></i></button>
   </div>
@@ -536,10 +537,10 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 <script>
 // ═══════════════════════════════════════════
 // SHIFTSTAR DASHBOARD — API Connected Version
-// Backend: http://127.0.0.1:8000
+// Backend: https://web-production-f21c8.up.railway.app
 // ═══════════════════════════════════════════
 
-const API = 'http://127.0.0.1:8000';
+const API = 'https://web-production-f21c8.up.railway.app';
 const SW = ['#534AB7','#1D9E75','#D85A30','#BA7517','#185FA5','#D4537E'];
 const CC = {Mechanical:'#D85A30',Changeover:'#1D9E75',Material:'#BA7517',Electrical:'#534AB7',Operator:'#888780','Quality hold':'#D4537E',Other:'#888780'};
 
@@ -643,6 +644,27 @@ async function launchApp() {
   setInterval(updateClock, 1000);
   setInterval(updateShiftUI, 30000);
   setSyncStatus('Connected — data syncing with ' + currentUser.company_id + ' company database');
+
+  // Check if user came from landing page with upgrade intent
+  const params = new URLSearchParams(window.location.search);
+  const upgradeTier = params.get('upgrade');
+  if (upgradeTier && (upgradeTier === 'pro' || upgradeTier === 'team')) {
+    setTimeout(() => startCheckout(upgradeTier), 1000);
+  }
+}
+
+async function startCheckout(tier) {
+  setSyncStatus('Opening Stripe checkout for ' + tier + ' plan...', 'info');
+  try {
+    const data = await api('POST', '/stripe/create-checkout-session?tier=' + tier);
+    if (data.checkout_url) {
+      window.location.href = data.checkout_url;
+    } else {
+      setSyncStatus('Could not start checkout. Please try again.', 'error');
+    }
+  } catch (e) {
+    setSyncStatus('Checkout failed: ' + e.message, 'error');
+  }
 }
 
 // ── Data Loading ──
