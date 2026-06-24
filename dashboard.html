@@ -11,9 +11,9 @@
 :root{
   --brand:#534AB7;--brand-dark:#3C3489;--brand-light:#EEEDFE;--brand-mid:#AFA9EC;
   --teal:#1D9E75;--coral:#D85A30;--amber:#BA7517;--pink:#D4537E;--blue:#185FA5;
-  --bg:#F8F7FF;--bg2:#FFFFFF;
+  --bg:#F8F7FF;--bg2:#FFFFFF;--surface:#EEEDFE;
   --text:#1A1825;--text2:#4B4768;--text3:#8B88A8;
-  --border:#E0DCF5;
+  --border:#E0DCF5;--border2:#C8C3EC;
   --success:#1D9E75;--warning:#BA7517;--danger:#D85A30;
   --radius:10px;--radius-lg:16px;
   font-size:16px;
@@ -23,71 +23,45 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 
 /* ZOOM + LANG */
 #zoom-bar{position:fixed;bottom:20px;right:20px;z-index:1000;display:flex;align-items:center;gap:5px;background:var(--bg2);border:1px solid var(--border);border-radius:40px;padding:5px 10px;box-shadow:0 4px 20px rgba(83,74,183,.1)}
-#zoom-bar button{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:15px;font-weight:500;color:var(--brand);display:flex;align-items:center;justify-content:center;}
+#zoom-bar button{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-size:15px;font-weight:500;color:var(--brand);display:flex;align-items:center;justify-content:center;transition:background .15s}
 #zoom-bar button:hover{background:var(--brand-light)}
 #zoom-level{font-size:11px;font-weight:500;color:var(--text2);min-width:34px;text-align:center}
 #lang-bar{position:fixed;bottom:20px;left:20px;z-index:1000;display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border);border-radius:40px;padding:5px 12px;box-shadow:0 4px 20px rgba(83,74,183,.1)}
 #lang-bar select{font-size:12px;font-family:'Inter',sans-serif;border:none;background:transparent;color:var(--brand);font-weight:500;cursor:pointer;outline:none}
 
-/* LOGIN */
-#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--bg)}
-.login-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:40px;width:100%;max-width:420px;box-shadow:0 8px 40px rgba(83,74,183,.1)}
-.login-brand{display:flex;align-items:center;gap:12px;margin-bottom:28px;justify-content:center}
-.login-logo{width:44px;height:44px;background:var(--brand);border-radius:12px;display:flex;align-items:center;justify-content:center}
-.login-logo i{color:var(--brand-light);font-size:24px}
-.login-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text)}
-.login-tag{font-size:11px;color:var(--text3);text-align:center;margin-bottom:28px}
-.login-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px}
-.login-tab{flex:1;font-size:13px;padding:8px;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:'Inter',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .15s}
-.login-tab.active{color:var(--brand);border-bottom-color:var(--brand);font-weight:500}
-.login-field{margin-bottom:14px}
-.login-field label{font-size:12px;color:var(--text2);display:block;margin-bottom:5px}
-.login-field input{width:100%;font-size:13px;font-family:'Inter',sans-serif;padding:10px 12px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text)}
-.login-field input:focus{outline:none;border-color:var(--brand-mid)}
-.login-btn{width:100%;font-size:14px;font-family:'Inter',sans-serif;padding:12px;border-radius:var(--radius);border:none;background:var(--brand);color:#fff;cursor:pointer;font-weight:500;transition:background .15s;margin-top:4px}
-.login-btn:hover{background:var(--brand-dark)}
-.login-err{font-size:12px;color:var(--danger);text-align:center;margin-top:10px;min-height:18px}
-.login-loading{text-align:center;font-size:13px;color:var(--text3);margin-top:10px}
-
 /* HEADER */
 header{background:var(--brand);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;position:sticky;top:0;z-index:50}
 .hdr-brand{display:flex;align-items:center;gap:10px}
 .hdr-logo{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:9px;display:flex;align-items:center;justify-content:center}
-.hdr-logo i{color:var(--brand-light);font-size:18px}
+.hdr-logo i{color:#EEEDFE;font-size:18px}
 .hdr-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:#fff}
 .hdr-tag{font-size:10px;color:rgba(255,255,255,.65)}
 .hdr-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .shift-pill{font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.15);color:#fff}
 .live-time{font-size:11px;color:rgba(255,255,255,.7)}
-.user-pill{font-size:11px;color:rgba(255,255,255,.8);background:rgba(255,255,255,.1);padding:4px 10px;border-radius:20px}
 .hdr-btn{font-size:12px;padding:5px 12px;cursor:pointer;border-radius:8px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:5px;transition:background .15s}
 .hdr-btn:hover{background:rgba(255,255,255,.15)}
 .hdr-btn-accent{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.3)}
+.hdr-btn-accent:hover{background:rgba(255,255,255,.3)}
 
-/* MAIN */
+/* LAYOUT */
 .main{max-width:1200px;margin:0 auto;padding:20px 20px 80px}
 
-/* SYNC STATUS */
-.sync-bar{display:flex;align-items:center;gap:8px;font-size:12px;padding:8px 14px;border-radius:var(--radius);margin-bottom:16px;background:var(--brand-light);color:var(--brand);border:1px solid var(--brand-mid)}
-.sync-bar.error{background:#FAECE7;color:var(--danger);border-color:#F5C4B4}
-.sync-bar.success{background:#E1F5EE;color:var(--teal);border-color:#B3E5D4}
-.sync-dot{width:7px;height:7px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* CONFIG */
+/* CONFIG PANEL */
 .config-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px;display:none}
 .config-panel.open{display:block}
 .config-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px}
 .config-sub{font-size:12px;color:var(--text3);margin-bottom:14px}
-.config-col-heads{display:grid;grid-template-columns:14px 1fr 1fr 1fr 22px;gap:8px;font-size:11px;color:var(--text3);margin-bottom:6px}
+.config-col-heads{display:grid;grid-template-columns:14px 1fr 1fr 1fr 22px;gap:8px;font-size:11px;color:var(--text3);margin-bottom:6px;padding:0 2px}
 .shift-row-item{display:grid;grid-template-columns:14px 1fr 1fr 1fr 22px;gap:8px;align-items:center;margin-bottom:7px}
 .swatch-dot{width:10px;height:10px;border-radius:50%;margin:auto}
 .cfg-input{font-size:13px;font-family:'Inter',sans-serif;padding:5px 8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);width:100%}
-.rm-btn{font-size:17px;color:var(--text3);cursor:pointer;background:none;border:none;line-height:1}
+.cfg-input:focus{outline:none;border-color:var(--brand-mid)}
+.rm-btn{font-size:17px;color:var(--text3);cursor:pointer;background:none;border:none;line-height:1;padding:0}
 .rm-btn:hover{color:var(--danger)}
 .cfg-actions{display:flex;gap:8px;align-items:center;margin-top:4px}
 .btn{font-size:12px;padding:5px 12px;cursor:pointer;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Inter',sans-serif;transition:background .15s}
-.btn:hover{background:var(--brand-light)}
+.btn:hover{background:var(--surface)}
 .btn-brand{background:var(--brand);color:#fff;border-color:var(--brand)}
 .btn-brand:hover{background:var(--brand-dark);border-color:var(--brand-dark)}
 .save-flash{font-size:11px;color:var(--success);opacity:0;transition:opacity .3s}
@@ -98,13 +72,13 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 .progress-track{background:var(--border);border-radius:4px;height:7px;overflow:hidden}
 .progress-fill{height:100%;border-radius:4px;transition:width .6s}
 .tl-row{display:flex;gap:3px;margin-top:8px;margin-bottom:3px}
-.tl-seg{height:5px;border-radius:3px;opacity:.25}
+.tl-seg{height:5px;border-radius:3px;opacity:.25;transition:opacity .3s}
 .tl-seg.active{opacity:1}
 .tl-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-bottom:20px}
 
 /* TABS */
 .tab-nav{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px;flex-wrap:wrap}
-.tab-btn{font-size:12px;padding:8px 14px;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:'Inter',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.tab-btn{font-size:12px;padding:8px 14px;cursor:pointer;border:none;background:transparent;color:var(--text3);font-family:'Inter',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:color .15s}
 .tab-btn.active{color:var(--brand);border-bottom-color:var(--brand);font-weight:500}
 .tab-btn:hover{color:var(--text)}
 .tab-pane{display:none}
@@ -118,7 +92,7 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 .metric-sub{font-size:11px;color:var(--text3);margin-top:4px}
 
 /* OEE FORMULA */
-.oee-formula{display:flex;align-items:center;gap:8px;background:var(--brand-light);padding:10px 16px;border-radius:var(--radius);margin-bottom:16px;flex-wrap:wrap;border:1px solid var(--brand-mid)}
+.oee-formula{display:flex;align-items:center;gap:8px;background:var(--surface);padding:10px 16px;border-radius:var(--radius);margin-bottom:16px;flex-wrap:wrap;border:1px solid var(--brand-mid)}
 .formula-part{text-align:center}
 .formula-val{font-size:16px;font-weight:500;color:var(--text)}
 .formula-lbl{font-size:10px;color:var(--text3)}
@@ -151,9 +125,10 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 .b-danger{background:#FAECE7;color:#993C1D}
 .b-warn{background:#FAEEDA;color:#854F0B}
 .b-ok{background:#E1F5EE;color:#085041}
+.b-purple{background:var(--brand-light);color:var(--brand-dark)}
 .empty{font-size:13px;color:var(--text3);text-align:center;padding:20px 0}
 
-/* AI */
+/* AI PANEL */
 .ai-panel{background:var(--brand-light);border:1px solid var(--brand-mid);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:14px}
 .ai-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px}
 .ai-icon{width:32px;height:32px;background:var(--brand);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -161,15 +136,28 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 .ai-title{font-size:14px;font-weight:500;color:var(--brand-dark)}
 .ai-subtitle{font-size:11px;color:var(--brand)}
 .ai-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.ai-action-btn{font-size:12px;padding:10px 12px;cursor:pointer;border-radius:var(--radius);border:1px solid var(--brand-mid);background:var(--bg2);color:var(--brand-dark);font-family:'Inter',sans-serif;text-align:left;line-height:1.4}
+.ai-action-btn{font-size:12px;padding:10px 12px;cursor:pointer;border-radius:var(--radius);border:1px solid var(--brand-mid);background:var(--bg2);color:var(--brand-dark);font-family:'Inter',sans-serif;text-align:left;line-height:1.4;transition:background .15s}
 .ai-action-btn:hover{background:var(--brand-light)}
 .ai-action-btn span{display:block;font-size:10px;color:var(--brand);margin-top:2px}
 .ai-output{background:var(--bg2);border:1px solid var(--brand-mid);border-radius:var(--radius);padding:14px;min-height:80px;font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap}
 .ai-input-row{display:flex;gap:8px;margin-bottom:12px}
 .ai-text-input{flex:1;font-size:13px;font-family:'Inter',sans-serif;padding:7px 10px;border-radius:var(--radius);border:1px solid var(--brand-mid);background:var(--bg2);color:var(--text)}
+.ai-text-input:focus{outline:none;border-color:var(--brand)}
 .quick-btns{display:flex;gap:6px;flex-wrap:wrap}
-.quick-btn{font-size:11px;padding:4px 10px;cursor:pointer;border-radius:20px;border:1px solid var(--brand-mid);background:transparent;color:var(--brand-dark);font-family:'Inter',sans-serif}
+.quick-btn{font-size:11px;padding:4px 10px;cursor:pointer;border-radius:20px;border:1px solid var(--brand-mid);background:transparent;color:var(--brand-dark);font-family:'Inter',sans-serif;transition:background .15s}
 .quick-btn:hover{background:var(--brand-light)}
+
+/* IMPORT */
+.csv-textarea{width:100%;min-height:100px;font-size:12px;font-family:monospace;padding:10px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);resize:vertical;line-height:1.6}
+.csv-textarea:focus{outline:none;border-color:var(--brand-mid)}
+.manual-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12px;color:var(--text2)}
+.field input{font-size:13px;font-family:'Inter',sans-serif;padding:6px 9px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);width:100%}
+.field input:focus{outline:none;border-color:var(--brand-mid)}
+.import-msg{font-size:12px;padding:8px 12px;border-radius:var(--radius);margin-top:10px;display:none}
+.msg-ok{background:#E1F5EE;color:#085041}
+.msg-err{background:#FAECE7;color:#993C1D}
 
 /* TRENDS */
 .stat-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
@@ -177,7 +165,7 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 .stat-lbl{font-size:11px;color:var(--text3);margin-bottom:3px}
 .stat-val{font-size:16px;font-weight:500;color:var(--text)}
 .range-btns{display:flex;gap:4px}
-.range-btn{font-size:11px;padding:3px 9px;cursor:pointer;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-family:'Inter',sans-serif}
+.range-btn{font-size:11px;padding:3px 9px;cursor:pointer;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);font-family:'Inter',sans-serif;transition:all .15s}
 .range-btn.active{background:var(--brand-light);color:var(--brand);border-color:var(--brand-mid)}
 .history-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;margin-bottom:7px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .history-card.hc-on{border-left:3px solid var(--teal)}
@@ -186,16 +174,6 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 .hc-name{font-size:13px;font-weight:500;color:var(--text);min-width:70px}
 .hc-oee{font-size:17px;font-weight:500;min-width:50px}
 .hc-meta{font-size:12px;color:var(--text2);flex:1}
-
-/* IMPORT */
-.csv-textarea{width:100%;min-height:100px;font-size:12px;font-family:monospace;padding:10px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);resize:vertical;line-height:1.6}
-.manual-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.field{display:flex;flex-direction:column;gap:4px}
-.field label{font-size:12px;color:var(--text2)}
-.field input{font-size:13px;font-family:'Inter',sans-serif;padding:6px 9px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text);width:100%}
-.import-msg{font-size:12px;padding:8px 12px;border-radius:var(--radius);margin-top:10px;display:none}
-.msg-ok{background:#E1F5EE;color:#085041}
-.msg-err{background:#FAECE7;color:#993C1D}
 
 /* REPORT */
 .report-area{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;font-size:12px;color:var(--text);line-height:1.8;white-space:pre-wrap;font-family:monospace;min-height:100px}
@@ -208,12 +186,15 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 .modal-field{margin-bottom:12px}
 .modal-field label{font-size:12px;color:var(--text2);display:block;margin-bottom:4px}
 .modal-field input,.modal-field select{width:100%;font-size:13px;font-family:'Inter',sans-serif;padding:7px 10px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg);color:var(--text)}
+.modal-field input:focus,.modal-field select:focus{outline:none;border-color:var(--brand-mid)}
 .modal-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .modal-actions{display:flex;gap:8px;align-items:center;margin-top:4px}
 .form-err{font-size:12px;color:var(--danger)}
 
 @media(max-width:640px){
-  .two-col,.ai-actions,.manual-grid{grid-template-columns:1fr}
+  .two-col{grid-template-columns:1fr}
+  .ai-actions{grid-template-columns:1fr}
+  .manual-grid{grid-template-columns:1fr}
   header{padding:10px 14px}
   .main{padding:14px 14px 80px}
   #zoom-bar{bottom:64px}
@@ -222,16 +203,16 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 </head>
 <body>
 
-<div id="zoom-bar">
-  <button onclick="adjZoom(-10)">−</button>
+<div id="zoom-bar" role="toolbar" aria-label="Zoom controls">
+  <button onclick="adjZoom(-10)" aria-label="Zoom out">−</button>
   <span id="zoom-level">100%</span>
-  <button onclick="adjZoom(10)">+</button>
+  <button onclick="adjZoom(10)" aria-label="Zoom in">+</button>
   <button onclick="resetZoom()" style="font-size:10px;width:auto;padding:0 7px;border-radius:20px">Reset</button>
 </div>
 
-<div id="lang-bar">
+<div id="lang-bar" role="complementary" aria-label="Language selector">
   <span style="font-size:14px">🌐</span>
-  <select id="lang-select" onchange="setLang(this.value)">
+  <select id="lang-select" onchange="setLang(this.value)" aria-label="Select language">
     <option value="en">English</option>
     <option value="es">Español</option>
     <option value="fr">Français</option>
@@ -242,137 +223,86 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
   </select>
 </div>
 
-<!-- LOGIN SCREEN -->
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-brand">
-      <div class="login-logo"><i class="ti ti-star"></i></div>
-      <div class="login-name">ShiftStar</div>
-    </div>
-    <div class="login-tag">Built for the floor. Understood in the boardroom.</div>
-    <div class="login-tabs">
-      <button class="login-tab active" id="lt-login" onclick="switchLoginTab('login')">Sign in</button>
-      <button class="login-tab" id="lt-register" onclick="switchLoginTab('register')">Register</button>
-    </div>
-
-    <!-- LOGIN FORM -->
-    <div id="login-form">
-      <div class="login-field"><label>Email</label><input type="email" id="l-email" placeholder="your@email.com"/></div>
-      <div class="login-field"><label>Password</label><input type="password" id="l-password" placeholder="••••••••"/></div>
-      <button class="login-btn" onclick="doLogin()">Sign in to ShiftStar</button>
-      <div class="login-err" id="login-err"></div>
-    </div>
-
-    <!-- REGISTER FORM -->
-    <div id="register-form" style="display:none">
-      <div class="login-field"><label>Your name</label><input type="text" id="r-name" placeholder="Anthony"/></div>
-      <div class="login-field"><label>Email</label><input type="email" id="r-email" placeholder="your@email.com"/></div>
-      <div class="login-field"><label>Password</label><input type="password" id="r-password" placeholder="••••••••"/></div>
-      <div class="login-field"><label>Company name</label><input type="text" id="r-company" placeholder="Acme Manufacturing"/></div>
-      <div class="login-field">
-        <label>Role</label>
-        <select id="r-role" style="width:100%;font-size:13px;font-family:'Inter',sans-serif;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text)">
-          <option value="supervisor">Supervisor</option>
-          <option value="manager">Manager</option>
-          <option value="admin">Admin</option>
-        </select>
-      </div>
-      <button class="login-btn" onclick="doRegister()">Create account</button>
-      <div class="login-err" id="register-err"></div>
-    </div>
-  </div>
-</div>
-
-<!-- MAIN APP -->
-<div id="app" style="display:none">
-
-<header>
+<header role="banner">
   <div class="hdr-brand">
-    <div class="hdr-logo"><i class="ti ti-star"></i></div>
+    <div class="hdr-logo"><i class="ti ti-star" aria-hidden="true"></i></div>
     <div>
       <div class="hdr-name">ShiftStar</div>
-      <div class="hdr-tag">Built for the floor. Understood in the boardroom.</div>
+      <div class="hdr-tag" data-i18n="tagline">Built for the floor. Understood in the boardroom.</div>
     </div>
   </div>
   <div class="hdr-right">
     <div class="shift-pill" id="active-pill">—</div>
     <div class="live-time" id="live-clock"></div>
-    <div class="user-pill" id="user-pill">—</div>
-    <button class="hdr-btn" onclick="toggleConfig()"><i class="ti ti-settings"></i> Shifts</button>
-    <button class="hdr-btn hdr-btn-accent" onclick="openModal()"><i class="ti ti-plus"></i> Log event</button>
-    <button class="hdr-btn" onclick="doLogout()"><i class="ti ti-logout"></i></button>
+    <button class="hdr-btn" onclick="toggleConfig()"><i class="ti ti-settings" aria-hidden="true"></i> <span data-i18n="btn.shifts">Shifts</span></button>
+    <button class="hdr-btn hdr-btn-accent" onclick="openModal()"><i class="ti ti-plus" aria-hidden="true"></i> <span data-i18n="btn.logevent">Log event</span></button>
   </div>
 </header>
 
-<main class="main">
-
-<div class="sync-bar" id="sync-bar">
-  <div class="sync-dot"></div>
-  <span id="sync-msg">Connected to ShiftStar backend</span>
-</div>
+<main class="main" role="main">
 
 <div class="config-panel" id="config-panel">
-  <div class="config-title">Shift schedule</div>
-  <div class="config-sub">Saved to your company account — visible to your whole team.</div>
-  <div class="config-col-heads"><span></span><span>Name</span><span>Start</span><span>End</span><span></span></div>
+  <div class="config-title" data-i18n="config.title">Shift schedule</div>
+  <div class="config-sub" data-i18n="config.sub">Your configuration saves automatically and persists across sessions.</div>
+  <div class="config-col-heads"><span></span><span data-i18n="col.name">Name</span><span data-i18n="col.start">Start</span><span data-i18n="col.end">End</span><span></span></div>
   <div id="shift-rows"></div>
   <div class="cfg-actions">
-    <button class="btn" onclick="addShiftRow()">+ Add shift</button>
-    <button class="btn btn-brand" onclick="saveShifts()">Save</button>
-    <button class="btn" onclick="toggleConfig()">Close</button>
-    <span class="save-flash" id="save-flash">✓ Saved</span>
+    <button class="btn" onclick="addShift()" data-i18n="btn.addshift">+ Add shift</button>
+    <button class="btn btn-brand" onclick="saveConfig()" data-i18n="btn.save">Save</button>
+    <button class="btn" onclick="toggleConfig()" data-i18n="btn.close">Close</button>
+    <span class="save-flash" id="save-flash" data-i18n="msg.saved">✓ Saved</span>
   </div>
 </div>
 
 <div class="progress-section">
-  <div class="progress-label"><span id="shift-progress-label">Shift progress</span><span id="shift-pct">—</span></div>
+  <div class="progress-label"><span id="shift-progress-label" data-i18n="progress.label">Shift progress</span><span id="shift-pct">—</span></div>
   <div class="progress-track"><div class="progress-fill" id="shift-bar" style="width:0%"></div></div>
   <div class="tl-row" id="tl-segs"></div>
   <div class="tl-labels" id="tl-labels"></div>
 </div>
 
-<nav class="tab-nav">
-  <button class="tab-btn active" id="tb-dashboard" onclick="showTab('dashboard')"><i class="ti ti-layout-dashboard"></i> Dashboard</button>
-  <button class="tab-btn" id="tb-ai" onclick="showTab('ai')"><i class="ti ti-sparkles"></i> AI Helper</button>
-  <button class="tab-btn" id="tb-trends" onclick="showTab('trends')"><i class="ti ti-trending-up"></i> Trends</button>
-  <button class="tab-btn" id="tb-import" onclick="showTab('import')"><i class="ti ti-upload"></i> Import</button>
-  <button class="tab-btn" id="tb-events" onclick="showTab('events')"><i class="ti ti-list"></i> Events</button>
-  <button class="tab-btn" id="tb-report" onclick="showTab('report')"><i class="ti ti-file-text"></i> Report</button>
+<nav class="tab-nav" role="navigation" aria-label="Dashboard sections">
+  <button class="tab-btn active" id="tb-dashboard" onclick="showTab('dashboard')"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> <span data-i18n="tab.dashboard">Dashboard</span></button>
+  <button class="tab-btn" id="tb-ai" onclick="showTab('ai')"><i class="ti ti-sparkles" aria-hidden="true"></i> <span data-i18n="tab.ai">AI Helper</span></button>
+  <button class="tab-btn" id="tb-trends" onclick="showTab('trends')"><i class="ti ti-trending-up" aria-hidden="true"></i> <span data-i18n="tab.trends">Trends</span></button>
+  <button class="tab-btn" id="tb-import" onclick="showTab('import')"><i class="ti ti-upload" aria-hidden="true"></i> <span data-i18n="tab.import">Import</span></button>
+  <button class="tab-btn" id="tb-events" onclick="showTab('events')"><i class="ti ti-list" aria-hidden="true"></i> <span data-i18n="tab.events">Events</span></button>
+  <button class="tab-btn" id="tb-report" onclick="showTab('report')"><i class="ti ti-file-text" aria-hidden="true"></i> <span data-i18n="tab.report">Report</span></button>
 </nav>
 
 <!-- DASHBOARD -->
 <div class="tab-pane active" id="pane-dashboard">
   <div class="metrics-grid">
-    <div class="metric-card"><div class="metric-label">OEE</div><div class="metric-val" id="m-oee">—</div><div class="metric-sub" id="m-oee-sub">Target 85%</div></div>
-    <div class="metric-card"><div class="metric-label">Throughput</div><div class="metric-val" id="m-tp">—</div><div class="metric-sub">good units</div></div>
-    <div class="metric-card"><div class="metric-label">Defect rate</div><div class="metric-val" id="m-dr">—</div><div class="metric-sub">Spec ≤ 2.5%</div></div>
-    <div class="metric-card"><div class="metric-label">Downtime</div><div class="metric-val" id="m-dt">0 min</div><div class="metric-sub">this shift</div></div>
+    <div class="metric-card"><div class="metric-label" data-i18n="metric.oee">OEE</div><div class="metric-val" id="m-oee">—</div><div class="metric-sub" id="m-oee-sub" data-i18n="metric.target">Target 85%</div></div>
+    <div class="metric-card"><div class="metric-label" data-i18n="metric.throughput">Throughput</div><div class="metric-val" id="m-tp">—</div><div class="metric-sub" data-i18n="metric.goodunits">good units</div></div>
+    <div class="metric-card"><div class="metric-label" data-i18n="metric.defect">Defect rate</div><div class="metric-val" id="m-dr">—</div><div class="metric-sub" data-i18n="metric.spec">Spec ≤ 2.5%</div></div>
+    <div class="metric-card"><div class="metric-label" data-i18n="metric.downtime">Downtime</div><div class="metric-val" id="m-dt">0 min</div><div class="metric-sub" data-i18n="metric.thisshift">this shift</div></div>
   </div>
   <div class="oee-formula" id="oee-formula" style="display:none">
-    <div class="formula-part"><div class="formula-val" id="f-av">—</div><div class="formula-lbl">Availability</div></div>
+    <div class="formula-part"><div class="formula-val" id="f-av">—</div><div class="formula-lbl" data-i18n="formula.avail">Availability</div></div>
     <div class="formula-op">×</div>
-    <div class="formula-part"><div class="formula-val" id="f-pf">—</div><div class="formula-lbl">Performance</div></div>
+    <div class="formula-part"><div class="formula-val" id="f-pf">—</div><div class="formula-lbl" data-i18n="formula.perf">Performance</div></div>
     <div class="formula-op">×</div>
-    <div class="formula-part"><div class="formula-val" id="f-ql">—</div><div class="formula-lbl">Quality</div></div>
+    <div class="formula-part"><div class="formula-val" id="f-ql">—</div><div class="formula-lbl" data-i18n="formula.qual">Quality</div></div>
     <div class="formula-op">=</div>
     <div class="formula-part"><div class="formula-val" id="f-oee">—</div><div class="formula-lbl">OEE</div></div>
   </div>
   <div class="two-col">
     <div class="panel">
-      <div class="panel-hdr"><span class="panel-title">Downtime by cause</span></div>
-      <div id="cause-bars"><div class="empty">No events logged</div></div>
+      <div class="panel-hdr"><span class="panel-title" data-i18n="panel.causes">Downtime by cause</span></div>
+      <div id="cause-bars"><div class="empty" data-i18n="empty.noevents">No events logged</div></div>
     </div>
     <div class="panel">
-      <div class="panel-hdr"><span class="panel-title">Production vs defects</span></div>
+      <div class="panel-hdr"><span class="panel-title" data-i18n="panel.production">Production vs defects</span></div>
       <div class="chart-wrap"><canvas id="prod-chart" width="280" height="120"></canvas></div>
     </div>
   </div>
   <div class="panel">
     <div class="panel-hdr">
-      <span class="panel-title" id="dash-log-title">Current shift events</span>
-      <button class="btn" onclick="showTab('ai')">AI summary ↗</button>
+      <span class="panel-title" id="dash-log-title" data-i18n="panel.events">Current shift events</span>
+      <button class="btn" onclick="showTab('ai')" data-i18n="btn.aisummary">AI summary ↗</button>
     </div>
-    <div id="event-log-dash"><div class="empty">No events logged. Hit "+ Log event" to start.</div></div>
+    <div id="event-log-dash"><div class="empty" data-i18n="empty.logstart">No events logged. Hit "+ Log event" to start.</div></div>
   </div>
 </div>
 
@@ -380,31 +310,31 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 <div class="tab-pane" id="pane-ai">
   <div class="ai-panel">
     <div class="ai-hdr">
-      <div class="ai-icon"><i class="ti ti-sparkles"></i></div>
+      <div class="ai-icon"><i class="ti ti-sparkles" aria-hidden="true"></i></div>
       <div>
-        <div class="ai-title">ShiftStar AI</div>
-        <div class="ai-subtitle">Shift intelligence powered by your real data</div>
+        <div class="ai-title" data-i18n="ai.title">ShiftStar AI</div>
+        <div class="ai-subtitle" data-i18n="ai.subtitle">Shift intelligence powered by your real data</div>
       </div>
     </div>
     <div class="ai-actions">
-      <button class="ai-action-btn" onclick="runAI('digest')"><i class="ti ti-clipboard-list"></i> End-of-shift digest<span>What happened, what it means</span></button>
-      <button class="ai-action-btn" onclick="runAI('handoff')"><i class="ti ti-transfer"></i> Shift handoff note<span>What the next crew needs to know</span></button>
-      <button class="ai-action-btn" onclick="runAI('rootcause')"><i class="ti ti-zoom-question"></i> Root cause flags<span>What's trending and why</span></button>
-      <button class="ai-action-btn" onclick="runAI('actions')"><i class="ti ti-list-check"></i> Corrective actions<span>What to do first next shift</span></button>
+      <button class="ai-action-btn" onclick="runAI('digest')"><i class="ti ti-clipboard-list" aria-hidden="true"></i> <span data-i18n="ai.digest">End-of-shift digest</span><span data-i18n="ai.digest.sub">What happened, what it means</span></button>
+      <button class="ai-action-btn" onclick="runAI('handoff')"><i class="ti ti-transfer" aria-hidden="true"></i> <span data-i18n="ai.handoff">Shift handoff note</span><span data-i18n="ai.handoff.sub">What the next crew needs to know</span></button>
+      <button class="ai-action-btn" onclick="runAI('rootcause')"><i class="ti ti-zoom-question" aria-hidden="true"></i> <span data-i18n="ai.rootcause">Root cause flags</span><span data-i18n="ai.rootcause.sub">What's trending and why</span></button>
+      <button class="ai-action-btn" onclick="runAI('actions')"><i class="ti ti-list-check" aria-hidden="true"></i> <span data-i18n="ai.actions">Corrective actions</span><span data-i18n="ai.actions.sub">What to do first next shift</span></button>
     </div>
-    <div class="ai-output" id="ai-output">Select an action above to generate AI-powered shift intelligence from your logged data.</div>
+    <div class="ai-output" id="ai-output" data-i18n="ai.placeholder">Select an action above to generate AI-powered shift intelligence from your logged data.</div>
   </div>
   <div class="panel">
-    <div class="panel-hdr"><span class="panel-title">Ask ShiftStar AI anything</span></div>
+    <div class="panel-hdr"><span class="panel-title" data-i18n="ai.askany">Ask ShiftStar AI anything</span></div>
     <div class="ai-input-row">
-      <input class="ai-text-input" id="ai-input" placeholder="e.g. Why is my OEE below target?"/>
-      <button class="btn btn-brand" onclick="runCustom()">Ask ↗</button>
+      <input class="ai-text-input" id="ai-input" data-i18n-placeholder="ai.inputplaceholder" placeholder="e.g. Why is my OEE below target?"/>
+      <button class="btn btn-brand" onclick="runCustom()" data-i18n="btn.ask">Ask ↗</button>
     </div>
     <div class="quick-btns">
-      <button class="quick-btn" onclick="setQ('Why is my OEE below target?')">Why below target?</button>
-      <button class="quick-btn" onclick="setQ('Write a 5-why for my top downtime cause')">5-why template</button>
-      <button class="quick-btn" onclick="setQ('Compare this shift to my recent trend')">Compare to trend</button>
-      <button class="quick-btn" onclick="setQ('Write an email to my plant manager about this shift')">Manager email</button>
+      <button class="quick-btn" onclick="setQ('Why is my OEE below target?')" data-i18n="q1">Why below target?</button>
+      <button class="quick-btn" onclick="setQ('Write a 5-why for my top downtime cause')" data-i18n="q2">5-why template</button>
+      <button class="quick-btn" onclick="setQ('Compare this shift to my recent trend')" data-i18n="q3">Compare to trend</button>
+      <button class="quick-btn" onclick="setQ('Write an email to my plant manager about this shift')" data-i18n="q4">Manager email</button>
     </div>
   </div>
 </div>
@@ -413,62 +343,63 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 <div class="tab-pane" id="pane-trends">
   <div class="panel">
     <div class="panel-hdr">
-      <span class="panel-title">OEE trend</span>
+      <span class="panel-title" data-i18n="panel.oeetrend">OEE trend</span>
       <div class="range-btns">
-        <button class="range-btn active" id="r7" onclick="setRange(7)">7 shifts</button>
-        <button class="range-btn" id="r14" onclick="setRange(14)">14</button>
-        <button class="range-btn" id="r30" onclick="setRange(30)">30</button>
+        <button class="range-btn active" id="r7" onclick="setRange(7)" data-i18n="range.7">7 shifts</button>
+        <button class="range-btn" id="r14" onclick="setRange(14)" data-i18n="range.14">14</button>
+        <button class="range-btn" id="r30" onclick="setRange(30)" data-i18n="range.30">30</button>
       </div>
     </div>
     <div style="height:160px"><canvas id="oee-trend-chart" width="640" height="155"></canvas></div>
   </div>
   <div class="stat-row">
-    <div class="stat-pill"><div class="stat-lbl">Avg OEE</div><div class="stat-val" id="s-avg">—</div></div>
-    <div class="stat-pill"><div class="stat-lbl">Best shift</div><div class="stat-val" id="s-best">—</div></div>
-    <div class="stat-pill"><div class="stat-lbl">Worst shift</div><div class="stat-val" id="s-worst">—</div></div>
-    <div class="stat-pill"><div class="stat-lbl">Below target</div><div class="stat-val" id="s-below">—</div></div>
-    <div class="stat-pill"><div class="stat-lbl">Trend</div><div class="stat-val" id="s-trend">—</div></div>
+    <div class="stat-pill"><div class="stat-lbl" data-i18n="stat.avg">Avg OEE</div><div class="stat-val" id="s-avg">—</div></div>
+    <div class="stat-pill"><div class="stat-lbl" data-i18n="stat.best">Best shift</div><div class="stat-val" id="s-best">—</div></div>
+    <div class="stat-pill"><div class="stat-lbl" data-i18n="stat.worst">Worst shift</div><div class="stat-val" id="s-worst">—</div></div>
+    <div class="stat-pill"><div class="stat-lbl" data-i18n="stat.below">Below target</div><div class="stat-val" id="s-below">—</div></div>
+    <div class="stat-pill"><div class="stat-lbl" data-i18n="stat.trend">Trend</div><div class="stat-val" id="s-trend">—</div></div>
   </div>
   <div class="two-col">
     <div class="panel">
-      <div class="panel-hdr"><span class="panel-title">Downtime Pareto — all shifts</span></div>
-      <div id="pareto-bars"><div class="empty">No history yet</div></div>
+      <div class="panel-hdr"><span class="panel-title" data-i18n="panel.pareto">Downtime Pareto — all shifts</span></div>
+      <div id="pareto-bars"><div class="empty" data-i18n="empty.nohistory">No shift history yet</div></div>
     </div>
     <div class="panel">
-      <div class="panel-hdr"><span class="panel-title">Downtime by shift</span></div>
+      <div class="panel-hdr"><span class="panel-title" data-i18n="panel.dttrend">Downtime by shift</span></div>
       <div class="chart-wrap"><canvas id="dt-trend-chart" width="280" height="120"></canvas></div>
     </div>
   </div>
   <div class="panel">
-    <div class="panel-hdr"><span class="panel-title">Shift history</span></div>
-    <div id="shift-history"><div class="empty">No history. Import production data to build history.</div></div>
+    <div class="panel-hdr"><span class="panel-title" data-i18n="panel.history">Shift history</span></div>
+    <div id="shift-history"><div class="empty" data-i18n="empty.loadhistory">No history. Load sample data or import shifts.</div></div>
   </div>
+  <button class="btn" onclick="loadSampleHistory()" style="margin-top:4px"><i class="ti ti-player-play" aria-hidden="true"></i> <span data-i18n="btn.samplehistory">Load sample history</span></button>
 </div>
 
 <!-- IMPORT -->
 <div class="tab-pane" id="pane-import">
   <div class="panel">
-    <div class="panel-hdr"><span class="panel-title">Import production data</span></div>
-    <div style="font-size:12px;color:var(--text3);margin-bottom:10px">Paste CSV from SAP, MRP, or Excel. First row = headers. Data saves to your company database.</div>
+    <div class="panel-hdr"><span class="panel-title" data-i18n="import.title">Import production data</span></div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:10px" data-i18n="import.sub">Paste CSV from SAP, MRP, or Excel. First row = headers. Comma or tab delimited.</div>
     <textarea class="csv-textarea" id="csv-raw" placeholder="machine,units_produced,units_defect,planned_time_min,downtime_min&#10;Line 1,450,8,480,22&#10;Line 2,510,12,480,15"></textarea>
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-      <button class="btn btn-brand" onclick="importCSV()"><i class="ti ti-calculator"></i> Import & calculate OEE</button>
-      <button class="btn" onclick="loadSampleImport()">Load sample</button>
-      <button class="btn" onclick="clearImport()">Clear</button>
+      <button class="btn btn-brand" onclick="importCSV()"><i class="ti ti-calculator" aria-hidden="true"></i> <span data-i18n="btn.import">Import & calculate OEE</span></button>
+      <button class="btn" onclick="loadSampleImport()" data-i18n="btn.loadsample">Load sample</button>
+      <button class="btn" onclick="clearImport()" data-i18n="btn.clear">Clear</button>
     </div>
     <div class="import-msg" id="import-msg"></div>
   </div>
   <div class="panel">
-    <div class="panel-hdr"><span class="panel-title">Manual entry</span></div>
+    <div class="panel-hdr"><span class="panel-title" data-i18n="manual.title">Manual entry</span></div>
     <div class="manual-grid">
-      <div class="field"><label>Good units produced</label><input type="number" id="man-good" placeholder="e.g. 1180"/></div>
-      <div class="field"><label>Defective / rejected units</label><input type="number" id="man-defect" placeholder="e.g. 25"/></div>
-      <div class="field"><label>Planned time (min)</label><input type="number" id="man-planned" placeholder="e.g. 480"/></div>
-      <div class="field"><label>Ideal cycle time (sec/unit)</label><input type="number" id="man-cycle" placeholder="e.g. 22"/></div>
-      <div class="field"><label>Shift name</label><input type="text" id="man-sname" placeholder="e.g. Shift A"/></div>
-      <div class="field"><label>Date</label><input type="date" id="man-date"/></div>
+      <div class="field"><label data-i18n="field.goodunits">Good units produced</label><input type="number" id="man-good" placeholder="e.g. 1180"/></div>
+      <div class="field"><label data-i18n="field.defects">Defective / rejected units</label><input type="number" id="man-defect" placeholder="e.g. 25"/></div>
+      <div class="field"><label data-i18n="field.planned">Planned time (min)</label><input type="number" id="man-planned" placeholder="e.g. 480"/></div>
+      <div class="field"><label data-i18n="field.cycle">Ideal cycle time (sec/unit)</label><input type="number" id="man-cycle" placeholder="e.g. 22"/></div>
+      <div class="field"><label data-i18n="field.shiftname">Shift name</label><input type="text" id="man-sname" placeholder="e.g. Shift A"/></div>
+      <div class="field"><label data-i18n="field.date">Date</label><input type="date" id="man-date"/></div>
     </div>
-    <button class="btn btn-brand" onclick="calcManual()">Save & calculate</button>
+    <button class="btn btn-brand" onclick="calcManual()" data-i18n="btn.savecalc">Save & calculate</button>
   </div>
 </div>
 
@@ -476,10 +407,10 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 <div class="tab-pane" id="pane-events">
   <div class="panel">
     <div class="panel-hdr">
-      <span class="panel-title">Event log — current shift</span>
-      <button class="btn btn-brand" onclick="openModal()"><i class="ti ti-plus"></i> Log event</button>
+      <span class="panel-title" id="events-log-title" data-i18n="panel.eventlog">Event log — current shift</span>
+      <button class="btn btn-brand" onclick="openModal()"><i class="ti ti-plus" aria-hidden="true"></i> <span data-i18n="btn.logevent">Log event</span></button>
     </div>
-    <div id="event-log-full"><div class="empty">No events logged yet.</div></div>
+    <div id="event-log-full"><div class="empty" data-i18n="empty.noevents2">No events logged yet.</div></div>
   </div>
 </div>
 
@@ -487,741 +418,415 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 <div class="tab-pane" id="pane-report">
   <div class="panel">
     <div class="panel-hdr">
-      <span class="panel-title">Shift summary report</span>
+      <span class="panel-title" data-i18n="report.title">Shift summary report</span>
       <div style="display:flex;gap:6px">
-        <button class="btn btn-brand" onclick="generateReport()">Generate</button>
-        <button class="btn" onclick="copyReport()" id="copy-btn">Copy</button>
+        <button class="btn btn-brand" onclick="generateReport()" data-i18n="btn.generate">Generate</button>
+        <button class="btn" onclick="copyReport()" id="copy-btn" data-i18n="btn.copy">Copy</button>
       </div>
     </div>
-    <div class="report-area" id="report-area">Hit "Generate" to build your shift summary from logged data.</div>
+    <div class="report-area" id="report-area" data-i18n="report.placeholder">Hit "Generate" to build your shift summary from logged data.</div>
   </div>
 </div>
 
 </main>
-</div>
 
 <!-- EVENT MODAL -->
-<div class="modal-overlay" id="modal">
+<div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="modal">
-    <div class="modal-title">Log downtime event</div>
-    <div class="modal-field"><label>Machine / line</label><input id="f-machine" placeholder="e.g. Line 3 — Conveyor Drive"/></div>
+    <div class="modal-title" id="modal-title" data-i18n="modal.title">Log downtime event</div>
+    <div class="modal-field"><label data-i18n="field.machine">Machine / line</label><input id="f-machine" placeholder="e.g. Line 3 — Conveyor Drive"/></div>
     <div class="modal-row">
-      <div class="modal-field"><label>Time occurred</label><input type="time" id="f-time"/></div>
-      <div class="modal-field"><label>Duration (min)</label><input type="number" id="f-duration" min="1" placeholder="22"/></div>
+      <div class="modal-field"><label data-i18n="field.time">Time occurred</label><input type="time" id="f-time"/></div>
+      <div class="modal-field"><label data-i18n="field.duration">Duration (min)</label><input type="number" id="f-duration" min="1" placeholder="22"/></div>
     </div>
     <div class="modal-row">
-      <div class="modal-field"><label>Cause</label>
+      <div class="modal-field"><label data-i18n="field.cause">Cause</label>
         <select id="f-cause">
-          <option>Mechanical</option><option>Changeover</option><option>Material</option>
-          <option>Electrical</option><option>Operator</option><option>Quality hold</option><option>Other</option>
+          <option data-i18n="cause.mechanical">Mechanical</option>
+          <option data-i18n="cause.changeover">Changeover</option>
+          <option data-i18n="cause.material">Material</option>
+          <option data-i18n="cause.electrical">Electrical</option>
+          <option data-i18n="cause.operator">Operator</option>
+          <option data-i18n="cause.quality">Quality hold</option>
+          <option data-i18n="cause.other">Other</option>
         </select>
       </div>
-      <div class="modal-field"><label>Type</label>
+      <div class="modal-field"><label data-i18n="field.type">Type</label>
         <select id="f-type">
-          <option value="unplanned">Unplanned</option>
-          <option value="planned">Planned</option>
+          <option value="unplanned" data-i18n="type.unplanned">Unplanned</option>
+          <option value="planned" data-i18n="type.planned">Planned</option>
         </select>
       </div>
     </div>
-    <div class="modal-field"><label>Notes / handoff info</label><input id="f-notes" placeholder="What happened, what was done, what to watch"/></div>
+    <div class="modal-field"><label data-i18n="field.notes">Notes / handoff info</label><input id="f-notes" placeholder="What happened, what was done, what to watch"/></div>
     <div class="modal-actions">
-      <button class="btn btn-brand" onclick="saveEvent()">Save event</button>
-      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-brand" onclick="saveEvent()" data-i18n="btn.saveevent">Save event</button>
+      <button class="btn" onclick="closeModal()" data-i18n="btn.cancel">Cancel</button>
       <span class="form-err" id="form-err"></span>
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script>
 // ═══════════════════════════════════════════
-// SHIFTSTAR DASHBOARD — API Connected Version
-// Backend: https://web-production-f21c8.up.railway.app
+// SHIFTSTAR DASHBOARD — Standalone Version
+// github.com/Astar8525/shiftstar
 // ═══════════════════════════════════════════
 
-const API = 'https://web-production-f21c8.up.railway.app';
-const SW = ['#534AB7','#1D9E75','#D85A30','#BA7517','#185FA5','#D4537E'];
-const CC = {Mechanical:'#D85A30',Changeover:'#1D9E75',Material:'#BA7517',Electrical:'#534AB7',Operator:'#888780','Quality hold':'#D4537E',Other:'#888780'};
+const SK='ss_shifts',EK='ss_events_',PK='ss_prod_',HK='ss_history',LK='ss_lang',ZK='ss_zoom';
+const SW=['#534AB7','#1D9E75','#D85A30','#BA7517','#185FA5','#D4537E'];
+const CC={Mechanical:'#D85A30',Changeover:'#1D9E75',Material:'#BA7517',Electrical:'#534AB7',Operator:'#888780','Quality hold':'#D4537E',Other:'#888780'};
 
-let token = localStorage.getItem('ss_token') || null;
-let currentUser = JSON.parse(localStorage.getItem('ss_user') || 'null');
-let shifts = [], events = [], prodData = null, charts = {}, tRange = 7;
+let shifts=[{name:'Shift A',start:'06:00',end:'14:00'},{name:'Shift B',start:'14:00',end:'22:00'},{name:'Shift C',start:'22:00',end:'06:00'}];
+let events=[],prodData=null,history=[],charts={},tRange=7;
 
-// ── API Helper ──
-async function api(method, path, body = null) {
-  const headers = { 'Content-Type': 'application/json' };
-  if (token) headers['Authorization'] = `Bearer ${token}`;
-  const res = await fetch(API + path, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : null
-  });
-  if (res.status === 401) {
-    doLogout();
-    throw new Error('Session expired');
-  }
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.detail || 'Request failed');
-  }
-  return res.json();
+// ── Helpers ──
+const t2m=t=>{const[h,m]=t.split(':').map(Number);return h*60+m;};
+const nowM=()=>{const n=new Date();return n.getHours()*60+n.getMinutes();};
+const f12=t=>{let[h,m]=t.split(':').map(Number);const a=h>=12?'pm':'am';h=h%12||12;return h+':'+(m<10?'0'+m:m)+a;};
+const fTime=iso=>{const d=new Date(iso);let h=d.getHours(),m=d.getMinutes();const a=h>=12?'PM':'AM';h=h%12||12;return h+':'+(m<10?'0'+m:m)+' '+a;};
+const fDate=iso=>{const d=new Date(iso);return(d.getMonth()+1)+'/'+d.getDate();};
+const pct=n=>Math.round(n*100)+'%';
+const r1=n=>Math.round(n*10)/10;
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}};
+const load=(k,def)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch(e){return def;}};
+
+function getActive(){const n=nowM();for(const s of shifts){const st=t2m(s.start),en=t2m(s.end);if(st<en){if(n>=st&&n<en)return s;}else{if(n>=st||n<en)return s;}}return null;}
+function sProg(s){const n=nowM(),st=t2m(s.start),en=t2m(s.end);let dur,el;if(st<en){dur=en-st;el=n-st;}else{dur=1440-st+en;el=n>=st?n-st:1440-st+n;}return Math.min(100,Math.max(0,Math.round(el/dur*100)));}
+function calcOEE(d){
+  const pl=parseFloat(d.planned_time_min)||480,dt=parseFloat(d.downtime_min)||0;
+  const good=parseFloat(d.units_produced)||0,def=parseFloat(d.units_defect)||0,tot=good+def;
+  const cyc=parseFloat(d.ideal_cycle_sec)||((pl-dt)*60/Math.max(good,1));
+  const av=Math.min(1,(pl-dt)/pl),pf=Math.min(1,(tot*cyc/60)/Math.max(pl-dt,1)),ql=tot>0?good/tot:1;
+  return{avail:av,perf:pf,qual:ql,oee:Math.min(1,av*pf*ql),good,defects:def,total:tot,dt,planned:pl};
 }
 
-function setSyncStatus(msg, type = 'info') {
-  const bar = document.getElementById('sync-bar');
-  const msgEl = document.getElementById('sync-msg');
-  bar.className = 'sync-bar' + (type === 'error' ? ' error' : type === 'success' ? ' success' : '');
-  msgEl.textContent = msg;
+// ── Persistence ──
+function loadAll(){
+  shifts=load(SK,shifts);
+  const a=getActive();
+  events=load(EK+(a?a.name.replace(/\s/g,'_'):'x'),[]);
+  prodData=load(PK+(a?a.name.replace(/\s/g,'_'):'x'),null);
+  history=load(HK,[]);
+}
+const pE=()=>{const a=getActive();if(a)save(EK+a.name.replace(/\s/g,'_'),events);};
+const pP=()=>{const a=getActive();if(a)save(PK+a.name.replace(/\s/g,'_'),prodData);};
+const pH=()=>save(HK,history);
+const pS=()=>save(SK,shifts);
+
+// ── Clock ──
+function updateClock(){
+  const n=new Date();const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let h=n.getHours(),mi=n.getMinutes(),s=n.getSeconds();const a=h>=12?'PM':'AM';h=h%12||12;
+  document.getElementById('live-clock').textContent=days[n.getDay()]+' '+(n.getMonth()+1)+'/'+n.getDate()+'/'+n.getFullYear()+' '+h+':'+(mi<10?'0'+mi:mi)+':'+(s<10?'0'+s:s)+' '+a;
 }
 
-// ── Auth ──
-function switchLoginTab(tab) {
-  document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
-  document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
-  document.getElementById('lt-login').classList.toggle('active', tab === 'login');
-  document.getElementById('lt-register').classList.toggle('active', tab === 'register');
-}
-
-async function doLogin() {
-  const email = document.getElementById('l-email').value.trim();
-  const password = document.getElementById('l-password').value;
-  document.getElementById('login-err').textContent = '';
-  try {
-    const data = await api('POST', '/auth/login', { email, password });
-    token = data.access_token;
-    console.log('Token received:', token);
-    currentUser = data.user;
-    localStorage.setItem('ss_token', token);
-    localStorage.setItem('ss_user', JSON.stringify(currentUser));
-    launchApp();
-  } catch (e) {
-    document.getElementById('login-err').textContent = e.message || 'Login failed';
-  }
-}
-
-async function doRegister() {
-  const name = document.getElementById('r-name').value.trim();
-  const email = document.getElementById('r-email').value.trim();
-  const password = document.getElementById('r-password').value;
-  const company_name = document.getElementById('r-company').value.trim();
-  const role = document.getElementById('r-role').value;
-  document.getElementById('register-err').textContent = '';
-  if (!name || !email || !password || !company_name) {
-    document.getElementById('register-err').textContent = 'All fields are required';
-    return;
-  }
-  try {
-    const data = await api('POST', '/auth/register', { name, email, password, company_name, role });
-    token = data.access_token;
-    console.log('Token received:', token);
-    currentUser = data.user;
-    localStorage.setItem('ss_token', token);
-    localStorage.setItem('ss_user', JSON.stringify(currentUser));
-    launchApp();
-  } catch (e) {
-    document.getElementById('register-err').textContent = e.message || 'Registration failed';
-  }
-}
-
-function doLogout() {
-  token = null;
-  currentUser = null;
-  localStorage.removeItem('ss_token');
-  localStorage.removeItem('ss_user');
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-}
-
-async function launchApp() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('user-pill').textContent = currentUser.name + ' · ' + currentUser.role;
-  await loadShifts();
-  await loadTodayEvents();
-  await loadTodayProduction();
-  updateClock();
-  updateShiftUI();
-  updateDashboard();
-  setInterval(updateClock, 1000);
-  setInterval(updateShiftUI, 30000);
-  setSyncStatus('Connected — data syncing with ' + currentUser.company_id + ' company database');
-}
-
-// ── Data Loading ──
-async function loadShifts() {
-  try {
-    shifts = await api('GET', '/shifts/');
-    renderConfigRows();
-    updateShiftUI();
-  } catch (e) {
-    setSyncStatus('Could not load shifts: ' + e.message, 'error');
-  }
-}
-
-async function loadTodayEvents() {
-  try {
-    const today = new Date().toISOString().split('T')[0];
-    const active = getActive();
-    const params = new URLSearchParams({ date: today });
-    if (active) params.append('shift_name', active.name);
-    events = await api('GET', '/events/?' + params.toString());
-    renderEventLog();
-    updateCauseBars();
-    updateMetrics();
-  } catch (e) {
-    setSyncStatus('Could not load events: ' + e.message, 'error');
-  }
-}
-
-async function loadTodayProduction() {
-  try {
-    const today = new Date().toISOString().split('T')[0];
-    const active = getActive();
-    const params = new URLSearchParams({ date: today });
-    if (active) params.append('shift_name', active.name);
-    const results = await api('GET', '/production/?' + params.toString());
-    prodData = results.length > 0 ? results[0] : null;
-    updateDashboard();
-  } catch (e) {
-    console.error('Could not load production data:', e.message);
-  }
-}
-
-// ── Time Helpers ──
-const t2m = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
-const nowM = () => { const n = new Date(); return n.getHours() * 60 + n.getMinutes(); };
-const f12 = t => { let [h, m] = t.split(':').map(Number); const a = h >= 12 ? 'pm' : 'am'; h = h % 12 || 12; return h + ':' + (m < 10 ? '0' + m : m) + a; };
-const fTime = iso => { const d = new Date(iso); let h = d.getHours(), m = d.getMinutes(); const a = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + (m < 10 ? '0' + m : m) + ' ' + a; };
-const fDate = iso => { const d = new Date(iso); return (d.getMonth() + 1) + '/' + d.getDate(); };
-const pct = n => Math.round(n * 100) + '%';
-const r1 = n => Math.round(n * 10) / 10;
-
-function getActive() {
-  const n = nowM();
-  for (const s of shifts) {
-    const st = t2m(s.start_time), en = t2m(s.end_time);
-    if (st < en) { if (n >= st && n < en) return s; }
-    else { if (n >= st || n < en) return s; }
-  }
-  return shifts[0] || null;
-}
-
-function sProg(s) {
-  const n = nowM(), st = t2m(s.start_time), en = t2m(s.end_time);
-  let dur, el;
-  if (st < en) { dur = en - st; el = n - st; }
-  else { dur = 1440 - st + en; el = n >= st ? n - st : 1440 - st + n; }
-  return Math.min(100, Math.max(0, Math.round(el / dur * 100)));
-}
-
-function calcOEE(d) {
-  const pl = parseFloat(d.planned_time_min) || 480;
-  const dt = parseFloat(d.downtime_min) || 0;
-  const good = parseFloat(d.units_produced) || 0;
-  const def = parseFloat(d.units_defect) || 0;
-  const tot = good + def;
-  const cyc = parseFloat(d.ideal_cycle_sec) || ((pl - dt) * 60 / Math.max(good, 1));
-  const av = Math.min(1, (pl - dt) / pl);
-  const pf = Math.min(1, (tot * cyc / 60) / Math.max(pl - dt, 1));
-  const ql = tot > 0 ? good / tot : 1;
-  return { avail: av, perf: pf, qual: ql, oee: Math.min(1, av * pf * ql), good, defects: def, total: tot, dt, planned: pl };
-}
-
-// ── Clock & Shift UI ──
-function updateClock() {
-  const n = new Date();
-  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  let h = n.getHours(), mi = n.getMinutes(), s = n.getSeconds();
-  const a = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12;
-  document.getElementById('live-clock').textContent = days[n.getDay()] + ' ' + (n.getMonth() + 1) + '/' + n.getDate() + '/' + n.getFullYear() + ' ' + h + ':' + (mi < 10 ? '0' + mi : mi) + ':' + (s < 10 ? '0' + s : s) + ' ' + a;
-}
-
-function updateShiftUI() {
-  const a = getActive();
-  const pill = document.getElementById('active-pill');
-  const bar = document.getElementById('shift-bar');
-  const idx = a ? shifts.indexOf(a) : -1;
-  const col = idx >= 0 ? SW[idx % SW.length] : 'rgba(255,255,255,0.3)';
-  if (a) {
-    pill.textContent = a.name;
-    const p = sProg(a);
-    bar.style.width = p + '%';
-    bar.style.background = col;
-    document.getElementById('shift-pct').textContent = p + '% complete';
-    document.getElementById('shift-progress-label').textContent = a.name + ' (' + f12(a.start_time) + ' – ' + f12(a.end_time) + ')';
-  } else {
-    pill.textContent = '—';
-    bar.style.width = '0%';
-  }
+// ── Shift UI ──
+function updateShiftUI(){
+  const a=getActive();const pill=document.getElementById('active-pill');const bar=document.getElementById('shift-bar');
+  const idx=a?shifts.indexOf(a):-1;const col=idx>=0?SW[idx%SW.length]:'rgba(255,255,255,0.3)';
+  if(a){pill.textContent=a.name;const p=sProg(a);bar.style.width=p+'%';bar.style.background=col;document.getElementById('shift-pct').textContent=p+'% complete';document.getElementById('shift-progress-label').textContent=a.name+' ('+f12(a.start)+' – '+f12(a.end)+')';}
+  else{pill.textContent='—';bar.style.width='0%';}
   renderTL(a);
 }
-
-function renderTL(a) {
-  const segs = document.getElementById('tl-segs'), labs = document.getElementById('tl-labels');
-  segs.innerHTML = ''; labs.innerHTML = '';
-  shifts.forEach((s, i) => {
-    const st = t2m(s.start_time), en = t2m(s.end_time);
-    const dur = st < en ? en - st : 1440 - st + en;
-    const d = document.createElement('div');
-    d.className = 'tl-seg' + (a && a.name === s.name ? ' active' : '');
-    d.style.cssText = 'background:' + SW[i % SW.length] + ';flex:' + dur / 1440;
-    segs.appendChild(d);
-    const sp = document.createElement('span');
-    sp.textContent = s.name + ' ' + f12(s.start_time);
-    labs.appendChild(sp);
-  });
+function renderTL(a){
+  const segs=document.getElementById('tl-segs'),labs=document.getElementById('tl-labels');
+  segs.innerHTML='';labs.innerHTML='';
+  shifts.forEach((s,i)=>{const st=t2m(s.start),en=t2m(s.end);const dur=st<en?en-st:1440-st+en;const d=document.createElement('div');d.className='tl-seg'+(a&&a.name===s.name?' active':'');d.style.cssText='background:'+SW[i%SW.length]+';flex:'+dur/1440;segs.appendChild(d);const sp=document.createElement('span');sp.textContent=s.name+' '+f12(s.start);labs.appendChild(sp);});
 }
 
 // ── Dashboard ──
-function updateMetrics() {
-  const dt = events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0);
-  document.getElementById('m-dt').textContent = dt + ' min';
-}
-
-function updateDashboard() {
-  updateMetrics();
-  const dt = events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0);
-  if (prodData) {
-    const r = calcOEE({ ...prodData, downtime_min: dt });
-    const oc = r.oee >= .85 ? 'var(--success)' : r.oee >= .75 ? 'var(--warning)' : 'var(--danger)';
-    document.getElementById('m-oee').textContent = pct(r.oee);
-    document.getElementById('m-oee').style.color = oc;
-    document.getElementById('m-oee-sub').textContent = r.oee >= .85 ? '✓ On target' : '↓ Below 85% target';
-    document.getElementById('m-tp').textContent = r.good.toLocaleString();
-    document.getElementById('m-dr').textContent = r.total > 0 ? r1(r.defects / r.total * 100) + '%' : '0%';
-    document.getElementById('m-dr').style.color = r.defects / r.total > .025 ? 'var(--danger)' : 'var(--success)';
-    document.getElementById('oee-formula').style.display = 'flex';
-    document.getElementById('f-av').textContent = pct(r.avail);
-    document.getElementById('f-pf').textContent = pct(r.perf);
-    document.getElementById('f-ql').textContent = pct(r.qual);
-    document.getElementById('f-oee').textContent = pct(r.oee);
+function updateDashboard(){
+  const dt=events.reduce((a,e)=>a+(parseInt(e.duration)||0),0);
+  document.getElementById('m-dt').textContent=dt+' min';
+  if(prodData){
+    const r=calcOEE({...prodData,downtime_min:dt});
+    const oc=r.oee>=.85?'var(--success)':r.oee>=.75?'var(--warning)':'var(--danger)';
+    document.getElementById('m-oee').textContent=pct(r.oee);document.getElementById('m-oee').style.color=oc;
+    document.getElementById('m-oee-sub').textContent=r.oee>=.85?'✓ On target':'↓ Below 85% target';
+    document.getElementById('m-tp').textContent=r.good.toLocaleString();
+    document.getElementById('m-dr').textContent=r.total>0?r1(r.defects/r.total*100)+'%':'0%';
+    document.getElementById('m-dr').style.color=r.defects/r.total>.025?'var(--danger)':'var(--success)';
+    document.getElementById('oee-formula').style.display='flex';
+    document.getElementById('f-av').textContent=pct(r.avail);document.getElementById('f-pf').textContent=pct(r.perf);document.getElementById('f-ql').textContent=pct(r.qual);document.getElementById('f-oee').textContent=pct(r.oee);
     updateProdChart(r);
   } else {
-    ['m-oee', 'm-tp', 'm-dr'].forEach(id => document.getElementById(id).textContent = '—');
-    document.getElementById('m-oee').style.color = '';
-    document.getElementById('oee-formula').style.display = 'none';
-    updateProdChart(null);
+    ['m-oee','m-tp','m-dr'].forEach(id=>document.getElementById(id).textContent='—');
+    document.getElementById('m-oee').style.color='';document.getElementById('m-dr').style.color='';
+    document.getElementById('oee-formula').style.display='none';updateProdChart(null);
   }
-  updateCauseBars();
-  renderEventLog();
+  updateCauseBars();renderEventLog();
 }
 
-function updateProdChart(r) {
-  const ctx = document.getElementById('prod-chart').getContext('2d');
-  if (charts.prod) { charts.prod.destroy(); delete charts.prod; }
-  if (!r) {
-    charts.prod = new Chart(ctx, { type: 'bar', data: { labels: ['No data imported'], datasets: [{ data: [0], backgroundColor: '#88878022' }] }, options: { responsive: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { color: '#8B88A8', font: { size: 11 } } }, y: { display: false } } } });
-    return;
-  }
-  charts.prod = new Chart(ctx, { type: 'bar', data: { labels: ['Good', 'Defects'], datasets: [{ data: [r.good, r.defects], backgroundColor: ['#1D9E7533', '#D85A3033'], borderColor: ['#1D9E75', '#D85A30'], borderWidth: 1.5, borderRadius: 4 }] }, options: { responsive: false, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#8B88A8', font: { size: 11 } } }, y: { grid: { display: false }, ticks: { color: '#8B88A8', font: { size: 11 } } } } } });
+function updateProdChart(r){
+  const ctx=document.getElementById('prod-chart').getContext('2d');
+  if(charts.prod){charts.prod.destroy();delete charts.prod;}
+  if(!r){charts.prod=new Chart(ctx,{type:'bar',data:{labels:['No data'],datasets:[{data:[0],backgroundColor:'#88878022'}]},options:{responsive:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{color:'#8B88A8',font:{size:11}}},y:{display:false}}}});return;}
+  charts.prod=new Chart(ctx,{type:'bar',data:{labels:['Good','Defects'],datasets:[{data:[r.good,r.defects],backgroundColor:['#1D9E7533','#D85A3033'],borderColor:['#1D9E75','#D85A30'],borderWidth:1.5,borderRadius:4}]},options:{responsive:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{color:'#8B88A8',font:{size:11}}},y:{grid:{display:false},ticks:{color:'#8B88A8',font:{size:11}}}}}});
 }
 
-function updateCauseBars() {
-  const el = document.getElementById('cause-bars');
-  const t = {};
-  events.forEach(e => { t[e.cause] = (t[e.cause] || 0) + (parseInt(e.duration) || 0); });
-  const s = Object.entries(t).sort((a, b) => b[1] - a[1]);
-  if (!s.length) { el.innerHTML = '<div class="empty">No events logged</div>'; return; }
-  const mx = s[0][1];
-  el.innerHTML = s.map(([c, m]) => `<div class="bar-row"><span class="bar-lbl">${c}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(m / mx * 100)}%;background:${CC[c] || '#888'}"></div></div><span class="bar-val">${m}m</span></div>`).join('');
+function updateCauseBars(){
+  const el=document.getElementById('cause-bars');const t={};
+  events.forEach(e=>{t[e.cause]=(t[e.cause]||0)+(parseInt(e.duration)||0);});
+  const s=Object.entries(t).sort((a,b)=>b[1]-a[1]);
+  if(!s.length){el.innerHTML='<div class="empty">No events logged</div>';return;}
+  const mx=s[0][1];
+  el.innerHTML=s.map(([c,m])=>`<div class="bar-row"><span class="bar-lbl">${c}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(m/mx*100)}%;background:${CC[c]||'#888'}"></div></div><span class="bar-val">${m}m</span></div>`).join('');
 }
 
-function renderEventLog() {
-  const els = [document.getElementById('event-log-dash'), document.getElementById('event-log-full')];
-  if (!events.length) { els.forEach(el => el && (el.innerHTML = '<div class="empty">No events logged.</div>')); return; }
-  const sorted = [...events].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-  const html = sorted.map(e => `<div class="event-item"><div class="ev-dot" style="background:${CC[e.cause] || '#888'}"></div><div class="ev-body"><div class="ev-text">${e.machine} — ${e.cause}<span class="badge ${e.event_type === 'unplanned' ? 'b-danger' : 'b-warn'}">${e.event_type}</span></div><div class="ev-meta">${fTime(e.timestamp)} · ${e.duration} min${e.notes ? ' · ' + e.notes : ''}</div></div><button class="ev-del" onclick="delEvent(${e.id})">×</button></div>`).join('');
-  els.forEach(el => el && (el.innerHTML = html));
+function renderEventLog(){
+  const els=[document.getElementById('event-log-dash'),document.getElementById('event-log-full')];
+  if(!events.length){els.forEach(el=>el&&(el.innerHTML='<div class="empty">No events logged.</div>'));return;}
+  const sorted=[...events].sort((a,b)=>new Date(b.timestamp)-new Date(a.timestamp));
+  const html=sorted.map((e,si)=>{const ri=events.indexOf(sorted[si]);return`<div class="event-item"><div class="ev-dot" style="background:${CC[e.cause]||'#888'}"></div><div class="ev-body"><div class="ev-text">${e.machine} — ${e.cause}<span class="badge ${e.type==='unplanned'?'b-danger':'b-warn'}">${e.type}</span></div><div class="ev-meta">${fTime(e.timestamp)} · ${e.duration} min${e.notes?' · '+e.notes:''}</div></div><button class="ev-del" onclick="delEvent(${ri})" aria-label="Delete">×</button></div>`;}).join('');
+  els.forEach(el=>el&&(el.innerHTML=html));
 }
-
-async function delEvent(id) {
-  try {
-    await api('DELETE', '/events/' + id);
-    events = events.filter(e => e.id !== id);
-    updateDashboard();
-    setSyncStatus('Event deleted', 'success');
-  } catch (e) {
-    setSyncStatus('Could not delete event: ' + e.message, 'error');
-  }
-}
+function delEvent(i){events.splice(i,1);pE();updateDashboard();}
 
 // ── AI ──
-function buildCtx() {
-  const a = getActive();
-  const dt = events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0);
-  const ct = {};
-  events.forEach(e => { ct[e.cause] = (ct[e.cause] || 0) + (parseInt(e.duration) || 0); });
-  const top = Object.entries(ct).sort((a, b) => b[1] - a[1])[0];
-  let oeeStr = 'Not calculated', tpStr = '—';
-  if (prodData) {
-    const r = calcOEE({ ...prodData, downtime_min: dt });
-    oeeStr = pct(r.oee) + ' (A:' + pct(r.avail) + ' P:' + pct(r.perf) + ' Q:' + pct(r.qual) + ')';
-    tpStr = r.good.toLocaleString() + ' good units';
-  }
-  const eLines = events.length ? events.map(e => `${fTime(e.timestamp)} — ${e.machine} — ${e.cause} (${e.event_type}) — ${e.duration}min${e.notes ? ' — ' + e.notes : ''}`).join('\n') : 'No events logged.';
-  return `SHIFTSTAR DATA\nCompany: ${currentUser?.company_id} | User: ${currentUser?.name} (${currentUser?.role})\nShift: ${a ? a.name : 'Unknown'} | ${new Date().toLocaleDateString()} | ${new Date().toLocaleTimeString()}\nOEE: ${oeeStr}\nThroughput: ${tpStr}\nDowntime: ${dt} min | Events: ${events.length}\nTop cause: ${top ? top[0] + ' (' + top[1] + ' min)' : 'None'}\n\nEVENTS:\n${eLines}`;
+function buildCtx(){
+  const a=getActive();const dt=events.reduce((a,e)=>a+(parseInt(e.duration)||0),0);
+  const ct={};events.forEach(e=>{ct[e.cause]=(ct[e.cause]||0)+(parseInt(e.duration)||0);});
+  const top=Object.entries(ct).sort((a,b)=>b[1]-a[1])[0];
+  let oeeStr='Not calculated';let tpStr='—';
+  if(prodData){const r=calcOEE({...prodData,downtime_min:dt});oeeStr=pct(r.oee)+' (A:'+pct(r.avail)+' P:'+pct(r.perf)+' Q:'+pct(r.qual)+')';tpStr=r.good.toLocaleString()+' good units';}
+  const eLines=events.length?events.map(e=>`${fTime(e.timestamp)} — ${e.machine} — ${e.cause} (${e.type}) — ${e.duration}min${e.notes?' — '+e.notes:''}`).join('\n'):'No events logged.';
+  const h7=history.slice(-7);const avgOee=h7.length?Math.round(h7.reduce((a,d)=>a+d.oee*100,0)/h7.length)+'%':'N/A';
+  const tdir=h7.length>=4?(()=>{const r=h7.slice(-3).reduce((a,d)=>a+d.oee,0)/3;const o=h7.slice(0,3).reduce((a,d)=>a+d.oee,0)/3;return r>o+.01?'improving':r<o-.01?'declining':'stable';})():'insufficient data';
+  return`SHIFTSTAR DATA\nShift: ${a?a.name:'Unknown'} | ${new Date().toLocaleDateString()} | ${new Date().toLocaleTimeString()}\nOEE: ${oeeStr}\nThroughput: ${tpStr}\nDowntime: ${dt} min | Events: ${events.length}\nTop cause: ${top?top[0]+' ('+top[1]+' min)':'None'}\nTrend (7 shifts): avg ${avgOee}, ${tdir}\n\nEVENTS:\n${eLines}`;
 }
 
-async function runAI(type) {
-  const el = document.getElementById('ai-output');
-  el.textContent = 'ShiftStar AI is analyzing your shift data...';
-  const ctx = buildCtx();
-  const p = {
-    digest: `You are ShiftStar AI for manufacturing. Write a concise end-of-shift digest. Cover: what happened, OEE impact, one key number for the plant manager. Under 150 words, plain language.\n\n${ctx}`,
-    handoff: `You are ShiftStar AI. Write a shift handoff note for the incoming supervisor. Include: open issues, machines to watch, quality holds, what was done, what to prioritize. Numbered list, under 200 words.\n\n${ctx}`,
-    rootcause: `You are ShiftStar AI. Analyze downtime patterns and flag potential root causes. If causes repeat or trend up, call it out. Suggest what to investigate first. Be direct and specific.\n\n${ctx}`,
-    actions: `You are ShiftStar AI. Give the top 3 corrective actions for next shift, numbered by priority. Each must be specific and actionable. Under 150 words.\n\n${ctx}`
+async function runAI(type){
+  const el=document.getElementById('ai-output');
+  el.textContent='ShiftStar AI is analyzing your shift data...';
+  const ctx=buildCtx();
+  const p={
+    digest:`You are ShiftStar AI for manufacturing. Write a concise end-of-shift digest from this data. Cover: what happened, OEE impact, one key number for the plant manager. Under 150 words, plain language.\n\n${ctx}`,
+    handoff:`You are ShiftStar AI. Write a shift handoff note for the incoming supervisor. Include: open issues, machines to watch, quality holds, what was done, what to prioritize first. Numbered list, under 200 words.\n\n${ctx}`,
+    rootcause:`You are ShiftStar AI. Analyze downtime patterns and flag potential root causes. If causes are repeating or trending up, call it out. Suggest what to investigate first. Be direct and specific.\n\n${ctx}`,
+    actions:`You are ShiftStar AI. Give the top 3 corrective actions for next shift, numbered by priority. Each must be specific and actionable — not vague advice. Under 150 words.\n\n${ctx}`
   };
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: p[type] }] }) });
-    const data = await res.json();
-    el.textContent = data.content?.find(b => b.type === 'text')?.text || 'No response.';
-  } catch (e) {
-    el.textContent = 'AI request failed. Check your connection.';
-  }
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:p[type]}]})});
+    const data=await res.json();
+    el.textContent=data.content?.find(b=>b.type==='text')?.text||'No response.';
+  }catch(e){el.textContent='AI request failed. Check your internet connection and try again.';}
 }
-
-async function runCustom() {
-  const q = document.getElementById('ai-input').value.trim();
-  if (!q) return;
-  const el = document.getElementById('ai-output');
-  el.textContent = 'Analyzing...';
-  const ctx = buildCtx();
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, messages: [{ role: 'user', content: `You are ShiftStar AI. Answer using the shift data. Be direct.\n\nQuestion: ${q}\n\n${ctx}` }] }) });
-    const data = await res.json();
-    el.textContent = data.content?.find(b => b.type === 'text')?.text || 'No response.';
-  } catch (e) {
-    el.textContent = 'Request failed.';
-  }
+async function runCustom(){
+  const q=document.getElementById('ai-input').value.trim();if(!q)return;
+  const el=document.getElementById('ai-output');el.textContent='Analyzing...';
+  const ctx=buildCtx();
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:`You are ShiftStar AI. Answer using the shift data. Be direct.\n\nQuestion: ${q}\n\n${ctx}`}]})});
+    const data=await res.json();
+    el.textContent=data.content?.find(b=>b.type==='text')?.text||'No response.';
+  }catch(e){el.textContent='Request failed.';}
 }
-
-function setQ(q) { document.getElementById('ai-input').value = q; }
+function setQ(q){document.getElementById('ai-input').value=q;}
 
 // ── Trends ──
-async function updateTrends() {
-  try {
-    const histData = await api('GET', '/history/?range=' + tRange);
-    const paretoData = await api('GET', '/history/pareto?range=' + tRange);
-    if (!histData.length) {
-      ['shift-history', 'pareto-bars'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = '<div class="empty">No shift history. Import production data to build history.</div>'; });
-      renderTrendCharts([]);
-      updateTrendStats([]);
-      return;
-    }
-    renderTrendCharts(histData);
-    renderPareto(paretoData);
-    updateTrendStats(histData);
-    renderHistoryList(histData);
-  } catch (e) {
-    setSyncStatus('Could not load trends: ' + e.message, 'error');
-  }
+function updateTrends(){
+  const data=history.slice(-tRange);
+  if(!data.length){['shift-history','pareto-bars'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML='<div class="empty">No shift history. Load sample data or import shifts.</div>';});renderTrendCharts([]);updateTrendStats([]);return;}
+  renderTrendCharts(data);renderPareto(data);updateTrendStats(data);renderHistoryList(data);
 }
-
-function renderTrendCharts(data) {
-  const labels = data.map(d => d.shift_name + ' ' + fDate(d.date));
-  const oees = data.map(d => Math.round(d.oee * 100));
-  if (charts.oee) { charts.oee.destroy(); delete charts.oee; }
-  const c1 = document.getElementById('oee-trend-chart').getContext('2d');
-  charts.oee = new Chart(c1, { type: 'line', data: { labels, datasets: [{ label: 'OEE %', data: oees, borderColor: '#534AB7', backgroundColor: 'rgba(83,74,183,0.06)', borderWidth: 2, pointRadius: 4, pointBackgroundColor: oees.map(v => v >= 85 ? '#1D9E75' : '#D85A30'), tension: 0.3, fill: true }, { label: 'Target 85%', data: data.map(() => 85), borderColor: '#BA7517', borderDash: [4, 4], borderWidth: 1.5, pointRadius: 0, fill: false }] }, options: { responsive: false, plugins: { legend: { display: true, labels: { font: { size: 11 }, boxWidth: 12 } } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 35 } }, y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, callback: v => v + '%' }, min: 0, max: 100 } } } });
-  const dts = data.map(d => d.total_downtime || 0);
-  if (charts.dt) { charts.dt.destroy(); delete charts.dt; }
-  const c2 = document.getElementById('dt-trend-chart').getContext('2d');
-  charts.dt = new Chart(c2, { type: 'bar', data: { labels, datasets: [{ data: dts, backgroundColor: dts.map(v => v > 60 ? '#D85A3033' : v > 30 ? '#BA751733' : '#1D9E7533'), borderColor: dts.map(v => v > 60 ? '#D85A30' : v > 30 ? '#BA7517' : '#1D9E75'), borderWidth: 1.5, borderRadius: 3 }] }, options: { responsive: false, plugins: { legend: { display: false } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 35 } }, y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 } } } } } });
+function renderTrendCharts(data){
+  const labels=data.map(d=>d.shiftName+' '+fDate(d.date));
+  const oees=data.map(d=>Math.round(d.oee*100));
+  if(charts.oee){charts.oee.destroy();delete charts.oee;}
+  const c1=document.getElementById('oee-trend-chart').getContext('2d');
+  charts.oee=new Chart(c1,{type:'line',data:{labels,datasets:[{label:'OEE %',data:oees,borderColor:'#534AB7',backgroundColor:'rgba(83,74,183,0.06)',borderWidth:2,pointRadius:4,pointBackgroundColor:oees.map(v=>v>=85?'#1D9E75':'#D85A30'),tension:0.3,fill:true},{label:'Target 85%',data:data.map(()=>85),borderColor:'#BA7517',borderDash:[4,4],borderWidth:1.5,pointRadius:0,fill:false}]},options:{responsive:false,plugins:{legend:{display:true,labels:{font:{size:11},boxWidth:12}}},scales:{x:{grid:{display:false},ticks:{font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},callback:v=>v+'%'},min:0,max:100}}}});
+  const dts=data.map(d=>d.totalDowntime||0);
+  if(charts.dt){charts.dt.destroy();delete charts.dt;}
+  const c2=document.getElementById('dt-trend-chart').getContext('2d');
+  charts.dt=new Chart(c2,{type:'bar',data:{labels,datasets:[{data:dts,backgroundColor:dts.map(v=>v>60?'#D85A3033':v>30?'#BA751733':'#1D9E7533'),borderColor:dts.map(v=>v>60?'#D85A30':v>30?'#BA7517':'#1D9E75'),borderWidth:1.5,borderRadius:3}]},options:{responsive:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10},maxRotation:35}},y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11}},title:{display:true,text:'min',font:{size:10}}}}}});
 }
-
-function renderPareto(data) {
-  const el = document.getElementById('pareto-bars');
-  if (!data.pareto || !data.pareto.length) { el.innerHTML = '<div class="empty">No cause data</div>'; return; }
-  const mx = data.pareto[0].minutes;
-  el.innerHTML = data.pareto.map(p => `<div class="bar-row"><span class="bar-lbl">${p.cause}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(p.minutes / mx * 100)}%;background:${CC[p.cause] || '#888'}"></div></div><span class="bar-val">${p.minutes}m·${p.cumulative_pct}%</span></div>`).join('');
+function renderPareto(data){
+  const el=document.getElementById('pareto-bars');const tots={};let grand=0;
+  data.forEach(d=>{if(d.causeTotals)Object.entries(d.causeTotals).forEach(([c,m])=>{tots[c]=(tots[c]||0)+m;grand+=m;});});
+  const sorted=Object.entries(tots).sort((a,b)=>b[1]-a[1]);
+  if(!sorted.length){el.innerHTML='<div class="empty">No cause data</div>';return;}
+  const mx=sorted[0][1];let cum=0;
+  el.innerHTML=sorted.map(([c,m])=>{cum+=m;const cp=grand>0?Math.round(cum/grand*100):0;return`<div class="bar-row"><span class="bar-lbl">${c}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.round(m/mx*100)}%;background:${CC[c]||'#888'}"></div></div><span class="bar-val">${m}m·${cp}%</span></div>`;}).join('');
 }
-
-function updateTrendStats(data) {
-  if (!data.length) return;
-  const oees = data.map(d => Math.round(d.oee * 100));
-  const avg = Math.round(oees.reduce((a, b) => a + b, 0) / oees.length);
-  document.getElementById('s-avg').textContent = avg + '%';
-  document.getElementById('s-best').textContent = Math.max(...oees) + '%';
-  document.getElementById('s-worst').textContent = Math.min(...oees) + '%';
-  document.getElementById('s-below').textContent = oees.filter(v => v < 85).length + ' of ' + data.length;
-  const rec = oees.slice(-3), old = oees.slice(0, 3);
-  const rA = rec.reduce((a, b) => a + b, 0) / rec.length;
-  const oA = old.reduce((a, b) => a + b, 0) / old.length;
-  const td = rA > oA + 1 ? '↑ Improving' : rA < oA - 1 ? '↓ Declining' : '→ Stable';
-  document.getElementById('s-trend').textContent = td;
-  document.getElementById('s-trend').style.color = rA > oA + 1 ? 'var(--success)' : rA < oA - 1 ? 'var(--danger)' : 'var(--text2)';
+function updateTrendStats(data){
+  if(!data.length)return;
+  const oees=data.map(d=>Math.round(d.oee*100));
+  const avg=Math.round(oees.reduce((a,b)=>a+b,0)/oees.length);
+  document.getElementById('s-avg').textContent=avg+'%';
+  document.getElementById('s-best').textContent=Math.max(...oees)+'%';
+  document.getElementById('s-worst').textContent=Math.min(...oees)+'%';
+  document.getElementById('s-below').textContent=oees.filter(v=>v<85).length+' of '+data.length;
+  const rec=oees.slice(-3),old=oees.slice(0,3);
+  const rA=rec.reduce((a,b)=>a+b,0)/rec.length,oA=old.reduce((a,b)=>a+b,0)/old.length;
+  const td=rA>oA+1?'↑ Improving':rA<oA-1?'↓ Declining':'→ Stable';
+  document.getElementById('s-trend').textContent=td;
+  document.getElementById('s-trend').style.color=rA>oA+1?'var(--success)':rA<oA-1?'var(--danger)':'var(--text2)';
 }
-
-function renderHistoryList(data) {
-  const el = document.getElementById('shift-history');
-  el.innerHTML = [...data].reverse().map(d => {
-    const oee = Math.round(d.oee * 100);
-    const cls = oee >= 85 ? 'hc-on' : oee >= 75 ? 'hc-near' : 'hc-below';
-    const badge = oee >= 85 ? 'b-ok' : oee >= 75 ? 'b-warn' : 'b-danger';
-    return `<div class="history-card ${cls}"><div class="hc-name">${d.shift_name}</div><div class="hc-oee" style="color:${oee >= 85 ? 'var(--teal)' : oee >= 75 ? 'var(--amber)' : 'var(--danger)'}">${oee}%</div><div class="hc-meta">${fDate(d.date)} · ${(d.good_units || 0).toLocaleString()} units · ${d.total_downtime || 0} min downtime</div><span class="badge ${badge}" style="margin-left:auto">${oee >= 85 ? 'on target' : oee >= 75 ? 'near target' : 'below target'}</span></div>`;
-  }).join('');
+function renderHistoryList(data){
+  const el=document.getElementById('shift-history');
+  el.innerHTML=[...data].reverse().map(d=>{const oee=Math.round(d.oee*100);const cls=oee>=85?'hc-on':oee>=75?'hc-near':'hc-below';const badge=oee>=85?'b-ok':oee>=75?'b-warn':'b-danger';return`<div class="history-card ${cls}"><div class="hc-name">${d.shiftName}</div><div class="hc-oee" style="color:${oee>=85?'var(--teal)':oee>=75?'var(--amber)':'var(--danger)'}">${oee}%</div><div class="hc-meta">${fDate(d.date)} · ${(d.good||0).toLocaleString()} units · ${d.totalDowntime||0} min downtime</div><span class="badge ${badge}" style="margin-left:auto">${oee>=85?'on target':oee>=75?'near target':'below target'}</span></div>`;}).join('');
 }
-
-function setRange(n) {
-  tRange = n;
-  [7, 14, 30].forEach(r => document.getElementById('r' + r)?.classList.toggle('active', r === n));
+function setRange(n){tRange=n;[7,14,30].forEach(r=>document.getElementById('r'+r)?.classList.toggle('active',r===n));updateTrends();}
+function addToHistory(e){const idx=history.findIndex(h=>h.id===e.id);if(idx>=0)history[idx]=e;else history.push(e);pH();}
+function saveCurrentToHistory(){
+  const a=getActive();if(!a||!prodData)return;
+  const dt=events.reduce((s,e)=>s+(parseInt(e.duration)||0),0);
+  const r=calcOEE({...prodData,downtime_min:dt});
+  const ct={};events.forEach(e=>{ct[e.cause]=(ct[e.cause]||0)+(parseInt(e.duration)||0);});
+  addToHistory({id:a.name+'_'+new Date().toISOString().split('T')[0],date:new Date().toISOString(),shiftName:a.name,oee:r.oee,good:r.good,defects:r.defects,totalDowntime:dt,causeTotals:ct});
+}
+function loadSampleHistory(){
+  const sn=['Shift A','Shift B','Shift C'],causes=['Mechanical','Changeover','Material','Electrical','Operator'];
+  const today=new Date();
+  for(let i=13;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-Math.floor(i/3));const s=sn[i%3];const oee=0.72+Math.random()*0.2;const good=Math.round(400+Math.random()*200);const def=Math.round(good*0.015+Math.random()*15);const dt=Math.round(20+Math.random()*60);const ct={};const mc=causes[Math.floor(Math.random()*causes.length)];ct[mc]=Math.round(dt*0.6);const sc=causes.find(c=>c!==mc);ct[sc]=dt-ct[mc];addToHistory({id:s+'_sample_'+i,date:d.toISOString(),shiftName:s,oee,good,defects:def,totalDowntime:dt,causeTotals:ct});}
   updateTrends();
 }
 
 // ── Import ──
-async function importCSV() {
-  const raw = document.getElementById('csv-raw').value.trim();
-  if (!raw) { showMsg('Paste CSV data first.', 'err'); return; }
-  const lines = raw.trim().split('\n');
-  if (lines.length < 2) { showMsg('Need a header row and at least one data row.', 'err'); return; }
-  const delim = lines[0].includes('\t') ? '\t' : ',';
-  const headers = lines[0].split(delim).map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
-  const rows = lines.slice(1).map(l => { const v = l.split(delim); return Object.fromEntries(headers.map((h, i) => [h, (v[i] || '').trim()])); });
-  const find = keys => keys.find(k => headers.includes(k));
-  const cG = find(['units_produced', 'units_good', 'good_units', 'produced']);
-  const cP = find(['planned_time_min', 'planned_time', 'planned_min']);
-  if (!cG || !cP) { showMsg('Need at least: units_produced and planned_time_min columns.', 'err'); return; }
-  const cD = find(['units_defect', 'defects', 'defective', 'rejected']);
-  const cDt = find(['downtime_min', 'downtime', 'dt_min']);
-  const cC = find(['ideal_cycle_sec', 'cycle_time', 'cycle_sec']);
-  let good = 0, def = 0, planned = 0, dt = 0, cyc = null;
-  rows.forEach(r => { good += parseFloat(r[cG]) || 0; def += cD ? parseFloat(r[cD]) || 0 : 0; planned += parseFloat(r[cP]) || 0; dt += cDt ? parseFloat(r[cDt]) || 0 : 0; if (cC && !cyc) cyc = parseFloat(r[cC]) || null; });
-  const dtTotal = dt || events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0);
-  try {
-    const active = getActive();
-    const today = new Date().toISOString().split('T')[0];
-    prodData = await api('POST', '/production/', {
-      shift_name: active ? active.name : 'Unknown',
-      date: today,
-      units_produced: good,
-      units_defect: def,
-      planned_time_min: planned,
-      downtime_min: dtTotal,
-      ideal_cycle_sec: cyc
-    });
-    await saveHistoryEntry(prodData, dtTotal);
-    updateDashboard();
-    showMsg('✓ ' + rows.length + ' rows imported. OEE calculated and saved to database.', 'ok');
-    setTimeout(() => showTab('dashboard'), 1200);
-  } catch (e) {
-    showMsg('Could not save to database: ' + e.message, 'err');
-  }
+function importCSV(){
+  const raw=document.getElementById('csv-raw').value.trim();
+  if(!raw){showMsg('Paste CSV data first.','err');return;}
+  const lines=raw.trim().split('\n');if(lines.length<2){showMsg('Need a header row and at least one data row.','err');return;}
+  const delim=lines[0].includes('\t')?'\t':',';
+  const headers=lines[0].split(delim).map(h=>h.trim().toLowerCase().replace(/\s+/g,'_'));
+  const rows=lines.slice(1).map(l=>{const v=l.split(delim);return Object.fromEntries(headers.map((h,i)=>[h,(v[i]||'').trim()]));});
+  const find=keys=>keys.find(k=>headers.includes(k));
+  const cG=find(['units_produced','units_good','good_units','produced']);
+  const cP=find(['planned_time_min','planned_time','planned_min']);
+  if(!cG||!cP){showMsg('Need at least: units_produced and planned_time_min columns.','err');return;}
+  const cD=find(['units_defect','defects','defective','rejected']);
+  const cDt=find(['downtime_min','downtime','dt_min']);
+  const cC=find(['ideal_cycle_sec','cycle_time','cycle_sec']);
+  let good=0,def=0,planned=0,dt=0,cyc=null;
+  rows.forEach(r=>{good+=parseFloat(r[cG])||0;def+=cD?parseFloat(r[cD])||0:0;planned+=parseFloat(r[cP])||0;dt+=cDt?parseFloat(r[cDt])||0:0;if(cC&&!cyc)cyc=parseFloat(r[cC])||null;});
+  prodData={units_produced:good,units_defect:def,planned_time_min:planned,downtime_min:dt||null,ideal_cycle_sec:cyc,imported:true};
+  pP();saveCurrentToHistory();updateDashboard();
+  showMsg('✓ '+rows.length+' rows imported. OEE calculated and added to trend history.','ok');
+  setTimeout(()=>showTab('dashboard'),1200);
 }
-
-async function calcManual() {
-  const good = parseFloat(document.getElementById('man-good').value) || 0;
-  const def = parseFloat(document.getElementById('man-defect').value) || 0;
-  const planned = parseFloat(document.getElementById('man-planned').value) || 0;
-  const cyc = parseFloat(document.getElementById('man-cycle').value) || null;
-  const sname = document.getElementById('man-sname').value.trim();
-  const dateVal = document.getElementById('man-date').value;
-  if (!good || !planned) { alert('Good units and planned time are required.'); return; }
-  const dt = events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0);
-  try {
-    prodData = await api('POST', '/production/', {
-      shift_name: sname || (getActive()?.name || 'Unknown'),
-      date: dateVal || new Date().toISOString().split('T')[0],
-      units_produced: good,
-      units_defect: def,
-      planned_time_min: planned,
-      downtime_min: dt,
-      ideal_cycle_sec: cyc
-    });
-    await saveHistoryEntry(prodData, dt);
-    updateDashboard();
-    showTab('dashboard');
-  } catch (e) {
-    alert('Could not save: ' + e.message);
-  }
+function calcManual(){
+  const good=parseFloat(document.getElementById('man-good').value)||0;
+  const def=parseFloat(document.getElementById('man-defect').value)||0;
+  const planned=parseFloat(document.getElementById('man-planned').value)||0;
+  const cyc=parseFloat(document.getElementById('man-cycle').value)||null;
+  const sname=document.getElementById('man-sname').value.trim();
+  const dateVal=document.getElementById('man-date').value;
+  if(!good||!planned){alert('Good units and planned time are required.');return;}
+  const dt=events.reduce((a,e)=>a+(parseInt(e.duration)||0),0);
+  prodData={units_produced:good,units_defect:def,planned_time_min:planned,downtime_min:dt,ideal_cycle_sec:cyc};
+  pP();
+  if(sname&&dateVal){const r=calcOEE(prodData);const ct={};events.forEach(e=>{ct[e.cause]=(ct[e.cause]||0)+(parseInt(e.duration)||0);});addToHistory({id:sname+'_'+dateVal,date:new Date(dateVal).toISOString(),shiftName:sname,oee:r.oee,good:r.good,defects:r.defects,totalDowntime:dt,causeTotals:ct});}
+  updateDashboard();updateTrends();showTab('dashboard');
 }
-
-async function saveHistoryEntry(prod, dtTotal) {
-  const r = calcOEE({ ...prod, downtime_min: dtTotal });
-  const ct = {};
-  events.forEach(e => { ct[e.cause] = (ct[e.cause] || 0) + (parseInt(e.duration) || 0); });
-  try {
-    await api('POST', '/history/', {
-      shift_name: prod.shift_name,
-      date: prod.date,
-      oee: r.oee,
-      good_units: r.good,
-      defects: r.defects,
-      total_downtime: dtTotal,
-      cause_totals_json: JSON.stringify(ct)
-    });
-  } catch (e) {
-    console.error('Could not save history:', e.message);
-  }
-}
-
-function loadSampleImport() { document.getElementById('csv-raw').value = 'machine,units_produced,units_defect,planned_time_min,downtime_min\nLine 1,447,9,480,22\nLine 2,511,13,480,15\nLine 3,382,7,480,38'; }
-function clearImport() { prodData = null; document.getElementById('csv-raw').value = ''; updateDashboard(); }
-function showMsg(msg, type) { const el = document.getElementById('import-msg'); el.style.display = 'block'; el.className = 'import-msg ' + (type === 'ok' ? 'msg-ok' : 'msg-err'); el.textContent = msg; }
+function loadSampleImport(){document.getElementById('csv-raw').value='machine,units_produced,units_defect,planned_time_min,downtime_min\nLine 1,447,9,480,22\nLine 2,511,13,480,15\nLine 3,382,7,480,38';}
+function clearImport(){prodData=null;pP();document.getElementById('csv-raw').value='';updateDashboard();}
+function showMsg(msg,type){const el=document.getElementById('import-msg');el.style.display='block';el.className='import-msg '+(type==='ok'?'msg-ok':'msg-err');el.textContent=msg;}
 
 // ── Report ──
-function generateReport() {
-  const a = getActive();
-  const now = new Date();
-  const dt = events.reduce((s, e) => s + (parseInt(e.duration) || 0), 0);
-  let oeeStr = 'Not calculated', tpStr = '—', drStr = '—', avStr = '—', pfStr = '—', qlStr = '—';
-  if (prodData) {
-    const r = calcOEE({ ...prodData, downtime_min: dt });
-    oeeStr = pct(r.oee); tpStr = r.good.toLocaleString();
-    drStr = r.total > 0 ? r1(r.defects / r.total * 100) + '%' : '0%';
-    avStr = pct(r.avail); pfStr = pct(r.perf); qlStr = pct(r.qual);
-  }
-  const ct = {};
-  events.forEach(e => { ct[e.cause] = (ct[e.cause] || 0) + (parseInt(e.duration) || 0); });
-  const cLines = Object.entries(ct).sort((a, b) => b[1] - a[1]).map(([c, m]) => `  ${c}: ${m} min`).join('\n') || '  None logged';
-  const eLines = events.length ? [...events].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map(e => `  ${fTime(e.timestamp)} | ${e.duration}min | ${e.cause} | ${e.machine}${e.notes ? ' | ' + e.notes : ''}`).join('\n') : '  No events logged';
-  document.getElementById('report-area').textContent = `⭐ SHIFTSTAR — SHIFT SUMMARY REPORT\n${'═'.repeat(44)}\nDate:         ${(now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()}\nShift:        ${a ? a.name : '—'}\nTime:         ${a ? f12(a.start_time) + ' – ' + f12(a.end_time) : '—'}\nSupervisor:   ${currentUser?.name || '—'}\nCompany:      ${currentUser?.company_id || '—'}\n\nPRODUCTION METRICS\n${'─'.repeat(44)}\nOEE:              ${oeeStr}\nThroughput:       ${tpStr} good units\nDefect rate:      ${drStr}\nTotal downtime:   ${dt} min\nEvents logged:    ${events.length}\n\nOEE BREAKDOWN\n${'─'.repeat(44)}\nAvailability:     ${avStr}\nPerformance:      ${pfStr}\nQuality:          ${qlStr}\n\nDOWNTIME BY CAUSE\n${'─'.repeat(44)}\n${cLines}\n\nEVENT LOG\n${'─'.repeat(44)}\n${eLines}\n\nSHIFT HANDOFF NOTES\n${'─'.repeat(44)}\n\n\n${'─'.repeat(44)}\nSupervisor signature: ___________________\n\nPowered by ShiftStar — Built for the floor. Understood in the boardroom.`;
+function generateReport(){
+  const a=getActive();const now=new Date();const dt=events.reduce((s,e)=>s+(parseInt(e.duration)||0),0);
+  let oeeStr='Not calculated',tpStr='—',drStr='—',avStr='—',pfStr='—',qlStr='—';
+  if(prodData){const r=calcOEE({...prodData,downtime_min:dt});oeeStr=pct(r.oee);tpStr=r.good.toLocaleString();drStr=r1(r.defects/r.total*100)+'%';avStr=pct(r.avail);pfStr=pct(r.perf);qlStr=pct(r.qual);}
+  const ct={};events.forEach(e=>{ct[e.cause]=(ct[e.cause]||0)+(parseInt(e.duration)||0);});
+  const cLines=Object.entries(ct).sort((a,b)=>b[1]-a[1]).map(([c,m])=>`  ${c}: ${m} min`).join('\n')||'  None logged';
+  const eLines=events.length?[...events].sort((a,b)=>new Date(a.timestamp)-new Date(b.timestamp)).map(e=>`  ${fTime(e.timestamp)} | ${e.duration}min | ${e.cause} | ${e.machine}${e.notes?' | '+e.notes:''}`).join('\n'):'  No events logged';
+  const h7=history.slice(-7);const avgOee=h7.length?Math.round(h7.reduce((a,d)=>a+d.oee*100,0)/h7.length)+'%':'N/A';
+  document.getElementById('report-area').textContent=`⭐ SHIFTSTAR — SHIFT SUMMARY REPORT\n${'═'.repeat(44)}\nDate:         ${(now.getMonth()+1)+'/'+now.getDate()+'/'+now.getFullYear()}\nShift:        ${a?a.name:'—'}\nTime:         ${a?f12(a.start)+' – '+f12(a.end):'—'}\nSupervisor:   ___________________________\n\nPRODUCTION METRICS\n${'─'.repeat(44)}\nOEE:              ${oeeStr}\nThroughput:       ${tpStr} good units\nDefect rate:      ${drStr}\nTotal downtime:   ${dt} min\nEvents logged:    ${events.length}\n\nOEE BREAKDOWN\n${'─'.repeat(44)}\nAvailability:     ${avStr}\nPerformance:      ${pfStr}\nQuality:          ${qlStr}\n\nDOWNTIME BY CAUSE\n${'─'.repeat(44)}\n${cLines}\n\nEVENT LOG\n${'─'.repeat(44)}\n${eLines}\n\nTREND CONTEXT\n${'─'.repeat(44)}\nAvg OEE (last 7 shifts): ${avgOee}\n\nSHIFT HANDOFF NOTES\n${'─'.repeat(44)}\n\n\n${'─'.repeat(44)}\nSupervisor signature: ___________________\n\nPowered by ShiftStar — Built for the floor. Understood in the boardroom.\ngithub.com/Astar8525/shiftstar`;
 }
-
-function copyReport() {
-  const t = document.getElementById('report-area').textContent;
+function copyReport(){
+  const t=document.getElementById('report-area').textContent;
   navigator.clipboard?.writeText(t);
-  const b = document.getElementById('copy-btn');
-  const orig = b.textContent;
-  b.textContent = '✓ Copied';
-  setTimeout(() => b.textContent = orig, 2000);
+  const b=document.getElementById('copy-btn');const orig=b.textContent;b.textContent='✓ Copied';
+  setTimeout(()=>b.textContent=orig,2000);
 }
 
-// ── Shift Config ──
-function toggleConfig() {
-  const p = document.getElementById('config-panel');
-  p.classList.toggle('open');
-  if (p.classList.contains('open')) renderConfigRows();
-}
-
-function renderConfigRows() {
-  const c = document.getElementById('shift-rows');
-  c.innerHTML = '';
-  shifts.forEach((s, i) => {
-    const row = document.createElement('div');
-    row.className = 'shift-row-item';
-    row.innerHTML = `<div class="swatch-dot" style="background:${SW[i % SW.length]}"></div><input class="cfg-input" value="${s.name}" id="sn-${i}"/><input type="time" class="cfg-input" value="${s.start_time}" id="ss-${i}"/><input type="time" class="cfg-input" value="${s.end_time}" id="se-${i}"/><button class="rm-btn" onclick="rmShift(${i})">×</button>`;
+// ── Config ──
+function toggleConfig(){const p=document.getElementById('config-panel');p.classList.toggle('open');if(p.classList.contains('open'))renderConfigRows();}
+function renderConfigRows(){
+  const c=document.getElementById('shift-rows');c.innerHTML='';
+  shifts.forEach((s,i)=>{
+    const row=document.createElement('div');row.className='shift-row-item';
+    row.innerHTML=`<div class="swatch-dot" style="background:${SW[i%SW.length]}"></div><input class="cfg-input" value="${s.name}" id="sn-${i}"/><input type="time" class="cfg-input" value="${s.start}" id="ss-${i}"/><input type="time" class="cfg-input" value="${s.end}" id="se-${i}"/><button class="rm-btn" onclick="rmShift(${i})">×</button>`;
     c.appendChild(row);
   });
 }
-
-function addShiftRow() {
-  shifts.push({ name: 'Shift ' + (shifts.length + 1), start_time: '00:00', end_time: '08:00' });
-  renderConfigRows();
+function addShift(){shifts.push({name:'Shift '+(shifts.length+1),start:'00:00',end:'08:00'});renderConfigRows();}
+function rmShift(i){if(shifts.length<=1)return;shifts.splice(i,1);renderConfigRows();}
+function saveConfig(){
+  shifts=shifts.map((_,i)=>({name:document.getElementById('sn-'+i).value.trim()||'Shift '+(i+1),start:document.getElementById('ss-'+i).value||'00:00',end:document.getElementById('se-'+i).value||'08:00'}));
+  pS();renderConfigRows();updateShiftUI();
+  const f=document.getElementById('save-flash');f.style.opacity='1';setTimeout(()=>f.style.opacity='0',2500);
 }
 
-function rmShift(i) {
-  if (shifts.length <= 1) return;
-  shifts.splice(i, 1);
-  renderConfigRows();
-}
-
-async function saveShifts() {
-  try {
-    // Delete all existing shifts and recreate
-    for (const s of shifts) {
-      if (s.id) {
-        await api('PUT', '/shifts/' + s.id, {
-          name: document.getElementById('sn-' + shifts.indexOf(s)).value.trim() || s.name,
-          start_time: document.getElementById('ss-' + shifts.indexOf(s)).value || s.start_time,
-          end_time: document.getElementById('se-' + shifts.indexOf(s)).value || s.end_time
-        });
-      } else {
-        await api('POST', '/shifts/', {
-          name: document.getElementById('sn-' + shifts.indexOf(s)).value.trim() || s.name,
-          start_time: document.getElementById('ss-' + shifts.indexOf(s)).value || s.start_time,
-          end_time: document.getElementById('se-' + shifts.indexOf(s)).value || s.end_time
-        });
-      }
-    }
-    await loadShifts();
-    updateShiftUI();
-    const f = document.getElementById('save-flash');
-    f.style.opacity = '1';
-    setTimeout(() => f.style.opacity = '0', 2500);
-    setSyncStatus('Shift schedule saved to database', 'success');
-  } catch (e) {
-    setSyncStatus('Could not save shifts: ' + e.message, 'error');
-  }
-}
-
-// ── Event Modal ──
-function openModal() {
-  const now = new Date();
-  const h = now.getHours(), m = now.getMinutes();
-  document.getElementById('f-time').value = (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m);
-  ['f-machine', 'f-notes'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('f-duration').value = '';
-  document.getElementById('form-err').textContent = '';
+// ── Modal ──
+function openModal(){
+  const now=new Date();const h=now.getHours(),m=now.getMinutes();
+  document.getElementById('f-time').value=(h<10?'0'+h:h)+':'+(m<10?'0'+m:m);
+  ['f-machine','f-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-duration').value='';document.getElementById('form-err').textContent='';
   document.getElementById('modal').classList.add('open');
 }
-
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
-
-async function saveEvent() {
-  const machine = document.getElementById('f-machine').value.trim();
-  const dur = document.getElementById('f-duration').value.trim();
-  if (!machine) { document.getElementById('form-err').textContent = 'Machine name required'; return; }
-  if (!dur || isNaN(dur) || parseInt(dur) < 1) { document.getElementById('form-err').textContent = 'Valid duration required'; return; }
-  const [h, m] = document.getElementById('f-time').value.split(':').map(Number);
-  const now = new Date();
-  const ts = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
-  const active = getActive();
-  try {
-    const newEvent = await api('POST', '/events/', {
-      shift_name: active ? active.name : 'Unknown',
-      machine,
-      cause: document.getElementById('f-cause').value,
-      event_type: document.getElementById('f-type').value,
-      duration: parseInt(dur),
-      notes: document.getElementById('f-notes').value.trim(),
-      timestamp: ts.toISOString()
-    });
-    events.unshift(newEvent);
-    updateDashboard();
-    closeModal();
-    setSyncStatus('Event saved to database', 'success');
-  } catch (e) {
-    document.getElementById('form-err').textContent = e.message;
-  }
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function saveEvent(){
+  const machine=document.getElementById('f-machine').value.trim();const dur=document.getElementById('f-duration').value.trim();
+  if(!machine){document.getElementById('form-err').textContent='Machine name required';return;}
+  if(!dur||isNaN(dur)||parseInt(dur)<1){document.getElementById('form-err').textContent='Valid duration required';return;}
+  const[h,m]=document.getElementById('f-time').value.split(':').map(Number);
+  const now=new Date();const ts=new Date(now.getFullYear(),now.getMonth(),now.getDate(),h,m,0);
+  events.push({machine,duration:parseInt(dur),cause:document.getElementById('f-cause').value,type:document.getElementById('f-type').value,notes:document.getElementById('f-notes').value.trim(),timestamp:ts.toISOString()});
+  pE();updateDashboard();closeModal();
 }
 
 // ── Tabs ──
-function showTab(name) {
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('pane-' + name).classList.add('active');
-  document.getElementById('tb-' + name).classList.add('active');
-  if (name === 'trends') updateTrends();
+function showTab(name){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pane-'+name).classList.add('active');
+  document.getElementById('tb-'+name).classList.add('active');
+  if(name==='trends')updateTrends();
 }
 
 // ── Zoom ──
-let zoom = parseInt(localStorage.getItem('ss_zoom') || '100');
-function adjZoom(d) { zoom = Math.min(150, Math.max(70, zoom + d)); applyZoom(); }
-function resetZoom() { zoom = 100; applyZoom(); }
-function applyZoom() { document.documentElement.style.fontSize = (zoom / 100) * 16 + 'px'; document.getElementById('zoom-level').textContent = zoom + '%'; localStorage.setItem('ss_zoom', zoom); }
+let zoom=parseInt(load(ZK,100));
+function adjZoom(d){zoom=Math.min(150,Math.max(70,zoom+d));applyZoom();}
+function resetZoom(){zoom=100;applyZoom();}
+function applyZoom(){document.documentElement.style.fontSize=(zoom/100)*16+'px';document.getElementById('zoom-level').textContent=zoom+'%';save(ZK,zoom);}
 applyZoom();
 
-// ── Language (basic) ──
-function setLang(lang) { localStorage.setItem('ss_lang', lang); }
+// ── Language ──
+const I18N={
+  en:{'tagline':'Built for the floor. Understood in the boardroom.','btn.shifts':'Shifts','btn.logevent':'Log event','btn.addshift':'+ Add shift','btn.save':'Save','btn.close':'Close','btn.ask':'Ask ↗','btn.generate':'Generate','btn.copy':'Copy','btn.saveevent':'Save event','btn.cancel':'Cancel','btn.import':'Import & calculate OEE','btn.loadsample':'Load sample','btn.clear':'Clear','btn.savecalc':'Save & calculate','btn.samplehistory':'Load sample history','btn.aisummary':'AI summary ↗','tab.dashboard':'Dashboard','tab.ai':'AI Helper','tab.trends':'Trends','tab.import':'Import','tab.events':'Events','tab.report':'Report','metric.oee':'OEE','metric.target':'Target 85%','metric.throughput':'Throughput','metric.goodunits':'good units','metric.defect':'Defect rate','metric.spec':'Spec ≤ 2.5%','metric.downtime':'Downtime','metric.thisshift':'this shift','formula.avail':'Availability','formula.perf':'Performance','formula.qual':'Quality','panel.causes':'Downtime by cause','panel.production':'Production vs defects','panel.events':'Current shift events','panel.oeetrend':'OEE trend','panel.pareto':'Downtime Pareto — all shifts','panel.dttrend':'Downtime by shift','panel.history':'Shift history','panel.eventlog':'Event log — current shift','panel.eventfull':'Events','config.title':'Shift schedule','config.sub':'Your configuration saves automatically and persists across sessions.','col.name':'Name','col.start':'Start','col.end':'End','progress.label':'Shift progress','msg.saved':'✓ Saved','ai.title':'ShiftStar AI','ai.subtitle':'Shift intelligence powered by your real data','ai.digest':'End-of-shift digest','ai.digest.sub':'What happened, what it means','ai.handoff':'Shift handoff note','ai.handoff.sub':'What the next crew needs to know','ai.rootcause':'Root cause flags','ai.rootcause.sub':"What's trending and why",'ai.actions':'Corrective actions','ai.actions.sub':'What to do first next shift','ai.placeholder':'Select an action above to generate AI-powered shift intelligence from your logged data.','ai.askany':'Ask ShiftStar AI anything','ai.inputplaceholder':'e.g. Why is my OEE below target?','q1':'Why below target?','q2':'5-why template','q3':'Compare to trend','q4':'Manager email','import.title':'Import production data','import.sub':'Paste CSV from SAP, MRP, or Excel. First row = headers. Comma or tab delimited.','manual.title':'Manual entry','field.goodunits':'Good units produced','field.defects':'Defective / rejected units','field.planned':'Planned time (min)','field.cycle':'Ideal cycle time (sec/unit)','field.shiftname':'Shift name','field.date':'Date','field.machine':'Machine / line','field.time':'Time occurred','field.duration':'Duration (min)','field.cause':'Cause','field.type':'Type','field.notes':'Notes / handoff info','cause.mechanical':'Mechanical','cause.changeover':'Changeover','cause.material':'Material','cause.electrical':'Electrical','cause.operator':'Operator','cause.quality':'Quality hold','cause.other':'Other','type.unplanned':'Unplanned','type.planned':'Planned','modal.title':'Log downtime event','stat.avg':'Avg OEE','stat.best':'Best shift','stat.worst':'Worst shift','stat.below':'Below target','stat.trend':'Trend','range.7':'7 shifts','range.14':'14','range.30':'30','empty.noevents':'No events logged','empty.logstart':'No events logged. Hit "+ Log event" to start.','empty.noevents2':'No events logged yet.','empty.nohistory':'No shift history yet','empty.loadhistory':'No history. Load sample data or import shifts.','report.title':'Shift summary report','report.placeholder':'Hit "Generate" to build your shift summary from logged data.'},
+  es:{'tagline':'Diseñado para el piso. Entendido en la sala de juntas.','btn.shifts':'Turnos','btn.logevent':'Registrar evento','btn.addshift':'+ Agregar turno','btn.save':'Guardar','btn.close':'Cerrar','btn.ask':'Preguntar ↗','btn.generate':'Generar','btn.copy':'Copiar','btn.saveevent':'Guardar evento','btn.cancel':'Cancelar','btn.import':'Importar y calcular OEE','btn.loadsample':'Cargar muestra','btn.clear':'Limpiar','btn.savecalc':'Guardar y calcular','btn.samplehistory':'Cargar historial de muestra','btn.aisummary':'Resumen IA ↗','tab.dashboard':'Panel','tab.ai':'Asistente IA','tab.trends':'Tendencias','tab.import':'Importar','tab.events':'Eventos','tab.report':'Reporte','metric.oee':'OEE','metric.target':'Meta 85%','metric.throughput':'Producción','metric.goodunits':'unidades buenas','metric.defect':'Tasa de defectos','metric.spec':'Espec ≤ 2.5%','metric.downtime':'Tiempo muerto','metric.thisshift':'este turno','formula.avail':'Disponibilidad','formula.perf':'Rendimiento','formula.qual':'Calidad','panel.causes':'Tiempo muerto por causa','panel.production':'Producción vs defectos','panel.events':'Eventos del turno actual','panel.oeetrend':'Tendencia OEE','panel.pareto':'Pareto de tiempo muerto','panel.dttrend':'Tiempo muerto por turno','panel.history':'Historial de turnos','panel.eventlog':'Registro de eventos — turno actual','config.title':'Programa de turnos','config.sub':'La configuración se guarda automáticamente.','col.name':'Nombre','col.start':'Inicio','col.end':'Fin','progress.label':'Progreso del turno','msg.saved':'✓ Guardado','ai.title':'ShiftStar IA','ai.subtitle':'Inteligencia de turno con tus datos reales','ai.digest':'Resumen fin de turno','ai.digest.sub':'Qué pasó y qué significa','ai.handoff':'Nota de entrega','ai.handoff.sub':'Lo que la siguiente tripulación necesita saber','ai.rootcause':'Alertas de causa raíz','ai.rootcause.sub':'Qué está aumentando y por qué','ai.actions':'Acciones correctivas','ai.actions.sub':'Qué hacer primero en el siguiente turno','ai.placeholder':'Selecciona una acción para generar inteligencia de turno.','ai.askany':'Pregunta cualquier cosa a ShiftStar IA','ai.inputplaceholder':'ej. ¿Por qué está mi OEE por debajo del objetivo?','q1':'¿Por qué bajo el objetivo?','q2':'Plantilla 5-why','q3':'Comparar con tendencia','q4':'Email al gerente','import.title':'Importar datos de producción','import.sub':'Pega CSV de SAP, MRP o Excel. Primera fila = encabezados.','manual.title':'Entrada manual','field.goodunits':'Unidades buenas producidas','field.defects':'Unidades defectuosas','field.planned':'Tiempo planificado (min)','field.cycle':'Tiempo de ciclo ideal (seg/unidad)','field.shiftname':'Nombre del turno','field.date':'Fecha','field.machine':'Máquina / línea','field.time':'Hora de ocurrencia','field.duration':'Duración (min)','field.cause':'Causa','field.type':'Tipo','field.notes':'Notas / información de entrega','cause.mechanical':'Mecánico','cause.changeover':'Cambio','cause.material':'Material','cause.electrical':'Eléctrico','cause.operator':'Operador','cause.quality':'Retención de calidad','cause.other':'Otro','type.unplanned':'No planificado','type.planned':'Planificado','modal.title':'Registrar evento de tiempo muerto','stat.avg':'OEE Prom.','stat.best':'Mejor turno','stat.worst':'Peor turno','stat.below':'Bajo objetivo','stat.trend':'Tendencia','range.7':'7 turnos','range.14':'14','range.30':'30','empty.noevents':'Sin eventos registrados','empty.logstart':'Sin eventos. Toca "+ Registrar evento" para comenzar.','empty.noevents2':'Sin eventos aún.','empty.nohistory':'Sin historial aún','empty.loadhistory':'Sin historial. Carga datos de muestra.','report.title':'Reporte de resumen de turno','report.placeholder':'Presiona "Generar" para crear tu resumen de turno.'},
+  fr:{'tagline':'Conçu pour le terrain. Compris en salle de direction.','btn.shifts':'Quarts','btn.logevent':'Enreg. événement','btn.addshift':'+ Ajouter quart','btn.save':'Enregistrer','btn.close':'Fermer','btn.ask':'Demander ↗','btn.generate':'Générer','btn.copy':'Copier','btn.saveevent':'Sauver événement','btn.cancel':'Annuler','btn.import':'Importer et calculer TRG','btn.loadsample':'Charger exemple','btn.clear':'Effacer','btn.savecalc':'Sauver et calculer','btn.samplehistory':'Charger historique exemple','btn.aisummary':'Résumé IA ↗','tab.dashboard':'Tableau de bord','tab.ai':'Assistant IA','tab.trends':'Tendances','tab.import':'Importer','tab.events':'Événements','tab.report':'Rapport','metric.oee':'TRG','metric.target':'Objectif 85%','metric.throughput':'Production','metric.goodunits':'bonnes unités','metric.defect':'Taux de défauts','metric.spec':'Spec ≤ 2.5%','metric.downtime':'Arrêts','metric.thisshift':'ce quart','formula.avail':'Disponibilité','formula.perf':'Performance','formula.qual':'Qualité','panel.causes':'Arrêts par cause','panel.production':'Production vs défauts','panel.events':'Événements du quart actuel','panel.oeetrend':'Tendance TRG','panel.pareto':'Pareto des arrêts','panel.dttrend':'Arrêts par quart','panel.history':'Historique des quarts','panel.eventlog':'Journal — quart actuel','config.title':'Programme des quarts','config.sub':'La configuration est sauvegardée automatiquement.','col.name':'Nom','col.start':'Début','col.end':'Fin','progress.label':'Progression du quart','msg.saved':'✓ Sauvegardé','ai.title':'ShiftStar IA','ai.subtitle':'Intelligence de quart avec vos données réelles','ai.digest':'Bilan fin de quart','ai.digest.sub':'Ce qui s\'est passé et ce que ça signifie','ai.handoff':'Note de passation','ai.handoff.sub':'Ce que l\'équipe suivante doit savoir','ai.rootcause':'Alertes causes profondes','ai.rootcause.sub':'Ce qui évolue et pourquoi','ai.actions':'Actions correctives','ai.actions.sub':'Quoi faire en premier au prochain quart','ai.placeholder':'Sélectionnez une action pour générer l\'intelligence de quart.','ai.askany':'Demandez n\'importe quoi à ShiftStar IA','ai.inputplaceholder':'ex. Pourquoi mon TRG est-il en dessous de l\'objectif?','q1':'Pourquoi sous l\'objectif?','q2':'Modèle 5-pourquoi','q3':'Comparer à la tendance','q4':'Email au directeur','import.title':'Importer les données de production','import.sub':'Collez CSV de SAP, MRP ou Excel. Première ligne = en-têtes.','manual.title':'Saisie manuelle','field.goodunits':'Bonnes unités produites','field.defects':'Unités défectueuses','field.planned':'Temps planifié (min)','field.cycle':'Temps de cycle idéal (sec/unité)','field.shiftname':'Nom du quart','field.date':'Date','field.machine':'Machine / ligne','field.time':'Heure d\'occurrence','field.duration':'Durée (min)','field.cause':'Cause','field.type':'Type','field.notes':'Notes / info passation','cause.mechanical':'Mécanique','cause.changeover':'Changement','cause.material':'Matériau','cause.electrical':'Électrique','cause.operator':'Opérateur','cause.quality':'Blocage qualité','cause.other':'Autre','type.unplanned':'Non planifié','type.planned':'Planifié','modal.title':'Enregistrer un arrêt','stat.avg':'TRG Moy.','stat.best':'Meilleur quart','stat.worst':'Pire quart','stat.below':'Sous objectif','stat.trend':'Tendance','range.7':'7 quarts','range.14':'14','range.30':'30','empty.noevents':'Aucun événement','empty.logstart':'Aucun événement. Appuyez sur "+ Enreg. événement".','empty.noevents2':'Aucun événement encore.','empty.nohistory':'Pas d\'historique encore','empty.loadhistory':'Pas d\'historique. Chargez des données exemple.','report.title':'Rapport de résumé de quart','report.placeholder':'Appuyez sur "Générer" pour créer votre résumé.'},
+  de:{'tagline':'Gebaut für die Fertigung. Verstanden im Vorstandszimmer.','btn.shifts':'Schichten','btn.logevent':'Ereignis erfassen','btn.addshift':'+ Schicht hinzufügen','btn.save':'Speichern','btn.close':'Schließen','btn.ask':'Fragen ↗','btn.generate':'Generieren','btn.copy':'Kopieren','btn.saveevent':'Ereignis speichern','btn.cancel':'Abbrechen','btn.import':'Importieren & OEE berechnen','btn.loadsample':'Beispiel laden','btn.clear':'Löschen','btn.savecalc':'Speichern & berechnen','btn.samplehistory':'Beispielverlauf laden','btn.aisummary':'KI-Zusammenfassung ↗','tab.dashboard':'Dashboard','tab.ai':'KI-Helfer','tab.trends':'Trends','tab.import':'Import','tab.events':'Ereignisse','tab.report':'Bericht','metric.oee':'OEE','metric.target':'Ziel 85%','metric.throughput':'Durchsatz','metric.goodunits':'Gutteile','metric.defect':'Fehlerquote','metric.spec':'Spec ≤ 2.5%','metric.downtime':'Ausfallzeit','metric.thisshift':'diese Schicht','formula.avail':'Verfügbarkeit','formula.perf':'Leistung','formula.qual':'Qualität','panel.causes':'Ausfallzeit nach Ursache','panel.production':'Produktion vs Fehler','panel.events':'Aktuelle Schichtereignisse','panel.oeetrend':'OEE-Trend','panel.pareto':'Ausfallzeit-Pareto','panel.dttrend':'Ausfallzeit je Schicht','panel.history':'Schichtverlauf','panel.eventlog':'Ereignisprotokoll — aktuelle Schicht','config.title':'Schichtplan','config.sub':'Konfiguration wird automatisch gespeichert.','col.name':'Name','col.start':'Start','col.end':'Ende','progress.label':'Schichtfortschritt','msg.saved':'✓ Gespeichert','ai.title':'ShiftStar KI','ai.subtitle':'Schichtintelligenz mit Ihren echten Daten','ai.digest':'Schichtabschluss-Digest','ai.digest.sub':'Was passiert ist und was es bedeutet','ai.handoff':'Übergabenotiz','ai.handoff.sub':'Was die nächste Besatzung wissen muss','ai.rootcause':'Ursachen-Flags','ai.rootcause.sub':'Was zunimmt und warum','ai.actions':'Korrekturmaßnahmen','ai.actions.sub':'Was zuerst in der nächsten Schicht zu tun ist','ai.placeholder':'Wählen Sie eine Aktion für KI-Schichtintelligenz.','ai.askany':'Fragen Sie ShiftStar KI alles','ai.inputplaceholder':'z.B. Warum liegt mein OEE unter dem Ziel?','q1':'Warum unter dem Ziel?','q2':'5-Warum-Vorlage','q3':'Mit Trend vergleichen','q4':'E-Mail an Werksleiter','import.title':'Produktionsdaten importieren','import.sub':'CSV von SAP, MRP oder Excel einfügen. Erste Zeile = Kopfzeilen.','manual.title':'Manuelle Eingabe','field.goodunits':'Produzierte Gutteile','field.defects':'Fehlerhafte Teile','field.planned':'Geplante Zeit (Min)','field.cycle':'Ideale Taktzeit (Sek/Teil)','field.shiftname':'Schichtname','field.date':'Datum','field.machine':'Maschine / Linie','field.time':'Zeitpunkt','field.duration':'Dauer (Min)','field.cause':'Ursache','field.type':'Typ','field.notes':'Notizen / Übergabeinfo','cause.mechanical':'Mechanisch','cause.changeover':'Rüsten','cause.material':'Material','cause.electrical':'Elektrisch','cause.operator':'Bediener','cause.quality':'Qualitätssperre','cause.other':'Sonstiges','type.unplanned':'Ungeplant','type.planned':'Geplant','modal.title':'Ausfallereignis erfassen','stat.avg':'Ø OEE','stat.best':'Beste Schicht','stat.worst':'Schlechteste Schicht','stat.below':'Unter Ziel','stat.trend':'Trend','range.7':'7 Schichten','range.14':'14','range.30':'30','empty.noevents':'Keine Ereignisse','empty.logstart':'Keine Ereignisse. "+ Ereignis erfassen" drücken.','empty.noevents2':'Noch keine Ereignisse.','empty.nohistory':'Noch kein Verlauf','empty.loadhistory':'Kein Verlauf. Beispieldaten laden.','report.title':'Schichtbericht','report.placeholder':'Auf "Generieren" drücken.'},
+  pt:{'tagline':'Feito para o chão de fábrica. Entendido na diretoria.','btn.shifts':'Turnos','btn.logevent':'Registrar evento','tab.dashboard':'Painel','tab.ai':'Assistente IA','tab.trends':'Tendências','tab.import':'Importar','tab.events':'Eventos','tab.report':'Relatório','metric.oee':'OEE','metric.target':'Meta 85%','metric.throughput':'Produção','metric.goodunits':'unidades boas','metric.defect':'Taxa de defeito','metric.downtime':'Paradas','metric.thisshift':'neste turno','formula.avail':'Disponibilidade','formula.perf':'Desempenho','formula.qual':'Qualidade','panel.causes':'Paradas por causa','ai.title':'ShiftStar IA','btn.save':'Salvar','btn.close':'Fechar','btn.generate':'Gerar','btn.copy':'Copiar','btn.saveevent':'Salvar evento','btn.cancel':'Cancelar','msg.saved':'✓ Salvo','config.title':'Programação de turnos','col.name':'Nome','col.start':'Início','col.end':'Fim','progress.label':'Progresso do turno','cause.mechanical':'Mecânico','cause.changeover':'Setup','cause.material':'Material','cause.electrical':'Elétrico','cause.operator':'Operador','cause.quality':'Bloqueio de qualidade','cause.other':'Outro','type.unplanned':'Não planejado','type.planned':'Planejado','modal.title':'Registrar parada','stat.avg':'OEE Méd.','stat.best':'Melhor turno','stat.worst':'Pior turno','stat.below':'Abaixo meta','stat.trend':'Tendência'},
+  zh:{'tagline':'为车间而建。在董事会中清晰呈现。','btn.shifts':'班次','btn.logevent':'记录事件','tab.dashboard':'仪表板','tab.ai':'AI助手','tab.trends':'趋势','tab.import':'导入','tab.events':'事件','tab.report':'报告','metric.oee':'OEE','metric.target':'目标85%','metric.throughput':'产量','metric.goodunits':'合格件','metric.defect':'缺陷率','metric.downtime':'停机','metric.thisshift':'本班次','formula.avail':'可用性','formula.perf':'性能','formula.qual':'质量','panel.causes':'停机原因','ai.title':'ShiftStar AI','btn.save':'保存','btn.close':'关闭','btn.generate':'生成','btn.copy':'复制','btn.saveevent':'保存事件','btn.cancel':'取消','msg.saved':'✓ 已保存','config.title':'班次计划','col.name':'名称','col.start':'开始','col.end':'结束','progress.label':'班次进度','cause.mechanical':'机械','cause.changeover':'换型','cause.material':'材料','cause.electrical':'电气','cause.operator':'操作员','cause.quality':'质量保留','cause.other':'其他','type.unplanned':'计划外','type.planned':'计划内','modal.title':'记录停机事件','stat.avg':'平均OEE','stat.best':'最佳班次','stat.worst':'最差班次','stat.below':'低于目标','stat.trend':'趋势'},
+  ja:{'tagline':'現場のために作られ、役員室で理解される。','btn.shifts':'シフト','btn.logevent':'イベント記録','tab.dashboard':'ダッシュボード','tab.ai':'AIアシスタント','tab.trends':'トレンド','tab.import':'インポート','tab.events':'イベント','tab.report':'レポート','metric.oee':'OEE','metric.target':'目標85%','metric.throughput':'スループット','metric.goodunits':'良品数','metric.defect':'不良率','metric.downtime':'ダウンタイム','metric.thisshift':'今シフト','formula.avail':'可用性','formula.perf':'性能','formula.qual':'品質','panel.causes':'原因別ダウンタイム','ai.title':'ShiftStar AI','btn.save':'保存','btn.close':'閉じる','btn.generate':'生成','btn.copy':'コピー','btn.saveevent':'イベント保存','btn.cancel':'キャンセル','msg.saved':'✓ 保存済み','config.title':'シフトスケジュール','col.name':'名前','col.start':'開始','col.end':'終了','progress.label':'シフト進捗','cause.mechanical':'機械','cause.changeover':'段取り','cause.material':'材料','cause.electrical':'電気','cause.operator':'オペレーター','cause.quality':'品質保留','cause.other':'その他','type.unplanned':'計画外','type.planned':'計画済み','modal.title':'停機イベントを記録','stat.avg':'平均OEE','stat.best':'最良シフト','stat.worst':'最悪シフト','stat.below':'目標以下','stat.trend':'トレンド'}
+};
+
+let currentLang=load(LK,'en');
+function setLang(lang){
+  currentLang=lang;save(LK,lang);document.documentElement.lang=lang;
+  document.getElementById('lang-select').value=lang;
+  const s=I18N[lang]||I18N.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(s[k])el.textContent=s[k];});
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const k=el.getAttribute('data-i18n-placeholder');if(s[k])el.placeholder=s[k];});
+}
+setLang(currentLang);
 
 // ── Init ──
-function init() {
-  const savedZoom = parseInt(localStorage.getItem('ss_zoom') || '100');
-  zoom = savedZoom;
-  applyZoom();
-  const savedLang = localStorage.getItem('ss_lang') || 'en';
-  document.getElementById('lang-select').value = savedLang;
-  const today = new Date().toISOString().split('T')[0];
-  const mn = document.getElementById('man-date');
-  if (mn) mn.value = today;
-
-  // Auto-login if token exists
-  if (token && currentUser) {
-    launchApp();
-  }
+function init(){
+  loadAll();
+  const a=getActive();
+  const mn=document.getElementById('man-sname');if(mn&&a)mn.value=a.name;
+  const md=document.getElementById('man-date');if(md)md.value=new Date().toISOString().split('T')[0];
+  updateClock();updateShiftUI();updateDashboard();renderConfigRows();
+  setInterval(updateClock,1000);
+  setInterval(()=>{updateShiftUI();},30000);
 }
-
 init();
 </script>
 </body>

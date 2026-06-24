@@ -39,8 +39,8 @@ def create_checkout_session(
                 },
                 "quantity": 1,
             }],
-            success_url="http://127.0.0.1:8000/dashboard?payment=success",
-            cancel_url="http://127.0.0.1:8000/dashboard?payment=cancelled",
+           success_url="https://web-production-f21c8.up.railway.app/dashboard?payment=success",
+           cancel_url="https://web-production-f21c8.up.railway.app/dashboard?payment=cancelled",
             customer_email=current_user.email,
             metadata={"user_id": current_user.id, "tier": tier}
         )
