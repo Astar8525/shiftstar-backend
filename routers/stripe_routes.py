@@ -8,11 +8,6 @@ import os
 
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
-PRICES = {
-    "pro": "price_pro_monthly",
-    "team": "price_team_monthly"
-}
-
 router = APIRouter(prefix="/stripe", tags=["stripe"])
 
 @router.post("/create-checkout-session")
@@ -21,6 +16,9 @@ def create_checkout_session(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
+    if not stripe.api_key:
+        raise HTTPException(status_code=500, detail="Stripe not configured")
+    
     if tier not in ["pro", "team"]:
         raise HTTPException(status_code=400, detail="Invalid tier")
     
@@ -39,10 +37,10 @@ def create_checkout_session(
                 },
                 "quantity": 1,
             }],
-           success_url="https://web-production-f21c8.up.railway.app/dashboard?payment=success",
-           cancel_url="https://web-production-f21c8.up.railway.app/dashboard?payment=cancelled",
+            success_url="https://web-production-f21c8.up.railway.app/dashboard?payment=success",
+            cancel_url="https://web-production-f21c8.up.railway.app/dashboard?payment=cancelled",
             customer_email=current_user.email,
-            metadata={"user_id": current_user.id, "tier": tier}
+            metadata={"user_id": str(current_user.id), "tier": tier}
         )
         return {"checkout_url": session.url}
     except Exception as e:
