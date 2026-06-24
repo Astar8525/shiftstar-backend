@@ -6,8 +6,6 @@ import models
 import stripe
 import os
 
-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
-
 router = APIRouter(prefix="/stripe", tags=["stripe"])
 
 @router.post("/create-checkout-session")
@@ -16,8 +14,11 @@ def create_checkout_session(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    if not stripe.api_key:
-        raise HTTPException(status_code=500, detail="Stripe not configured")
+    key = os.getenv("STRIPE_SECRET_KEY")
+    if not key:
+        raise HTTPException(status_code=500, detail="Stripe not configured - key: " + str(os.environ.keys()))
+    
+    stripe.api_key = key
     
     if tier not in ["pro", "team"]:
         raise HTTPException(status_code=400, detail="Invalid tier")
