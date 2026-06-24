@@ -6,7 +6,7 @@ import models
 import stripe
 import os
 
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+stripe.api_key = "sk_live_yourfullkeyhere"
 
 router = APIRouter(prefix="/stripe", tags=["stripe"])
 
