@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from database import engine
 import models
-from routers import users, shifts, events, production, history, stripe_routes
+from routers import users, shifts, events, production, history, stripe_routes, ai_routes
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -27,6 +27,7 @@ app.include_router(events.router)
 app.include_router(production.router)
 app.include_router(history.router)
 app.include_router(stripe_routes.router)
+app.include_router(ai_routes.router)
 
 @app.get("/dashboard")
 def serve_dashboard():
