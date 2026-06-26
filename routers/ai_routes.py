@@ -37,8 +37,9 @@ async def ai_chat(
             timeout=30.0
         )
 
-    if response.status_code != 200:
-        raise HTTPException(status_code=500, detail="AI request failed")
+if response.status_code != 200:
+        raise HTTPException(status_code=500, detail=f"AI request failed: {response.status_code} - {response.text}")
+      
 
     data = response.json()
     text = data.get("content", [{}])[0].get("text", "No response")
