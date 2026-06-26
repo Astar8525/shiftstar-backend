@@ -21,26 +21,28 @@ async def ai_chat(
     if not prompt:
         raise HTTPException(status_code=400, detail="Prompt required")
 
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            "https://api.anthropic.com/v1/messages",
-            headers={
-                "x-api-key": api_key,
-                "anthropic-version": "2023-06-01",
-                "content-type": "application/json"
-            },
-            json={
-                "model": "claude-sonnet-4-20250514",
-                "max_tokens": 1000,
-                "messages": [{"role": "user", "content": prompt}]
-            },
-            timeout=30.0
-        )
-
-if response.status_code != 200:
-        raise HTTPException(status_code=500, detail=f"AI request failed: {response.status_code} - {response.text}")
-      
-
-    data = response.json()
-    text = data.get("content", [{}])[0].get("text", "No response")
-    return {"response": text}
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "https://api.anthropic.com/v1/messages",
+                headers={
+                    "x-api-key": api_key,
+                    "anthropic-version": "2023-06-01",
+                    "content-type": "application/json"
+                },
+                json={
+                    "model": "claude-sonnet-4-20250514",
+                    "max_tokens": 1000,
+                    "messages": [{"role": "user", "content": prompt}]
+                },
+                timeout=30.0
+            )
+        data = response.json()
+        if response.status_code != 200:
+            raise HTTPException(status_code=500, detail=f"AI error: {data}")
+        text = data.get("content", [{}])[0].get("text", "No response")
+        return {"response": text}
+    except httpx.TimeoutException:
+        raise HTTPException(status_code=500, detail="AI request timed out")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
