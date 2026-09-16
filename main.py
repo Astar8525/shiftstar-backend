@@ -10,7 +10,7 @@ models.Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title="ShiftStar API",
     description="Manufacturing shift intelligence platform — Built for the floor. Understood in the boardroom.",
-    version="1.0.0"
+    version="1.1.0"
 )
 
 app.add_middleware(
@@ -45,6 +45,10 @@ def serve_privacy():
 def serve_terms():
     return FileResponse("terms.html")
 
+@app.get("/ethics")
+def serve_ethics():
+    return FileResponse("ethics.html")
+
 @app.get("/health")
 def health():
-    return {"status": "healthy"}
+    return {"status": "healthy", "version": "1.1.0"}
