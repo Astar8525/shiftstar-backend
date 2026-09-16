@@ -200,7 +200,24 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 /* REPORT */
 .report-area{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;font-size:12px;color:var(--text);line-height:1.8;white-space:pre-wrap;font-family:monospace;min-height:100px}
 
-/* TOOLTIPS */
+/* ONBOARDING MODAL */
+.onboard-overlay{display:none;position:fixed;inset:0;background:rgba(26,24,37,.6);z-index:300;align-items:center;justify-content:center;padding:20px}
+.onboard-overlay.open{display:flex}
+.onboard-modal{background:var(--bg2);border-radius:var(--radius-lg);padding:36px;width:100%;max-width:500px;box-shadow:0 24px 80px rgba(83,74,183,.2)}
+.onboard-logo{width:48px;height:48px;background:var(--brand);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.onboard-logo i{color:var(--brand-light);font-size:26px}
+.onboard-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text);text-align:center;margin-bottom:8px}
+.onboard-sub{font-size:14px;color:var(--text2);text-align:center;margin-bottom:28px;line-height:1.6}
+.onboard-steps{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
+.onboard-step{display:flex;align-items:flex-start;gap:14px;background:var(--bg);border-radius:var(--radius);padding:14px}
+.onboard-step-num{width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.onboard-step-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px}
+.onboard-step-desc{font-size:12px;color:var(--text2);line-height:1.5}
+.onboard-btn{width:100%;padding:14px;background:var(--brand);color:#fff;border:none;border-radius:40px;font-size:15px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;margin-bottom:10px}
+.onboard-btn:hover{background:var(--brand-dark)}
+.onboard-skip{width:100%;padding:8px;background:transparent;color:var(--text3);border:none;font-size:13px;font-family:'Inter',sans-serif;cursor:pointer}
+.onboard-skip:hover{color:var(--text)}
+
 .tooltip-wrap{position:relative;display:inline-flex;align-items:center;gap:4px}
 .tooltip-icon{width:14px;height:14px;border-radius:50%;background:var(--text3);color:#fff;font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;cursor:help;flex-shrink:0;line-height:1}
 .tooltip-icon:hover + .tooltip-box{opacity:1;visibility:visible;transform:translateY(0)}
@@ -507,6 +524,40 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 </main>
 </div>
 
+<!-- ONBOARDING MODAL -->
+<div class="onboard-overlay" id="onboard-modal">
+  <div class="onboard-modal">
+    <div class="onboard-logo"><i class="ti ti-star"></i></div>
+    <div class="onboard-title">Welcome to ShiftStar!</div>
+    <div class="onboard-sub">Built for the floor. Understood in the boardroom.<br/>Here's how to get started in 3 simple steps.</div>
+    <div class="onboard-steps">
+      <div class="onboard-step">
+        <div class="onboard-step-num">1</div>
+        <div>
+          <div class="onboard-step-title">Configure your shift schedule</div>
+          <div class="onboard-step-desc">Click the <strong>Shifts</strong> button in the top right to set your shift names and times. ShiftStar will automatically detect which shift is active. Set it once — it saves forever.</div>
+        </div>
+      </div>
+      <div class="onboard-step">
+        <div class="onboard-step-num">2</div>
+        <div>
+          <div class="onboard-step-title">Log your first downtime event</div>
+          <div class="onboard-step-desc">Click <strong>+ Log event</strong> whenever a machine goes down. Enter the machine name, cause, duration, and any notes for the next crew. Takes 10 seconds.</div>
+        </div>
+      </div>
+      <div class="onboard-step">
+        <div class="onboard-step-num">3</div>
+        <div>
+          <div class="onboard-step-title">Import your production data</div>
+          <div class="onboard-step-desc">Go to the <strong>Import</strong> tab and paste your CSV export from SAP, MRP, or Excel. ShiftStar will calculate your real OEE — Availability × Performance × Quality — instantly.</div>
+        </div>
+      </div>
+    </div>
+    <button class="onboard-btn" onclick="closeOnboarding()">Let's get started →</button>
+    <button class="onboard-skip" onclick="closeOnboarding()">Skip — I'll explore on my own</button>
+  </div>
+</div>
+
 <!-- EVENT MODAL -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
@@ -650,6 +701,9 @@ async function launchApp() {
   setInterval(updateClock, 1000);
   setInterval(updateShiftUI, 30000);
   setSyncStatus('Connected — data syncing with ' + currentUser.company_id + ' company database');
+
+  // Show onboarding for first-time users
+  setTimeout(() => showOnboarding(), 800);
 
   // Check if user came from landing page with upgrade intent
   const params = new URLSearchParams(window.location.search);
@@ -1210,7 +1264,20 @@ async function saveEvent() {
   }
 }
 
-// ── Tabs ──
+// ── Onboarding ──
+function showOnboarding() {
+  const seen = localStorage.getItem('ss_onboarded_' + currentUser?.id);
+  if (!seen) {
+    document.getElementById('onboard-modal').classList.add('open');
+  }
+}
+
+function closeOnboarding() {
+  document.getElementById('onboard-modal').classList.remove('open');
+  localStorage.setItem('ss_onboarded_' + currentUser?.id, '1');
+}
+
+
 function showTab(name) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
