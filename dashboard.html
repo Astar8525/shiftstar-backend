@@ -284,6 +284,25 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
       <div class="login-field"><label>Password</label><input type="password" id="l-password" placeholder="••••••••"/></div>
       <button class="login-btn" onclick="doLogin()">Sign in to ShiftStar</button>
       <div class="login-err" id="login-err"></div>
+      <p style="text-align:center;margin-top:12px"><button onclick="showForgotPassword()" style="background:none;border:none;color:var(--brand);font-size:13px;cursor:pointer;font-family:'Inter',sans-serif">Forgot your password?</button></p>
+    </div>
+
+    <!-- FORGOT PASSWORD FORM -->
+    <div id="forgot-form" style="display:none">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">Enter your email address and we'll send you a link to reset your password.</p>
+      <div class="login-field"><label>Email</label><input type="email" id="fp-email" placeholder="your@email.com"/></div>
+      <button class="login-btn" onclick="doForgotPassword()">Send reset link</button>
+      <div class="login-err" id="forgot-err"></div>
+      <p style="text-align:center;margin-top:12px"><button onclick="showLogin()" style="background:none;border:none;color:var(--brand);font-size:13px;cursor:pointer;font-family:'Inter',sans-serif">← Back to sign in</button></p>
+    </div>
+
+    <!-- RESET PASSWORD FORM -->
+    <div id="reset-form" style="display:none">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px;line-height:1.6">Enter your new password below.</p>
+      <div class="login-field"><label>New password</label><input type="password" id="rp-password" placeholder="••••••••"/></div>
+      <div class="login-field"><label>Confirm new password</label><input type="password" id="rp-confirm" placeholder="••••••••"/></div>
+      <button class="login-btn" onclick="doResetPassword()">Update password</button>
+      <div class="login-err" id="reset-err"></div>
     </div>
 
     <!-- REGISTER FORM -->
@@ -679,7 +698,52 @@ async function doRegister() {
   }
 }
 
-function doLogout() {
+function showForgotPassword() {
+  document.getElementById('login-form').style.display = 'none';
+  document.getElementById('register-form').style.display = 'none';
+  document.getElementById('forgot-form').style.display = 'block';
+  document.getElementById('reset-form').style.display = 'none';
+}
+
+function showLogin() {
+  document.getElementById('login-form').style.display = 'block';
+  document.getElementById('register-form').style.display = 'none';
+  document.getElementById('forgot-form').style.display = 'none';
+  document.getElementById('reset-form').style.display = 'none';
+}
+
+async function doForgotPassword() {
+  const email = document.getElementById('fp-email').value.trim();
+  document.getElementById('forgot-err').textContent = '';
+  if (!email) { document.getElementById('forgot-err').textContent = 'Email required'; return; }
+  try {
+    await api('POST', '/reset/request', { email });
+    document.getElementById('forgot-err').style.color = 'var(--success)';
+    document.getElementById('forgot-err').textContent = '✓ Reset link sent. Check your email — or contact support at anthonynorman85@gmail.com';
+  } catch (e) {
+    document.getElementById('forgot-err').textContent = e.message || 'Request failed';
+  }
+}
+
+async function doResetPassword() {
+  const password = document.getElementById('rp-password').value;
+  const confirm = document.getElementById('rp-confirm').value;
+  const token = new URLSearchParams(window.location.search).get('reset_token');
+  document.getElementById('reset-err').textContent = '';
+  if (!password) { document.getElementById('reset-err').textContent = 'Password required'; return; }
+  if (password !== confirm) { document.getElementById('reset-err').textContent = 'Passwords do not match'; return; }
+  if (password.length < 6) { document.getElementById('reset-err').textContent = 'Password must be at least 6 characters'; return; }
+  try {
+    await api('POST', '/reset/confirm', { token, password });
+    document.getElementById('reset-err').style.color = 'var(--success)';
+    document.getElementById('reset-err').textContent = '✓ Password updated! Redirecting to login...';
+    setTimeout(() => { window.location.href = '/dashboard'; }, 2000);
+  } catch (e) {
+    document.getElementById('reset-err').textContent = e.message || 'Reset failed';
+  }
+}
+
+
   token = null;
   currentUser = null;
   localStorage.removeItem('ss_token');
@@ -1310,6 +1374,16 @@ function init() {
   // Auto-login if token exists
   if (token && currentUser) {
     launchApp();
+  }
+
+  // Check for password reset token in URL
+  const resetToken = new URLSearchParams(window.location.search).get('reset_token');
+  if (resetToken) {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'none';
+    document.getElementById('forgot-form').style.display = 'none';
+    document.getElementById('reset-form').style.display = 'block';
+    document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
   }
 }
 
