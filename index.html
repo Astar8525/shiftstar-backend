@@ -180,7 +180,19 @@ footer{background:var(--text);border-top:1px solid rgba(255,255,255,.06);padding
 .footer-links a{font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;}
 .footer-links a:hover{color:rgba(255,255,255,.8)}
 
-.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
+.faq{background:var(--bg2)}
+.faq-grid{display:flex;flex-direction:column;gap:0;margin-top:48px;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.faq-item{border-bottom:1px solid var(--border)}
+.faq-item:last-child{border-bottom:none}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;background:transparent;border:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:15px;font-weight:500;color:var(--text);text-align:left;gap:16px}
+.faq-q:hover{background:var(--bg)}
+.faq-icon{width:24px;height:24px;border-radius:50%;background:var(--brand-light);color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:transform .2s}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-a{display:none;padding:0 24px 20px;font-size:14px;color:var(--text2);line-height:1.8}
+.faq-item.open .faq-a{display:block}
+.faq-a a{color:var(--brand)}
+
+
 .fade-up.visible{opacity:1;transform:translateY(0)}
 
 @media(max-width:768px){
@@ -195,6 +207,15 @@ footer{background:var(--text);border-top:1px solid rgba(255,255,255,.06);padding
   footer{flex-direction:column;align-items:flex-start}
   #zoom-bar{bottom:72px}
 }
+
+/* COOKIE BANNER */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:2000;background:#1A1825;color:#fff;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;transform:translateY(100%);transition:transform .4s ease;box-shadow:0 -4px 24px rgba(0,0,0,.2)}
+#cookie-banner.show{transform:translateY(0)}
+#cookie-banner p{font-size:13px;color:rgba(255,255,255,.7);max-width:700px;line-height:1.6}
+#cookie-banner a{color:#AFA9EC}
+.cookie-btn{font-size:13px;padding:8px 20px;border-radius:20px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;border:none;white-space:nowrap}
+.cookie-accept{background:var(--brand);color:#fff}
+.cookie-decline{background:transparent;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.2)!important;border:none}
 </style>
 </head>
 <body>
@@ -231,6 +252,7 @@ footer{background:var(--text);border-top:1px solid rgba(255,255,255,.06);padding
     <a href="#features">Features</a>
     <a href="#ai">AI Helper</a>
     <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
   </div>
   <button class="nav-cta" onclick="goToApp('free')">Get started free</button>
 </nav>
@@ -461,6 +483,105 @@ footer{background:var(--text);border-top:1px solid rgba(255,255,255,.06);padding
   </div>
 </section>
 
+<section class="faq" id="faq">
+  <div class="container">
+    <p class="section-eye" style="text-align:center">FAQ</p>
+    <h2 class="section-title" style="text-align:center;margin:0 auto 12px">Frequently asked questions</h2>
+    <p class="section-sub" style="text-align:center;margin:0 auto">Everything you need to know about ShiftStar.</p>
+    <div class="faq-grid">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          What is ShiftStar and who is it for?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">ShiftStar is a cloud-based shift intelligence platform built for manufacturing supervisors, plant managers, and operations teams. It tracks OEE in real time, logs downtime events, generates AI-powered shift handoff notes, and shows trend analysis across multiple shifts. If you manage a production floor and rely on manual reports or spreadsheets, ShiftStar was built for you.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          Do I need to install anything?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">No. ShiftStar is entirely web-based. Create your account, log in from any browser on any device, and start tracking. No software to install, no IT ticket required, no training week. Your data lives in the cloud and is accessible from anywhere.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          How does ShiftStar calculate OEE?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">ShiftStar uses the standard industry formula: OEE = Availability × Performance × Quality. You import your production data as a CSV from SAP, MRP, or any spreadsheet — ShiftStar auto-detects the column names and calculates all three components from your actual numbers. No estimates, no manual formulas. The supported column names include units_produced, units_defect, planned_time_min, downtime_min, and ideal_cycle_sec.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          Can my whole team use ShiftStar?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Yes. ShiftStar is built for teams. Every user gets their own secure login and your company's data is completely isolated from other companies. The Pro plan supports up to 3 users, Team supports up to 10, and the Plant plan supports unlimited users across multiple facilities. You can set roles — supervisor, manager, or admin — so each person sees what they need.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          What does the ShiftStar AI actually do?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">ShiftStar AI reads your actual shift data — logged events, OEE, downtime causes, trend history — and generates four types of intelligence: an end-of-shift digest summarizing what happened and what it cost you, an automatic handoff note for the incoming supervisor, root cause flags identifying patterns in your downtime, and corrective action priorities telling you what to do first next shift. You can also ask ShiftStar AI any question about your shift in plain English.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          Is my production data secure?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Yes. Your data belongs to you. ShiftStar uses JWT authentication, encrypted connections, and complete multi-tenant isolation — meaning your company's data is never visible to any other company using ShiftStar. We do not sell your data to third parties. You can request deletion of your data at any time by contacting us at <a href="mailto:anthonynorman85@gmail.com">anthonynorman85@gmail.com</a>.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          Can I try ShiftStar before paying?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Yes. The Starter plan is completely free — no credit card required. It includes live shift detection, downtime event logging, OEE calculation, and shift summary reports. Pro and Team plans include a 14-day free trial. If you decide to subscribe and are not satisfied within 7 days of your first charge, contact us for a full refund.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          What happens to my data if I cancel?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">If you cancel your subscription you retain access to ShiftStar until the end of your current billing period. After that your account reverts to the free Starter tier. Your data is retained for 90 days after account closure and then permanently deleted unless you request earlier deletion.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          Does ShiftStar work with SAP?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Yes. ShiftStar accepts CSV exports from SAP PP, SAP MM, and any MRP or ERP system that can export to CSV or Excel. Just export your production data, copy the contents, and paste it into ShiftStar's Import tab. ShiftStar automatically maps the column names and calculates your OEE. Live ERP integration with direct SAP connection is available on the Plant plan.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          What languages does ShiftStar support?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">ShiftStar supports 7 languages out of the box: English, Español, Français, Deutsch, Português, 中文, and 日本語. Switch languages using the globe icon in the bottom left corner of any page. The language setting is saved per browser so your team members can each use their preferred language.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          How do I get support?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Email us at <a href="mailto:anthonynorman85@gmail.com">anthonynorman85@gmail.com</a> and we'll respond within 24 hours. Pro and Team plan subscribers receive priority support. For enterprise Plant plan customers, we provide dedicated onboarding and a direct support line.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <section class="cta-section">
   <div class="container">
     <h2 class="section-title">Your next shift starts with ShiftStar.</h2>
@@ -517,5 +638,40 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 </script>
-</body>
+
+<!-- COOKIE CONSENT BANNER -->
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent">
+  <p>ShiftStar uses essential cookies to keep you logged in and remember your preferences. By continuing to use ShiftStar you agree to our <a href="/privacy">Privacy Policy</a> and <a href="/terms">Terms of Service</a>.</p>
+  <div style="display:flex;gap:8px;flex-shrink:0">
+    <button class="cookie-btn cookie-decline" onclick="dismissCookie()">Decline non-essential</button>
+    <button class="cookie-btn cookie-accept" onclick="acceptCookie()">Accept & continue</button>
+  </div>
+</div>
+<script>
+// ── COOKIE CONSENT ──
+function acceptCookie() {
+  localStorage.setItem('ss_cookie_consent', 'accepted');
+  document.getElementById('cookie-banner').classList.remove('show');
+}
+function dismissCookie() {
+  localStorage.setItem('ss_cookie_consent', 'declined');
+  document.getElementById('cookie-banner').classList.remove('show');
+}
+// ── FAQ ──
+function toggleFAQ(btn) {
+  const item = btn.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// ── COOKIE ──
+function checkCookie() {
+  const consent = localStorage.getItem('ss_cookie_consent');
+  if (!consent) {
+    setTimeout(() => document.getElementById('cookie-banner').classList.add('show'), 1500);
+  }
+}
+checkCookie();
+</script></body>
 </html>
