@@ -1385,6 +1385,21 @@ function init() {
     document.getElementById('reset-form').style.display = 'block';
     document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
   }
+
+  // Check for payment result in URL
+  const paymentStatus = new URLSearchParams(window.location.search).get('payment');
+  if (paymentStatus === 'success') {
+    setTimeout(() => {
+      setSyncStatus('🎉 Payment successful! Welcome to ShiftStar Pro. Your account has been upgraded.', 'success');
+      // Clean URL
+      window.history.replaceState({}, '', '/dashboard');
+    }, 1000);
+  } else if (paymentStatus === 'cancelled') {
+    setTimeout(() => {
+      setSyncStatus('Payment cancelled — no charge was made. Upgrade anytime from the header.', 'info');
+      window.history.replaceState({}, '', '/dashboard');
+    }, 1000);
+  }
 }
 
 init();
