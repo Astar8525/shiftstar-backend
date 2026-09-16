@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ShiftStar Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.10.0/dist/tabler-icons.min.css"/>
+<style>
+:root{--brand:#534AB7;--brand-dark:#3C3489;--brand-light:#EEEDFE;--brand-mid:#AFA9EC;--teal:#1D9E75;--coral:#D85A30;--amber:#BA7517;--bg:#F8F7FF;--bg2:#FFFFFF;--text:#1A1825;--text2:#4B4768;--text3:#8B88A8;--border:#DDD9F5;--radius:10px;--radius-lg:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{background:var(--brand);padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr-logo{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.hdr-logo i{color:#EEEDFE;font-size:18px}
+.hdr-name{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:#fff}
+.hdr-tag{font-size:10px;color:rgba(255,255,255,.6)}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.hdr-btn{font-size:12px;padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;cursor:pointer;font-family:'Inter',sans-serif}
+.hdr-btn:hover{background:rgba(255,255,255,.15)}
+.main{max-width:1100px;margin:0 auto;padding:28px 20px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.stat-label{font-size:12px;color:var(--text3);margin-bottom:6px}
+.stat-val{font-size:28px;font-weight:700;color:var(--brand)}
+.section-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:14px}
+.company-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:14px;overflow:hidden}
+.company-header{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:var(--bg2)}
+.company-header:hover{background:var(--bg)}
+.company-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text)}
+.company-meta{font-size:12px;color:var(--text3);margin-top:3px}
+.company-pills{display:flex;gap:8px;align-items:center}
+.pill{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500}
+.pill-purple{background:var(--brand-light);color:var(--brand)}
+.pill-teal{background:#E1F5EE;color:var(--teal)}
+.company-users{display:none;border-top:1px solid var(--border)}
+.company-card.open .company-users{display:block}
+.user-row{display:flex;align-items:center;gap:12px;padding:10px 20px;border-bottom:1px solid var(--border)}
+.user-row:last-child{border-bottom:none}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--brand);flex-shrink:0}
+.user-name{font-size:13px;font-weight:500;color:var(--text)}
+.user-email{font-size:12px;color:var(--text3)}
+.user-role{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;margin-left:auto}
+.role-admin{background:#FAECE7;color:var(--coral)}
+.role-manager{background:var(--brand-light);color:var(--brand)}
+.role-supervisor{background:#E1F5EE;color:var(--teal)}
+.loading{text-align:center;padding:60px;color:var(--text3);font-size:14px}
+.error-msg{background:#FAECE7;color:var(--coral);padding:14px 18px;border-radius:var(--radius);margin-bottom:16px;font-size:13px}
+.refresh-btn{font-size:12px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--bg2);color:var(--text2);cursor:pointer;font-family:'Inter',sans-serif}
+.refresh-btn:hover{background:var(--brand-light);color:var(--brand)}
+.empty{text-align:center;padding:40px;color:var(--text3);font-size:14px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-brand">
+    <div class="hdr-logo"><i class="ti ti-star"></i></div>
+    <div>
+      <div class="hdr-name">ShiftStar Admin</div>
+      <div class="hdr-tag">Internal dashboard — admin only</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <button class="refresh-btn" onclick="loadData()"><i class="ti ti-refresh"></i> Refresh</button>
+    <button class="hdr-btn" onclick="goToDashboard()"><i class="ti ti-layout-dashboard"></i> Dashboard</button>
+    <button class="hdr-btn" onclick="logout()"><i class="ti ti-logout"></i> Logout</button>
+  </div>
+</header>
+
+<main class="main">
+  <div id="error-area"></div>
+  
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat-card"><div class="stat-label">Total Users</div><div class="stat-val" id="s-users">—</div></div>
+    <div class="stat-card"><div class="stat-label">Companies</div><div class="stat-val" id="s-companies">—</div></div>
+    <div class="stat-card"><div class="stat-label">Events Logged</div><div class="stat-val" id="s-events">—</div></div>
+    <div class="stat-card"><div class="stat-label">Shift History</div><div class="stat-val" id="s-history">—</div></div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <div class="section-title">Companies & Users</div>
+    <div style="font-size:12px;color:var(--text3)" id="last-updated"></div>
+  </div>
+
+  <div id="companies-list"><div class="loading">Loading data...</div></div>
+</main>
+
+<script>
+const API = 'https://web-production-f21c8.up.railway.app';
+const token = localStorage.getItem('ss_token');
+
+if (!token) {
+  window.location.href = '/dashboard';
+}
+
+async function api(method, path) {
+  const res = await fetch(API + path, {
+    method,
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
+  });
+  if (res.status === 401 || res.status === 403) {
+    document.getElementById('error-area').innerHTML = '<div class="error-msg">Access denied. Admin role required. <a href="/dashboard">Return to dashboard</a></div>';
+    document.getElementById('companies-list').innerHTML = '';
+    throw new Error('Access denied');
+  }
+  if (!res.ok) throw new Error('Request failed');
+  return res.json();
+}
+
+async function loadData() {
+  try {
+    const [stats, companies] = await Promise.all([
+      api('GET', '/admin/stats'),
+      api('GET', '/admin/companies')
+    ]);
+
+    document.getElementById('s-users').textContent = stats.total_users;
+    document.getElementById('s-companies').textContent = stats.total_companies;
+    document.getElementById('s-events').textContent = stats.total_events.toLocaleString();
+    document.getElementById('s-history').textContent = stats.total_shift_history.toLocaleString();
+    document.getElementById('last-updated').textContent = 'Updated ' + new Date().toLocaleTimeString();
+
+    const list = document.getElementById('companies-list');
+    if (!companies.length) {
+      list.innerHTML = '<div class="empty">No companies registered yet.</div>';
+      return;
+    }
+
+    list.innerHTML = companies.map(c => `
+      <div class="company-card" id="company-${c.id}">
+        <div class="company-header" onclick="toggleCompany(${c.id})">
+          <div>
+            <div class="company-name">${c.name}</div>
+            <div class="company-meta">ID: ${c.id} · Joined ${new Date(c.created_at).toLocaleDateString()}</div>
+          </div>
+          <div class="company-pills">
+            <span class="pill pill-purple">${c.user_count} user${c.user_count !== 1 ? 's' : ''}</span>
+            <span class="pill pill-teal">${c.event_count} events</span>
+          </div>
+        </div>
+        <div class="company-users">
+          ${c.users.map(u => `
+            <div class="user-row">
+              <div class="user-avatar">${u.name.charAt(0).toUpperCase()}</div>
+              <div>
+                <div class="user-name">${u.name}</div>
+                <div class="user-email">${u.email}</div>
+              </div>
+              <span class="user-role role-${u.role}">${u.role}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function toggleCompany(id) {
+  document.getElementById('company-' + id).classList.toggle('open');
+}
+
+function goToDashboard() { window.location.href = '/dashboard'; }
+function logout() { localStorage.removeItem('ss_token'); localStorage.removeItem('ss_user'); window.location.href = '/dashboard'; }
+
+loadData();
+setInterval(loadData, 60000);
+</script>
+</body>
+</html>
