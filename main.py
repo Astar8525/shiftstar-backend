@@ -55,6 +55,28 @@ def serve_ethics():
 def serve_admin():
     return FileResponse("admin.html")
 
+@app.get("/import-guide")
+def serve_import_guide():
+    return FileResponse("import-guide.html")
+
+@app.get("/samples/{filename}")
+def serve_sample(filename: str):
+    allowed = [
+        "ShiftStar_Sample_CSV_24hr.csv",
+        "ShiftStar_Sample_CSV_7day.csv",
+        "ShiftStar_Sample_CSV_30day.csv",
+        "ShiftStar_Sample_SAP_24hr.csv",
+        "ShiftStar_Sample_SAP_7day.csv",
+        "ShiftStar_Sample_SAP_30day.csv",
+        "ShiftStar_Sample_MRP_24hr.csv",
+        "ShiftStar_Sample_MRP_7day.csv",
+        "ShiftStar_Sample_MRP_30day.csv",
+    ]
+    if filename not in allowed:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(f"samples/{filename}", filename=filename, media_type="text/csv")
+
 @app.get("/health")
 def health():
     return {"status": "healthy", "version": "1.1.0"}

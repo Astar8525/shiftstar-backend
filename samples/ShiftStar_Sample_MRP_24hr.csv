@@ -1,0 +1,10 @@
+production_date,shift,resource_id,good_units,rejected_units,planned_hrs,downtime_min,capacity_pct
+2026-09-01,Day,Resource-A,378,3,8,45,82.7
+2026-09-01,Day,Resource-B,385,7,8,19,89.5
+2026-09-01,Day,Resource-C,372,6,8,39,78.5
+2026-09-01,Afternoon,Resource-A,405,4,8,10,88.2
+2026-09-01,Afternoon,Resource-B,400,8,8,40,89.9
+2026-09-01,Afternoon,Resource-C,406,6,8,31,82.7
+2026-09-01,Night,Resource-A,351,7,8,60,80.7
+2026-09-01,Night,Resource-B,437,5,8,32,81.7
+2026-09-01,Night,Resource-C,436,4,8,53,84.5
