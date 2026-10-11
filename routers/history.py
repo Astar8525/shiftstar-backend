@@ -1,13 +1,33 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
+from datetime import date as date_type, timedelta
 import json
+
 from database import get_db
 from auth import get_current_user
 import models
 import schemas
 
 router = APIRouter(prefix="/history", tags=["history"])
+
+
+def _entry_day(entry):
+    try:
+        return date_type.fromisoformat(str(entry.date)[:10])
+    except Exception:
+        return None
+
+
+def _within_days(results, days):
+    """Keep entries from the last `days` calendar days, counted back from the newest entry."""
+    dated = [(e, _entry_day(e)) for e in results]
+    found = [d for _, d in dated if d is not None]
+    if not found:
+        return list(results)
+    cutoff = max(found) - timedelta(days=days - 1)
+    return [e for e, d in dated if d is None or d >= cutoff]
+
 
 @router.get("/", response_model=List[schemas.ShiftHistoryOut])
 def get_history(
@@ -25,8 +45,10 @@ def get_history(
         )
     results = query.order_by(
         models.ShiftHistory.date.desc()
-    ).limit(range).all()
+    ).all()
+    results = _within_days(results, range or 7)
     return list(reversed(results))
+
 
 @router.post("/", response_model=schemas.ShiftHistoryOut)
 def save_history(
@@ -66,6 +88,7 @@ def save_history(
     db.refresh(new_entry)
     return new_entry
 
+
 @router.get("/pareto")
 def get_pareto(
     range: Optional[int] = Query(7),
@@ -76,7 +99,8 @@ def get_pareto(
         models.ShiftHistory.company_id == current_user.company_id
     ).order_by(
         models.ShiftHistory.date.desc()
-    ).limit(range).all()
+    ).all()
+    results = _within_days(results, range or 7)
 
     # Aggregate cause totals across all shifts
     totals = {}
