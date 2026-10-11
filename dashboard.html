@@ -1684,7 +1684,9 @@ var EXTRA2 = [
   ["near target", "cerca del objetivo", "proche de l'objectif", "nahe am Ziel", "perto da meta", "接近目标", "目標に近い"],
   ["off target", "fuera del objetivo", "hors objectif", "außerhalb des Ziels", "fora da meta", "未达标", "目標外"]
 ];
-ROWS = ROWS.concat(EXTRA, EXTRA2);
+ROWS = ROWS.concat(EXTRA, EXTRA2, [
+    ["Latest shift", "Último turno", "Dernière équipe", "Letzte Schicht", "Último turno", "最近班次", "直近のシフト"]
+  ]);
 var X = {
   es: { of: "{a} de {b}", meta: "{d} \u00B7 {n} unidades \u00B7 {m} min de inactividad", saved: "Guardados {a} de {b} turnos...", imp: "Se importaron {r} filas (formato {f}) como {s} turnos en {d} día(s), del {a} al {b}. OEE calculado y guardado.", cols: "Se necesitan las columnas de unidades producidas y tiempo planificado. Columnas encontradas: {c}", fail: "No se pudo guardar en la base de datos tras {n} turnos: {m}", fail2: "No se pudo guardar: {m}" },
   fr: { of: "{a} sur {b}", meta: "{d} \u00B7 {n} unités \u00B7 {m} min d'arrêt", saved: "{a} équipes enregistrées sur {b}...", imp: "{r} lignes importées (format {f}) en {s} équipes sur {d} jour(s), du {a} au {b}. OEE calculé et enregistré.", cols: "Les colonnes unités produites et temps planifié sont requises. Colonnes trouvées : {c}", fail: "Impossible d'enregistrer dans la base de données après {n} équipes : {m}", fail2: "Impossible d'enregistrer : {m}" },
@@ -1969,5 +1971,113 @@ window.ssHistNote = async function () {
 };
 </script>
 <!-- i18n-ai2:end -->
+<!-- i18n-period:start -->
+<script>
+(function () {
+  function lang() { try { return localStorage.getItem('ss_lang') || 'en'; } catch (e) { return 'en'; } }
+  var W = {
+    shifts: { en: 'shifts', es: 'turnos', fr: 'équipes', de: 'Schichten', pt: 'turnos', zh: '个班次', ja: 'シフト' },
+    min: { en: 'min', es: 'min', fr: 'min', de: 'Min.', pt: 'min', zh: '分钟', ja: '分' },
+    avg: { en: 'avg', es: 'prom.', fr: 'moy.', de: 'Ø', pt: 'méd.', zh: '平均', ja: '平均' }
+  };
+  var DAYS = { shift: 0, day: 1, week: 7, month: 30 };
+  window.ssPeriod = 'shift';
+  var frac = function (v) { v = Number(v) || 0; return v <= 1.5 ? v : v / 100; };
+  var ymd = function (x) { return String(x).slice(0, 10); };
+  window.ssPeriodStats = async function (days) {
+    var h = await api('GET', '/history/?range=' + days);
+    if (!h || !h.length) return null;
+    var n = h.length, sum = 0, down = 0, good = 0, def = 0, below = 0, best = h[0], worst = h[0];
+    h.forEach(function (d) {
+      var o = frac(d.oee);
+      sum += o; down += Number(d.total_downtime) || 0; good += Number(d.good_units) || 0; def += Number(d.defects) || 0;
+      if (o > frac(best.oee)) best = d;
+      if (o < frac(worst.oee)) worst = d;
+      if (o < 0.85) below++;
+    });
+    return { n: n, d1: ymd(h[0].date), d2: ymd(h[n - 1].date), oee: sum / n, good: good, defects: def, rate: (good + def) ? def / (good + def) : 0, down: down, best: best, worst: worst, below: below };
+  };
+  function setText(id, t) { var el = document.getElementById(id); if (el) el.textContent = t; return el; }
+  async function applyPeriod() {
+    var p = window.ssPeriod;
+    if (p === 'shift') return;
+    var S;
+    try { S = await window.ssPeriodStats(DAYS[p]); } catch (e) { return; }
+    if (window.ssPeriod !== p || !S) return;
+    var L = lang();
+    var oc = S.oee >= 0.85 ? 'var(--success)' : S.oee >= 0.75 ? 'var(--warning)' : 'var(--danger)';
+    var o = setText('m-oee', Math.round(S.oee * 100) + '%'); if (o) o.style.color = oc;
+    var fd = function (x) { return (typeof fDate === 'function') ? fDate(x) : x; };
+    setText('m-oee-sub', W.avg[L] + ' · ' + S.n + ' ' + W.shifts[L] + ' · ' + fd(S.d1) + ' – ' + fd(S.d2));
+    setText('m-tp', S.good.toLocaleString());
+    var dr = setText('m-dr', (Math.round(S.rate * 1000) / 10) + '%'); if (dr) dr.style.color = S.rate > 0.025 ? 'var(--danger)' : 'var(--success)';
+    setText('m-dt', S.down.toLocaleString() + ' ' + W.min[L]);
+    var f = document.getElementById('oee-formula'); if (f) f.style.display = 'none';
+    if (typeof updateProdChart === 'function') updateProdChart({ good: S.good, defects: S.defects });
+  }
+  function setPeriod(p) {
+    window.ssPeriod = p;
+    ['shift', 'day', 'week', 'month'].forEach(function (k) { var b = document.getElementById('sp-' + k); if (b) b.classList.toggle('active', k === p); });
+    if (typeof updateDashboard === 'function') updateDashboard();
+  }
+  function build() {
+    if (document.getElementById('sp-bar')) return true;
+    var m = document.getElementById('m-oee'); if (!m) return false;
+    var card = m.closest('.metric-card'); if (!card || !card.parentElement) return false;
+    var grid = card.parentElement;
+    var bar = document.createElement('div');
+    bar.id = 'sp-bar'; bar.className = 'range-btns'; bar.style.cssText = 'margin:0 0 10px 0;flex-wrap:wrap';
+    [['shift', 'Latest shift'], ['day', '24 hours'], ['week', '7 days'], ['month', '30 days']].forEach(function (x) {
+      var b = document.createElement('button');
+      b.className = 'range-btn' + (x[0] === 'shift' ? ' active' : ''); b.id = 'sp-' + x[0]; b.textContent = x[1];
+      b.onclick = function () { setPeriod(x[0]); };
+      bar.appendChild(b);
+    });
+    grid.parentNode.insertBefore(bar, grid);
+    return true;
+  }
+  if (!build()) { document.addEventListener('DOMContentLoaded', build); }
+  var _ud = window.updateDashboard;
+  if (typeof _ud === 'function') {
+    window.updateDashboard = function () { var r = _ud.apply(this, arguments); applyPeriod(); return r; };
+  }
+  var _sl = window.setLang;
+  if (typeof _sl === 'function') {
+    window.setLang = function (l) { _sl(l); applyPeriod(); };
+  }
+  var _hn = window.ssHistNote;
+  window.ssHistNote = async function () {
+    var p = window.ssPeriod;
+    if (p === 'shift' || !DAYS[p]) { return _hn ? await _hn() : ''; }
+    try {
+      var S = await window.ssPeriodStats(DAYS[p]);
+      if (!S) return '';
+      var names = { day: 'last 24 hours (the most recent day of data)', week: 'last 7 days', month: 'last 30 days' };
+      var s = '\n\nPERIOD VIEW: The user selected the ' + names[p] + ' view, so describe ALL shifts in this period, not only the latest shift. The period has ' + S.n + ' shifts from ' + S.d1 + ' to ' + S.d2 + ': average OEE ' + (S.oee * 100).toFixed(1) + '%, ' + S.below + ' shifts below the 85% target, total good units ' + S.good + ', defect rate ' + (S.rate * 100).toFixed(1) + '%, total downtime ' + S.down + ' min (average ' + Math.round(S.down / S.n) + ' min per shift). Best shift: ' + S.best.shift_name + ' ' + ymd(S.best.date) + ' (' + Math.round(frac(S.best.oee) * 100) + '%). Worst shift: ' + S.worst.shift_name + ' ' + ymd(S.worst.date) + ' (' + Math.round(frac(S.worst.oee) * 100) + '%).';
+      try {
+        var pr = await api('GET', '/history/pareto?range=' + DAYS[p]);
+        if (pr && pr.pareto && pr.pareto.length) s += ' Top downtime causes: ' + pr.pareto.slice(0, 3).map(function (x) { return x.cause + ' ' + x.minutes + ' min'; }).join(', ') + '.';
+      } catch (e) {}
+      return s + ' Treat these period figures as accurate, and ignore single-shift figures above where they conflict.';
+    } catch (e) { return ''; }
+  };
+  if (window.ssRep && window.ssRep.fixCauses) {
+    var _fc = window.ssRep.fixCauses;
+    window.ssRep.fixCauses = function (s) {
+      s = _fc(s);
+      if (lang() !== 'en') s = String(s).replace(/None logged/g, window.ssRep.t('No events logged'));
+      return s;
+    };
+  }
+  if (window.ssShowAI) {
+    var _sa = window.ssShowAI;
+    window.ssShowAI = function (el, md) {
+      md = String(md).replace(/(^|[^*])\*(?!\s)([^*\n]+?)(?<!\s)\*(?!\*)/g, '$1$2');
+      _sa(el, md);
+    };
+  }
+})();
+</script>
+<!-- i18n-period:end -->
 </body>
 </html>
