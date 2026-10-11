@@ -1621,6 +1621,80 @@ init();
     ["Worst shift", "Peor turno", "Pire équipe", "Schlechteste Schicht", "Pior turno", "最差班次", "最も低いシフト"],
     ["Your name", "Su nombre", "Votre nom", "Ihr Name", "Seu nome", "您的姓名", "お名前"]
   ];
+  /* i18n-extra:start */
+var EXTRA = [
+  ["Paste CSV data first.", "Pegue primero los datos CSV.", "Collez d'abord les données CSV.", "Fügen Sie zuerst die CSV-Daten ein.", "Cole os dados CSV primeiro.", "请先粘贴 CSV 数据。", "先にCSVデータを貼り付けてください。"],
+  ["Need a header row and at least one data row.", "Se necesita una fila de encabezados y al menos una fila de datos.", "Une ligne d'en-têtes et au moins une ligne de données sont requises.", "Eine Kopfzeile und mindestens eine Datenzeile sind erforderlich.", "É necessária uma linha de cabeçalho e pelo menos uma linha de dados.", "需要一行表头和至少一行数据。", "見出し行と、少なくとも1行のデータが必要です。"],
+  ["Good units and planned time are required.", "Las unidades buenas y el tiempo planificado son obligatorios.", "Les unités conformes et le temps planifié sont obligatoires.", "Gutteile und geplante Zeit sind erforderlich.", "Unidades boas e tempo planejado são obrigatórios.", "必须填写合格数量和计划时间。", "良品数と計画時間は必須です。"],
+  ["↑ Improving", "↑ Mejorando", "↑ En amélioration", "↑ Verbessernd", "↑ Melhorando", "↑ 改善", "↑ 改善中"],
+  ["↓ Declining", "↓ Empeorando", "↓ En baisse", "↓ Rückläufig", "↓ Piorando", "↓ 下降", "↓ 悪化中"],
+  ["→ Stable", "→ Estable", "→ Stable", "→ Stabil", "→ Estável", "→ 稳定", "→ 安定"],
+  ["No cause data", "Sin datos de causas", "Aucune donnée de cause", "Keine Ursachendaten", "Sem dados de causas", "无原因数据", "原因データなし"],
+  ["No data imported", "Sin datos importados", "Aucune donnée importée", "Keine Daten importiert", "Nenhum dado importado", "未导入数据", "インポートされたデータなし"],
+  ["on target", "en objetivo", "dans l'objectif", "im Ziel", "na meta", "达标", "目標達成"],
+  ["below target", "bajo objetivo", "sous l'objectif", "unter Ziel", "abaixo da meta", "低于目标", "目標未達"],
+  ["✓ On target", "✓ En objetivo", "✓ Dans l'objectif", "✓ Im Ziel", "✓ Na meta", "✓ 达标", "✓ 目標達成"],
+  ["↓ Below 85% target", "↓ Por debajo del objetivo del 85 %", "↓ Sous l'objectif de 85 %", "↓ Unter dem Ziel von 85 %", "↓ Abaixo da meta de 85%", "↓ 低于 85% 目标", "↓ 目標85%未満"]
+];
+ROWS = ROWS.concat(EXTRA);
+var X = {
+  es: { of: "{a} de {b}", meta: "{d} \u00B7 {n} unidades \u00B7 {m} min de inactividad", saved: "Guardados {a} de {b} turnos...", imp: "Se importaron {r} filas (formato {f}) como {s} turnos en {d} día(s), del {a} al {b}. OEE calculado y guardado.", cols: "Se necesitan las columnas de unidades producidas y tiempo planificado. Columnas encontradas: {c}", fail: "No se pudo guardar en la base de datos tras {n} turnos: {m}", fail2: "No se pudo guardar: {m}" },
+  fr: { of: "{a} sur {b}", meta: "{d} \u00B7 {n} unités \u00B7 {m} min d'arrêt", saved: "{a} équipes enregistrées sur {b}...", imp: "{r} lignes importées (format {f}) en {s} équipes sur {d} jour(s), du {a} au {b}. OEE calculé et enregistré.", cols: "Les colonnes unités produites et temps planifié sont requises. Colonnes trouvées : {c}", fail: "Impossible d'enregistrer dans la base de données après {n} équipes : {m}", fail2: "Impossible d'enregistrer : {m}" },
+  de: { of: "{a} von {b}", meta: "{d} \u00B7 {n} Einheiten \u00B7 {m} Min. Stillstand", saved: "{a} von {b} Schichten gespeichert...", imp: "{r} Zeilen importiert (Format {f}) als {s} Schichten über {d} Tag(e), {a} bis {b}. OEE berechnet und gespeichert.", cols: "Die Spalten für produzierte Einheiten und geplante Zeit werden benötigt. Gefundene Spalten: {c}", fail: "Speichern in der Datenbank nach {n} Schichten fehlgeschlagen: {m}", fail2: "Speichern fehlgeschlagen: {m}" },
+  pt: { of: "{a} de {b}", meta: "{d} \u00B7 {n} unidades \u00B7 {m} min de parada", saved: "{a} de {b} turnos salvos...", imp: "{r} linhas importadas (formato {f}) como {s} turnos em {d} dia(s), de {a} a {b}. OEE calculado e salvo.", cols: "São necessárias as colunas de unidades produzidas e tempo planejado. Colunas encontradas: {c}", fail: "Não foi possível salvar no banco de dados após {n} turnos: {m}", fail2: "Não foi possível salvar: {m}" },
+  zh: { of: "{a} / {b}", meta: "{d} \u00B7 {n} 件 \u00B7 停机 {m} 分钟", saved: "已保存 {a} / {b} 个班次…", imp: "已导入 {r} 行（{f} 格式），共 {s} 个班次，跨越 {d} 天，{a} 至 {b}。OEE 已计算并保存。", cols: "需要“产量”和“计划时间”两列。已找到的列：{c}", fail: "保存到数据库失败（已保存 {n} 个班次）：{m}", fail2: "无法保存：{m}" },
+  ja: { of: "{b}件中{a}件", meta: "{d} \u00B7 {n} 個 \u00B7 ダウンタイム {m} 分", saved: "{b}件中{a}件のシフトを保存しました…", imp: "{r}行（{f}形式）を{s}シフト・{d}日分としてインポートしました（{a}〜{b}）。OEEを計算して保存しました。", cols: "生産数と計画時間の列が必要です。見つかった列：{c}", fail: "データベースに保存できませんでした（{n}シフト保存後）：{m}", fail2: "保存できませんでした：{m}" }
+};
+function fill(t, o) { return t.replace(/\{(\w+)\}/g, function (_, k) { return o[k]; }); }
+function rxConvert(src, lang) {
+  if (lang === "en" || !D || !D[lang] || !X[lang]) return null;
+  var s = String(src).trim();
+  if (!s) return null;
+  var F = X[lang], m, out = null;
+  if ((m = /^(\d+) of (\d+)$/.exec(s))) out = fill(F.of, { a: m[1], b: m[2] });
+  else if ((m = /^([\d,.]+) good units$/.exec(s))) out = m[1] + " " + (D[lang]["good units"] || "good units");
+  else if ((m = /^(\d{1,2}\/\d{1,2}) \u00B7 ([\d,.]+) units \u00B7 ([\d,.]+) min downtime$/.exec(s))) out = fill(F.meta, { d: m[1], n: m[2], m: m[3] });
+  else if ((m = /^Saved (\d+) of (\d+) shifts\.\.\.$/.exec(s))) out = fill(F.saved, { a: m[1], b: m[2] });
+  else if ((m = /^Imported (\d+) rows \((\w+) format\) as (\d+) shifts across (\d+) day\(s\), (\S+) to (\S+)\. OEE calculated and saved\.$/.exec(s))) out = fill(F.imp, { r: m[1], f: m[2], s: m[3], d: m[4], a: m[5], b: m[6] });
+  else if ((m = /^Need units produced and planned time columns\. Columns found: ([\s\S]*)$/.exec(s))) out = fill(F.cols, { c: m[1] });
+  else if ((m = /^Could not save to database after (\d+) shifts: ([\s\S]*)$/.exec(s))) out = fill(F.fail, { n: m[1], m: m[2] });
+  else if ((m = /^Could not save: ([\s\S]*)$/.exec(s))) out = fill(F.fail2, { m: m[1] });
+  if (out === null) return null;
+  return String(src).replace(s, function () { return out; });
+}
+var csrc = new WeakMap();
+function patchCharts(lang) {
+  try {
+    if (typeof charts === "undefined" || !charts) return;
+    Object.keys(charts).forEach(function (k) {
+      try {
+        var ch = charts[k];
+        if (!ch || !ch.data) return;
+        var changed = false;
+        (ch.data.datasets || []).forEach(function (ds) {
+          if (typeof ds.label !== "string") return;
+          var rec = csrc.get(ds);
+          var src = (rec && ds.label === rec.out) ? rec.src : ds.label;
+          var out = convert(src, lang);
+          if (out !== ds.label) { ds.label = out; changed = true; }
+          csrc.set(ds, { src: src, out: out });
+        });
+        var L = ch.data.labels;
+        if (L && L.length === 1 && typeof L[0] === "string") {
+          var r2 = csrc.get(L);
+          var s2 = (r2 && L[0] === r2.out) ? r2.src : L[0];
+          var o2 = convert(s2, lang);
+          if (o2 !== L[0]) { L[0] = o2; changed = true; }
+          csrc.set(L, { src: s2, out: o2 });
+        }
+        if (changed) ch.update("none");
+      } catch (e) {}
+    });
+  } catch (e) {}
+}
+var _alert = window.alert;
+window.alert = function (m) { var t = m; try { t = convert(String(m), current); } catch (e) {} return _alert.call(window, t); };
+/* i18n-extra:end */
   var D = {};
   LANGS.forEach(function (l, i) {
     D[l] = {};
@@ -1630,7 +1704,7 @@ init();
   var current = 'en', timer = null, mo = null;
   var SKIP = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, NOSCRIPT: 1 };
 
-  function convert(src, lang) {
+  function convert(src, lang) { var _rx = rxConvert(src, lang); if (_rx !== null) return _rx;
     if (lang === 'en' || !D[lang]) return src;
     var t = src.trim();
     if (t && Object.prototype.hasOwnProperty.call(D[lang], t)) {
@@ -1673,7 +1747,7 @@ init();
       var nodes = [], n;
       while ((n = w.nextNode())) nodes.push(n);
       nodes.forEach(function (x) { doText(x, lang); });
-      document.body.querySelectorAll('[placeholder],[title]').forEach(function (el) { doAttr(el, lang); });
+      document.body.querySelectorAll('[placeholder],[title]').forEach(function (el) { doAttr(el, lang); }); patchCharts(lang);
     } finally {
       mo.observe(document.body, { childList: true, subtree: true, characterData: true });
     }
