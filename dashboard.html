@@ -1132,39 +1132,67 @@ function setRange(n) {
 async function importCSV() {
   const raw = document.getElementById('csv-raw').value.trim();
   if (!raw) { showMsg('Paste CSV data first.', 'err'); return; }
-  const lines = raw.trim().split('\n');
+  const lines = raw.split(/\r?\n/).filter(l => l.trim());
   if (lines.length < 2) { showMsg('Need a header row and at least one data row.', 'err'); return; }
+  lines[0] = lines[0].replace(/^\uFEFF/, '');
   const delim = lines[0].includes('\t') ? '\t' : ',';
-  const headers = lines[0].split(delim).map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
-  const rows = lines.slice(1).map(l => { const v = l.split(delim); return Object.fromEntries(headers.map((h, i) => [h, (v[i] || '').trim()])); });
+  const splitLine = l => { const out = []; let cur = '', q = false; for (const ch of l) { if (ch === '"') { q = !q; } else if (ch === delim && !q) { out.push(cur); cur = ''; } else { cur += ch; } } out.push(cur); return out; };
+  const headers = splitLine(lines[0]).map(h => h.trim().toLowerCase().replace(/\s+/g, '_'));
+  const rows = lines.slice(1).map(l => { const v = splitLine(l); return Object.fromEntries(headers.map((h, i) => [h, (v[i] || '').trim()])); });
   const find = keys => keys.find(k => headers.includes(k));
-  const cG = find(['units_produced', 'units_good', 'good_units', 'produced']);
-  const cP = find(['planned_time_min', 'planned_time', 'planned_min']);
-  if (!cG || !cP) { showMsg('Need at least: units_produced and planned_time_min columns.', 'err'); return; }
-  const cD = find(['units_defect', 'defects', 'defective', 'rejected']);
-  const cDt = find(['downtime_min', 'downtime', 'dt_min']);
+  const cDate = find(['date', 'production_date', 'scheduled.start', 'scheduled_start', 'posting_date', 'start_date']);
+  const cShift = find(['shift_name', 'shift']);
+  const cG = find(['units_produced', 'units_good', 'good_units', 'produced', 'confirmed.qty', 'confirmed_qty', 'confirmed_quantity']);
+  const cD = find(['units_defect', 'defects', 'defective', 'rejected', 'rejected_units', 'scrap.qty', 'scrap_qty', 'scrap']);
+  const cPm = find(['planned_time_min', 'planned_time', 'planned_min', 'planned.time.min']);
+  const cPh = find(['planned_hrs', 'planned_hours', 'planned_hr']);
+  const cDt = find(['downtime_min', 'downtime', 'dt_min', 'downtime.min']);
   const cC = find(['ideal_cycle_sec', 'cycle_time', 'cycle_sec']);
-  let good = 0, def = 0, planned = 0, dt = 0, cyc = null;
-  rows.forEach(r => { good += parseFloat(r[cG]) || 0; def += cD ? parseFloat(r[cD]) || 0 : 0; planned += parseFloat(r[cP]) || 0; dt += cDt ? parseFloat(r[cDt]) || 0 : 0; if (cC && !cyc) cyc = parseFloat(r[cC]) || null; });
-  const dtTotal = dt || events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0);
+  if (!cG || (!cPm && !cPh)) { showMsg('Need units produced and planned time columns. Columns found: ' + headers.join(', '), 'err'); return; }
+  const num = v => parseFloat(String(v).replace(/,/g, '')) || 0;
+  const pad = n => String(n).padStart(2, '0');
+  const toISO = s => { const t = String(s || '').trim().split(/[ T]/)[0]; let m = t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/); if (m) return m[1] + '-' + pad(m[2]) + '-' + pad(m[3]); m = t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/); if (m) return m[3] + '-' + pad(m[1]) + '-' + pad(m[2]); return ''; };
+  const today = new Date().toISOString().split('T')[0];
+  const groups = {};
+  rows.forEach(r => {
+    const date = (cDate && toISO(r[cDate])) || today;
+    let shift = (cShift && r[cShift]) || 'Imported';
+    if (shift.length === 1) shift = 'Shift ' + shift.toUpperCase();
+    const key = date + '|' + shift;
+    const g = groups[key] || (groups[key] = { shift_name: shift, date: date, good: 0, def: 0, planned: 0, dt: 0, cycW: 0 });
+    const good = num(r[cG]);
+    g.good += good;
+    g.def += cD ? num(r[cD]) : 0;
+    g.planned += cPm ? num(r[cPm]) : num(r[cPh]) * 60;
+    g.dt += cDt ? num(r[cDt]) : 0;
+    if (cC) g.cycW += num(r[cC]) * good;
+  });
+  const recs = Object.values(groups).sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : a.shift_name.localeCompare(b.shift_name)).map(g => ({
+    shift_name: g.shift_name,
+    date: g.date,
+    units_produced: Math.round(g.good),
+    units_defect: Math.round(g.def),
+    planned_time_min: Math.round(g.planned),
+    downtime_min: Math.round(g.dt),
+    ideal_cycle_sec: (cC && g.good) ? Math.round(g.cycW / g.good * 10) / 10 : null
+  }));
+  if (recs.length === 1 && !cDt) { recs[0].downtime_min = events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0); }
+  const days = new Set(recs.map(r => r.date)).size;
+  let saved = 0;
   try {
-    const active = getActive();
-    const today = new Date().toISOString().split('T')[0];
-    prodData = await api('POST', '/production/', {
-      shift_name: active ? active.name : 'Unknown',
-      date: today,
-      units_produced: good,
-      units_defect: def,
-      planned_time_min: planned,
-      downtime_min: dtTotal,
-      ideal_cycle_sec: cyc
-    });
-    await saveHistoryEntry(prodData, dtTotal);
+    for (const rec of recs) {
+      const r = calcOEE(rec);
+      await api('POST', '/history/', { shift_name: rec.shift_name, date: rec.date, oee: r.oee, good_units: r.good, defects: r.defects, total_downtime: rec.downtime_min, cause_totals_json: '{}' });
+      saved++;
+      if (saved % 10 === 0) showMsg('Saved ' + saved + ' of ' + recs.length + ' shifts...', 'ok');
+    }
+    prodData = await api('POST', '/production/', recs[recs.length - 1]);
+    if (typeof loadShifts === 'function') { try { await loadShifts(); } catch (e) {} }
     updateDashboard();
-    showMsg('✓ ' + rows.length + ' rows imported. OEE calculated and saved to database.', 'ok');
+    showMsg('Imported ' + rows.length + ' rows as ' + recs.length + ' shifts across ' + days + ' day(s). OEE calculated and saved.', 'ok');
     setTimeout(() => showTab('dashboard'), 1200);
   } catch (e) {
-    showMsg('Could not save to database: ' + e.message, 'err');
+    showMsg('Could not save to database after ' + saved + ' shifts: ' + e.message, 'err');
   }
 }
 
