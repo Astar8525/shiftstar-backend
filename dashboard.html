@@ -935,13 +935,13 @@ function renderTL(a) {
 
 // ── Dashboard ──
 function updateMetrics() {
-  const dt = events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0);
+  const dt = Math.max(events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0), (prodData && Number(prodData.downtime_min)) || 0);
   document.getElementById('m-dt').textContent = dt + ' min';
 }
 
 function updateDashboard() {
   updateMetrics();
-  const dt = events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0);
+  const dt = Math.max(events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0), (prodData && Number(prodData.downtime_min)) || 0);
   if (prodData) {
     const r = calcOEE({ ...prodData, downtime_min: dt });
     const oc = r.oee >= .85 ? 'var(--success)' : r.oee >= .75 ? 'var(--warning)' : 'var(--danger)';
@@ -1009,7 +1009,7 @@ async function delEvent(id) {
 // ── AI ──
 function buildCtx() {
   const a = getActive();
-  const dt = events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0);
+  const dt = Math.max(events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0), (prodData && Number(prodData.downtime_min)) || 0);
   const ct = {};
   events.forEach(e => { ct[e.cause] = (ct[e.cause] || 0) + (parseInt(e.duration) || 0); });
   const top = Object.entries(ct).sort((a, b) => b[1] - a[1])[0];
@@ -1250,7 +1250,7 @@ function showMsg(msg, type) { const el = document.getElementById('import-msg'); 
 function generateReport() {
   const a = getActive();
   const now = new Date();
-  const dt = events.reduce((s, e) => s + (parseInt(e.duration) || 0), 0);
+  const dt = Math.max(events.reduce((s, e) => s + (parseInt(e.duration) || 0), 0), (prodData && Number(prodData.downtime_min)) || 0);
   let oeeStr = 'Not calculated', tpStr = '—', drStr = '—', avStr = '—', pfStr = '—', qlStr = '—';
   if (prodData) {
     const r = calcOEE({ ...prodData, downtime_min: dt });
