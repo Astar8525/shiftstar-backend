@@ -1809,7 +1809,17 @@ window.alert = function (m) { var t = m; try { t = convert(String(m), current); 
       mo.observe(document.body, { childList: true, subtree: true, characterData: true });
     }
   }
-  mo = new MutationObserver(function () {
+  function fastPass(recs) {
+    mo.disconnect();
+    try {
+      recs.forEach(function (r) {
+        if (r.type === 'characterData') { doText(r.target, current); }
+        else if (r.addedNodes) { r.addedNodes.forEach(function (n) { if (n.nodeType === 3) doText(n, current); }); }
+      });
+    } finally { mo.observe(document.body, { childList: true, subtree: true, characterData: true }); }
+  }
+  mo = new MutationObserver(function (recs) {
+    if (current !== 'en') { try { fastPass(recs); } catch (e) {} }
     if (current === 'en') return;
     clearTimeout(timer);
     timer = setTimeout(function () { apply(current); }, 80);
