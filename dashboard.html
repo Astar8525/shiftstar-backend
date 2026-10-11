@@ -853,7 +853,7 @@ const t2m = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; }
 const nowM = () => { const n = new Date(); return n.getHours() * 60 + n.getMinutes(); };
 const f12 = t => { let [h, m] = t.split(':').map(Number); const a = h >= 12 ? 'pm' : 'am'; h = h % 12 || 12; return h + ':' + (m < 10 ? '0' + m : m) + a; };
 const fTime = iso => { const d = new Date(iso); let h = d.getHours(), m = d.getMinutes(); const a = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return h + ':' + (m < 10 ? '0' + m : m) + ' ' + a; };
-const fDate = iso => { const d = new Date(iso); return (d.getMonth() + 1) + '/' + d.getDate(); };
+const fDate = iso => { const m = /^(\d{4})-(\d{2})-(\d{2})(T00:00:00(\.0+)?Z?)?$/.exec(String(iso)); if (m) return (+m[2]) + '/' + (+m[3]); const d = new Date(iso); return (d.getMonth() + 1) + '/' + d.getDate(); };
 const pct = n => Math.round(n * 100) + '%';
 const r1 = n => Math.round(n * 10) / 10;
 
