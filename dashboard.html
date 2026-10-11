@@ -1034,7 +1034,7 @@ async function runAI(type) {
     actions: `You are ShiftStar AI. Give the top 3 corrective actions for next shift, numbered by priority. Each must be specific and actionable. Under 150 words.\n\n${ctx}`
   };
   try {
-    const res = await api('POST', '/ai/chat', { prompt: p[type] });
+    const res = await api('POST', '/ai/chat', { prompt: p[type] + ssLangNote() });
     el.textContent = res.response || 'No response.';
   } catch (e) {
     el.textContent = 'AI request failed: ' + e.message;
@@ -1048,7 +1048,7 @@ async function runCustom() {
   el.textContent = 'Analyzing...';
   const ctx = buildCtx();
   try {
-    const res = await api('POST', '/ai/chat', { prompt: `You are ShiftStar AI. Answer using the shift data. Be direct.\n\nQuestion: ${q}\n\n${ctx}` });
+    const res = await api('POST', '/ai/chat', { prompt: `You are ShiftStar AI. Answer using the shift data. Be direct.\n\nQuestion: ${q}\n\n${ctx}` + ssLangNote() });
     el.textContent = res.response || 'No response.';
   } catch (e) {
     el.textContent = 'Request failed: ' + e.message;
@@ -1915,5 +1915,16 @@ window.alert = function (m) { var t = m; try { t = convert(String(m), current); 
 })();
 </script>
 <!-- i18n-report:end -->
+<!-- i18n-ai:start -->
+<script>
+window.ssLangNote = function () {
+  var L = 'en';
+  try { L = localStorage.getItem('ss_lang') || 'en'; } catch (e) {}
+  var N = { es: 'Spanish', fr: 'French', de: 'German', pt: 'Brazilian Portuguese', zh: 'Simplified Chinese', ja: 'Japanese' };
+  if (!N[L]) return '';
+  return '\n\nIMPORTANT: Write your entire reply in ' + N[L] + '. Keep technical abbreviations such as OEE, SAP and MRP unchanged.';
+};
+</script>
+<!-- i18n-ai:end -->
 </body>
 </html>
