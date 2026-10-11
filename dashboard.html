@@ -1449,5 +1449,257 @@ function init() {
 
 init();
 </script>
+<!-- i18n:start -->
+<script>
+/* ShiftStar i18n */
+(function () {
+  var LANGS = ['es', 'fr', 'de', 'pt', 'zh', 'ja'];
+  var ROWS = [
+    ["(Planned time − Downtime) ÷ Planned time. How much of your scheduled time was the machine actually available to run.", "(Tiempo planificado − Tiempo de inactividad) ÷ Tiempo planificado. Qué parte de su tiempo programado estuvo realmente disponible la máquina para funcionar.", "(Temps planifié − Temps d'arrêt) ÷ Temps planifié. La part de votre temps programmé pendant laquelle la machine était réellement disponible pour tourner.", "(Geplante Zeit − Stillstandszeit) ÷ Geplante Zeit. Wie viel Ihrer geplanten Zeit die Maschine tatsächlich zum Laufen verfügbar war.", "(Tempo planejado − Tempo parado) ÷ Tempo planejado. Quanto do seu tempo programado a máquina esteve realmente disponível para operar.", "（计划时间 − 停机时间）÷ 计划时间。在您的计划时间内，设备实际可用于运行的比例。", "（計画時間 − 停止時間）÷ 計画時間。計画した時間のうち、設備が実際に稼働可能だった割合です。"],
+    ["+ Add shift", "+ Añadir turno", "+ Ajouter une équipe", "+ Schicht hinzufügen", "+ Adicionar turno", "+ 添加班次", "+ シフトを追加"],
+    ["+ Log event", "+ Registrar evento", "+ Consigner un événement", "+ Ereignis erfassen", "+ Registrar evento", "+ 记录事件", "+ イベントを記録"],
+    ["← Back to sign in", "← Volver a iniciar sesión", "← Retour à la connexion", "← Zurück zur Anmeldung", "← Voltar ao login", "← 返回登录", "← ログインに戻る"],
+    ["✓ Saved", "✓ Guardado", "✓ Enregistré", "✓ Gespeichert", "✓ Salvo", "✓ 已保存", "✓ 保存しました"],
+    ["0 min", "0 min", "0 min", "0 Min.", "0 min", "0 分钟", "0 分"],
+    ["14 days", "14 días", "14 jours", "14 Tage", "14 dias", "14 天", "14日間"],
+    ["24 hours", "24 horas", "24 heures", "24 Stunden", "24 horas", "24 小时", "24時間"],
+    ["30 days", "30 días", "30 jours", "30 Tage", "30 dias", "30 天", "30日間"],
+    ["5-why template", "Plantilla de los 5 porqués", "Modèle des 5 pourquoi", "5-Why-Vorlage", "Modelo dos 5 porquês", "5 个为什么模板", "なぜなぜ5回テンプレート"],
+    ["7 days", "7 días", "7 jours", "7 Tage", "7 dias", "7 天", "7日間"],
+    ["Actual output vs theoretical maximum output. Are you running as fast as you should be when the machine is running?", "Producción real frente a la producción máxima teórica. ¿Está funcionando a la velocidad que debería cuando la máquina está en marcha?", "Production réelle par rapport à la production maximale théorique. Tournez-vous aussi vite que vous le devriez lorsque la machine fonctionne ?", "Tatsächliche Ausbringung im Vergleich zur theoretischen Höchstausbringung. Laufen Sie so schnell wie möglich, wenn die Maschine läuft?", "Produção real versus produção máxima teórica. Você está operando na velocidade que deveria quando a máquina está em funcionamento?", "实际产出与理论最大产出的对比。设备运行时，是否达到了应有的速度？", "実際の生産量と理論上の最大生産量の比較です。設備が稼働しているとき、本来の速度で動いていますか？"],
+    ["Admin", "Administrador", "Administrateur", "Administrator", "Administrador", "管理员", "管理者"],
+    ["AI Helper", "Asistente de IA", "Assistant IA", "KI-Assistent", "Assistente de IA", "AI 助手", "AIアシスタント"],
+    ["AI summary ↗", "Resumen de IA ↗", "Résumé IA ↗", "KI-Zusammenfassung ↗", "Resumo de IA ↗", "AI 摘要 ↗", "AI要約 ↗"],
+    ["AI-powered shift digests, handoff notes, root cause flags and corrective actions", "Resúmenes de turno con IA, notas de relevo, indicadores de causa raíz y acciones correctivas", "Synthèses d'équipe, notes de passation, alertes de cause racine et actions correctives par IA", "KI-gestützte Schichtzusammenfassungen, Übergabenotizen, Ursachenhinweise und Korrekturmaßnahmen", "Resumos de turno, notas de passagem, alertas de causa raiz e ações corretivas com IA", "AI 驱动的班次摘要、交接记录、根本原因提示和纠正措施", "AIによるシフト要約、引き継ぎメモ、根本原因フラグ、是正措置"],
+    ["Ask ↗", "Preguntar ↗", "Demander ↗", "Fragen ↗", "Perguntar ↗", "提问 ↗", "質問 ↗"],
+    ["Ask ShiftStar AI anything", "Pregunte cualquier cosa a ShiftStar AI", "Posez n'importe quelle question à ShiftStar AI", "Fragen Sie ShiftStar AI alles", "Pergunte qualquer coisa ao ShiftStar AI", "向 ShiftStar AI 提出任何问题", "ShiftStar AIに何でも質問できます"],
+    ["Availability", "Disponibilidad", "Disponibilité", "Verfügbarkeit", "Disponibilidade", "可用率", "時間稼働率"],
+    ["Avg OEE", "OEE promedio", "OEE moyen", "Durchschn. OEE", "OEE médio", "平均 OEE", "平均OEE"],
+    ["Below target", "Bajo el objetivo", "Sous l'objectif", "Unter Ziel", "Abaixo da meta", "低于目标", "目標未達"],
+    ["Best shift", "Mejor turno", "Meilleure équipe", "Beste Schicht", "Melhor turno", "最佳班次", "最良のシフト"],
+    ["Built for the floor. Understood in the boardroom.", "Hecho para la planta. Entendido en la sala de juntas.", "Conçu pour l'atelier. Compris en salle de direction.", "Für die Fertigung gebaut. Im Vorstand verstanden.", "Feito para o chão de fábrica. Entendido na sala de reuniões.", "为车间而生，让管理层一目了然。", "現場のために作られ、経営会議でも伝わる。"],
+    ["button in the top right to set your shift names and times. ShiftStar will automatically detect which shift is active. Set it once — it saves forever.", "botón de la esquina superior derecha para definir los nombres y horarios de sus turnos. ShiftStar detectará automáticamente qué turno está activo. Configúrelo una vez: se guarda para siempre.", "bouton en haut à droite pour définir les noms et horaires de vos équipes. ShiftStar détectera automatiquement l'équipe en cours. Configurez-le une fois : c'est enregistré pour toujours.", "Schaltfläche oben rechts, um Ihre Schichtnamen und -zeiten festzulegen. ShiftStar erkennt automatisch, welche Schicht aktiv ist. Einmal einrichten – wird dauerhaft gespeichert.", "botão no canto superior direito para definir os nomes e horários dos seus turnos. O ShiftStar detecta automaticamente qual turno está ativo. Configure uma vez — fica salvo para sempre.", "按钮，设置班次名称和时间。ShiftStar 会自动识别当前班次。只需设置一次，永久保存。", "ボタンをクリックして、シフト名と時間を設定します。ShiftStarが稼働中のシフトを自動で判別します。一度設定すれば永久に保存されます。"],
+    ["Cancel", "Cancelar", "Annuler", "Abbrechen", "Cancelar", "取消", "キャンセル"],
+    ["Cause", "Causa", "Cause", "Ursache", "Causa", "原因", "原因"],
+    ["Changeover", "Cambio de formato", "Changement de série", "Umrüstung", "Troca de produto", "换线", "段取り替え"],
+    ["Clear", "Borrar", "Effacer", "Leeren", "Limpar", "清除", "クリア"],
+    ["Click", "Haga clic en", "Cliquez sur", "Klicken Sie auf", "Clique em", "点击", ""],
+    ["Click the", "Haga clic en el", "Cliquez sur le", "Klicken Sie auf die", "Clique no", "点击右上角的", "右上の"],
+    ["Close", "Cerrar", "Fermer", "Schließen", "Fechar", "关闭", "閉じる"],
+    ["Company name", "Nombre de la empresa", "Nom de l'entreprise", "Firmenname", "Nome da empresa", "公司名称", "会社名"],
+    ["Compare to trend", "Comparar con la tendencia", "Comparer à la tendance", "Mit Trend vergleichen", "Comparar com a tendência", "与趋势对比", "トレンドと比較"],
+    ["Configure your shift schedule", "Configure su calendario de turnos", "Configurez votre planning d'équipes", "Schichtplan konfigurieren", "Configure sua escala de turnos", "配置您的班次安排", "シフトスケジュールを設定"],
+    ["Confirm new password", "Confirmar nueva contraseña", "Confirmer le nouveau mot de passe", "Neues Passwort bestätigen", "Confirmar nova senha", "确认新密码", "新しいパスワードを確認"],
+    ["Connected to ShiftStar backend", "Conectado al servidor de ShiftStar", "Connecté au serveur ShiftStar", "Mit dem ShiftStar-Server verbunden", "Conectado ao servidor do ShiftStar", "已连接到 ShiftStar 服务器", "ShiftStarサーバーに接続済み"],
+    ["Copy", "Copiar", "Copier", "Kopieren", "Copiar", "复制", "コピー"],
+    ["Corrective actions", "Acciones correctivas", "Actions correctives", "Korrekturmaßnahmen", "Ações corretivas", "纠正措施", "是正措置"],
+    ["Create account", "Crear cuenta", "Créer un compte", "Konto erstellen", "Criar conta", "创建账户", "アカウントを作成"],
+    ["Current shift events", "Eventos del turno actual", "Événements de l'équipe en cours", "Ereignisse der aktuellen Schicht", "Eventos do turno atual", "当前班次事件", "現在のシフトのイベント"],
+    ["Dashboard", "Panel", "Tableau de bord", "Dashboard", "Painel", "仪表盘", "ダッシュボード"],
+    ["Date", "Fecha", "Date", "Datum", "Data", "日期", "日付"],
+    ["Defect rate", "Tasa de defectos", "Taux de défauts", "Fehlerquote", "Taxa de defeitos", "不良率", "不良率"],
+    ["Defective / rejected units", "Unidades defectuosas / rechazadas", "Unités défectueuses / rejetées", "Fehlerhafte / zurückgewiesene Einheiten", "Unidades defeituosas / rejeitadas", "不良 / 拒收数量", "不良品／廃棄数"],
+    ["Download sample files to try ShiftStar", "Descargue archivos de muestra para probar ShiftStar", "Téléchargez des fichiers d'exemple pour essayer ShiftStar", "Laden Sie Beispieldateien herunter, um ShiftStar auszuprobieren", "Baixe arquivos de exemplo para testar o ShiftStar", "下载示例文件，体验 ShiftStar", "サンプルファイルをダウンロードしてShiftStarを試す"],
+    ["Downtime", "Tiempo de inactividad", "Temps d'arrêt", "Stillstandszeit", "Tempo parado", "停机时间", "ダウンタイム"],
+    ["Downtime by cause", "Inactividad por causa", "Arrêts par cause", "Stillstand nach Ursache", "Parada por causa", "按原因划分的停机", "原因別ダウンタイム"],
+    ["Downtime by shift", "Inactividad por turno", "Arrêts par équipe", "Stillstand nach Schicht", "Parada por turno", "按班次划分的停机", "シフト別ダウンタイム"],
+    ["Downtime Pareto — all shifts", "Pareto de inactividad — todos los turnos", "Pareto des arrêts — toutes les équipes", "Stillstands-Pareto — alle Schichten", "Pareto de paradas — todos os turnos", "停机帕累托图 — 所有班次", "ダウンタイムのパレート図 — 全シフト"],
+    ["Duration (min)", "Duración (min)", "Durée (min)", "Dauer (Min.)", "Duração (min)", "时长（分钟）", "所要時間（分）"],
+    ["e.g. 1180", "p. ej., 1180", "ex. : 1180", "z. B. 1180", "ex.: 1180", "例如 1180", "例：1180"],
+    ["e.g. 22", "p. ej., 22", "ex. : 22", "z. B. 22", "ex.: 22", "例如 22", "例：22"],
+    ["e.g. 25", "p. ej., 25", "ex. : 25", "z. B. 25", "ex.: 25", "例如 25", "例：25"],
+    ["e.g. 480", "p. ej., 480", "ex. : 480", "z. B. 480", "ex.: 480", "例如 480", "例：480"],
+    ["e.g. Line 3 — Conveyor Drive", "p. ej., Línea 3 — Accionamiento del transportador", "ex. : Ligne 3 — Entraînement du convoyeur", "z. B. Linie 3 — Förderantrieb", "ex.: Linha 3 — Acionamento da esteira", "例如：3 号线 — 输送机驱动", "例：ライン3 — コンベヤ駆動部"],
+    ["e.g. Shift A", "p. ej., Turno A", "ex. : Équipe A", "z. B. Schicht A", "ex.: Turno A", "例如：A 班", "例：Aシフト"],
+    ["e.g. Why is my OEE below target?", "p. ej., ¿Por qué mi OEE está por debajo del objetivo?", "ex. : Pourquoi mon OEE est-il sous l'objectif ?", "z. B. Warum liegt mein OEE unter dem Ziel?", "ex.: Por que meu OEE está abaixo da meta?", "例如：为什么我的 OEE 低于目标？", "例：なぜOEEが目標を下回っているのですか？"],
+    ["Electrical", "Eléctrico", "Électrique", "Elektrisch", "Elétrico", "电气", "電気"],
+    ["Email", "Correo electrónico", "E-mail", "E-Mail", "E-mail", "电子邮件", "メールアドレス"],
+    ["End", "Fin", "Fin", "Ende", "Fim", "结束", "終了"],
+    ["End-of-shift digest", "Resumen de fin de turno", "Synthèse de fin d'équipe", "Schichtende-Zusammenfassung", "Resumo de fim de turno", "班末摘要", "シフト終了サマリー"],
+    ["Enter your email address and we'll send you a link to reset your password.", "Introduzca su correo electrónico y le enviaremos un enlace para restablecer su contraseña.", "Saisissez votre adresse e-mail et nous vous enverrons un lien pour réinitialiser votre mot de passe.", "Geben Sie Ihre E-Mail-Adresse ein, und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.", "Digite seu e-mail e enviaremos um link para redefinir sua senha.", "请输入您的电子邮箱，我们将向您发送重置密码的链接。", "メールアドレスを入力してください。パスワードをリセットするためのリンクをお送りします。"],
+    ["Enter your new password below.", "Introduzca su nueva contraseña a continuación.", "Saisissez votre nouveau mot de passe ci-dessous.", "Geben Sie unten Ihr neues Passwort ein.", "Digite sua nova senha abaixo.", "请在下方输入您的新密码。", "新しいパスワードを下に入力してください。"],
+    ["Event log — current shift", "Registro de eventos — turno actual", "Journal des événements — équipe en cours", "Ereignisprotokoll — aktuelle Schicht", "Registro de eventos — turno atual", "事件日志 — 当前班次", "イベントログ — 現在のシフト"],
+    ["Events", "Eventos", "Événements", "Ereignisse", "Eventos", "事件", "イベント"],
+    ["Export your production data from SAP, MRP, or Excel as a CSV file. Copy the contents and paste them here. ShiftStar will auto-detect your column names and calculate OEE instantly.", "Exporte sus datos de producción desde SAP, MRP o Excel como archivo CSV. Copie el contenido y péguelo aquí. ShiftStar detectará automáticamente los nombres de sus columnas y calculará el OEE al instante.", "Exportez vos données de production depuis SAP, MRP ou Excel au format CSV. Copiez le contenu et collez-le ici. ShiftStar détectera automatiquement le nom de vos colonnes et calculera l'OEE instantanément.", "Exportieren Sie Ihre Produktionsdaten aus SAP, MRP oder Excel als CSV-Datei. Kopieren Sie den Inhalt und fügen Sie ihn hier ein. ShiftStar erkennt Ihre Spaltennamen automatisch und berechnet die OEE sofort.", "Exporte seus dados de produção do SAP, MRP ou Excel como arquivo CSV. Copie o conteúdo e cole aqui. O ShiftStar detecta automaticamente os nomes das colunas e calcula o OEE na hora.", "将 SAP、MRP 或 Excel 中的生产数据导出为 CSV 文件，复制内容并粘贴到此处。ShiftStar 会自动识别列名并立即计算 OEE。", "SAP、MRP、ExcelからCSVファイルとして生産データを書き出し、内容をコピーしてここに貼り付けてください。ShiftStarが列名を自動で判別し、OEEを即座に計算します。"],
+    ["Forgot your password?", "¿Olvidó su contraseña?", "Mot de passe oublié ?", "Passwort vergessen?", "Esqueceu sua senha?", "忘记密码？", "パスワードをお忘れですか？"],
+    ["Full log of all downtime events recorded this shift", "Registro completo de todos los eventos de inactividad de este turno", "Journal complet des arrêts enregistrés pendant cette équipe", "Vollständiges Protokoll aller in dieser Schicht erfassten Stillstände", "Registro completo de todos os eventos de parada deste turno", "本班次记录的所有停机事件的完整日志", "このシフトで記録されたすべてのダウンタイムイベントの完全なログ"],
+    ["Generate", "Generar", "Générer", "Erstellen", "Gerar", "生成", "生成"],
+    ["Generate a formatted shift summary report ready to share with your plant manager", "Genere un informe resumen del turno con formato, listo para compartir con el jefe de planta", "Générez un rapport de synthèse d'équipe mis en forme, prêt à partager avec votre directeur d'usine", "Erstellen Sie einen formatierten Schichtbericht, den Sie direkt mit Ihrem Werksleiter teilen können", "Gere um relatório resumo do turno formatado, pronto para compartilhar com o gerente da planta", "生成格式规范的班次摘要报告，可直接分享给厂长", "整形されたシフト要約レポートを生成し、工場長にすぐ共有できます"],
+    ["Go to the", "Vaya a la pestaña", "Allez à l'onglet", "Gehen Sie zum Tab", "Vá para a aba", "前往", ""],
+    ["good units", "unidades buenas", "unités conformes", "Gutteile", "unidades boas", "合格数量", "良品数"],
+    ["Good units ÷ Total units produced. What percentage of what you made was actually good?", "Unidades buenas ÷ Total de unidades producidas. ¿Qué porcentaje de lo que fabricó era realmente bueno?", "Unités conformes ÷ Total des unités produites. Quel pourcentage de votre production était réellement conforme ?", "Gutteile ÷ insgesamt produzierte Einheiten. Welcher Anteil dessen, was Sie gefertigt haben, war tatsächlich gut?", "Unidades boas ÷ Total de unidades produzidas. Que porcentagem do que você produziu estava realmente boa?", "合格数量 ÷ 总产量。您生产的产品中，真正合格的比例是多少？", "良品数 ÷ 総生産数。作ったもののうち、実際に良品だった割合は？"],
+    ["Good units produced", "Unidades buenas producidas", "Unités conformes produites", "Produzierte Gutteile", "Unidades boas produzidas", "合格产量", "良品生産数"],
+    ["Here's how to get started in 3 simple steps.", "Así puede empezar en 3 sencillos pasos.", "Voici comment démarrer en 3 étapes simples.", "So legen Sie in 3 einfachen Schritten los.", "Veja como começar em 3 passos simples.", "只需 3 个简单步骤即可开始。", "3つの簡単なステップで始められます。"],
+    ["Hit \"Generate\" to build your shift summary from logged data.", "Pulse “Generar” para crear su resumen del turno a partir de los datos registrados.", "Cliquez sur « Générer » pour créer votre synthèse d'équipe à partir des données consignées.", "Klicken Sie auf „Erstellen“, um Ihre Schichtzusammenfassung aus den erfassten Daten zu erstellen.", "Clique em “Gerar” para criar o resumo do turno com os dados registrados.", "点击“生成”，即可根据已记录的数据创建班次摘要。", "「生成」を押すと、記録済みデータからシフト要約が作成されます。"],
+    ["How to import", "Cómo importar", "Comment importer", "So importieren Sie", "Como importar", "如何导入", "インポート方法"],
+    ["Ideal cycle time (sec/unit)", "Tiempo de ciclo ideal (s/unidad)", "Temps de cycle idéal (s/unité)", "Ideale Zykluszeit (Sek./Einheit)", "Tempo de ciclo ideal (s/unidade)", "理想节拍（秒/件）", "理想サイクルタイム（秒/個）"],
+    ["Import", "Importar", "Importer", "Import", "Importar", "导入", "インポート"],
+    ["Import & calculate OEE", "Importar y calcular OEE", "Importer et calculer l'OEE", "Importieren & OEE berechnen", "Importar e calcular OEE", "导入并计算 OEE", "インポートしてOEEを計算"],
+    ["Import production data", "Importar datos de producción", "Importer les données de production", "Produktionsdaten importieren", "Importar dados de produção", "导入生产数据", "生産データをインポート"],
+    ["Import your production data", "Importe sus datos de producción", "Importez vos données de production", "Importieren Sie Ihre Produktionsdaten", "Importe seus dados de produção", "导入您的生产数据", "生産データをインポートしましょう"],
+    ["Let's get started →", "Comencemos →", "C'est parti →", "Los geht's →", "Vamos começar →", "开始吧 →", "始めましょう →"],
+    ["Load sample", "Cargar muestra", "Charger un exemple", "Beispiel laden", "Carregar exemplo", "加载示例", "サンプルを読み込む"],
+    ["Log downtime event", "Registrar evento de inactividad", "Consigner un arrêt", "Stillstand erfassen", "Registrar evento de parada", "记录停机事件", "ダウンタイムイベントを記録"],
+    ["Log event", "Registrar evento", "Consigner un événement", "Ereignis erfassen", "Registrar evento", "记录事件", "イベントを記録"],
+    ["Log your first downtime event", "Registre su primer evento de inactividad", "Consignez votre premier arrêt", "Erfassen Sie Ihren ersten Stillstand", "Registre seu primeiro evento de parada", "记录您的第一个停机事件", "最初のダウンタイムイベントを記録"],
+    ["Machine / line", "Máquina / línea", "Machine / ligne", "Maschine / Linie", "Máquina / linha", "设备 / 产线", "設備／ライン"],
+    ["Manager", "Gerente", "Responsable", "Manager", "Gerente", "经理", "マネージャー"],
+    ["Manager email", "Correo del gerente", "E-mail du responsable", "E-Mail des Managers", "E-mail do gerente", "经理邮箱", "マネージャーのメール"],
+    ["Manual entry", "Entrada manual", "Saisie manuelle", "Manuelle Eingabe", "Entrada manual", "手动输入", "手動入力"],
+    ["Material", "Material", "Matériau", "Material", "Material", "物料", "資材"],
+    ["Mechanical", "Mecánico", "Mécanique", "Mechanisch", "Mecânico", "机械", "機械"],
+    ["Name", "Nombre", "Nom", "Name", "Nome", "姓名", "名前"],
+    ["New password", "Nueva contraseña", "Nouveau mot de passe", "Neues Passwort", "Nova senha", "新密码", "新しいパスワード"],
+    ["No events logged", "Sin eventos registrados", "Aucun événement consigné", "Keine Ereignisse erfasst", "Nenhum evento registrado", "未记录事件", "イベントは記録されていません"],
+    ["No events logged yet.", "Aún no hay eventos registrados.", "Aucun événement consigné pour l'instant.", "Noch keine Ereignisse erfasst.", "Nenhum evento registrado ainda.", "尚未记录任何事件。", "まだイベントは記録されていません。"],
+    ["No events logged. Hit \"+ Log event\" to start.", "Sin eventos registrados. Pulse “+ Registrar evento” para empezar.", "Aucun événement consigné. Cliquez sur « + Consigner un événement » pour commencer.", "Keine Ereignisse erfasst. Klicken Sie auf „+ Ereignis erfassen“, um zu beginnen.", "Nenhum evento registrado. Clique em “+ Registrar evento” para começar.", "未记录事件。点击“+ 记录事件”开始。", "イベントは記録されていません。「+ イベントを記録」を押して開始してください。"],
+    ["No history yet", "Aún no hay historial", "Pas encore d'historique", "Noch kein Verlauf", "Ainda sem histórico", "暂无历史记录", "まだ履歴はありません"],
+    ["No history. Import production data to build history.", "Sin historial. Importe datos de producción para crear el historial.", "Aucun historique. Importez des données de production pour en constituer un.", "Kein Verlauf. Importieren Sie Produktionsdaten, um einen Verlauf aufzubauen.", "Sem histórico. Importe dados de produção para criar o histórico.", "暂无历史记录。导入生产数据以建立历史记录。", "履歴がありません。生産データをインポートして履歴を作成してください。"],
+    ["Notes / handoff info", "Notas / información de relevo", "Notes / infos de passation", "Notizen / Übergabeinfos", "Notas / informações de passagem", "备注 / 交接信息", "メモ／引き継ぎ情報"],
+    ["OEE trend", "Tendencia de OEE", "Tendance de l'OEE", "OEE-Trend", "Tendência do OEE", "OEE 趋势", "OEEトレンド"],
+    ["OEE trending across multiple shifts, Pareto downtime analysis, shift history", "Tendencia de OEE en varios turnos, análisis Pareto de inactividad e historial de turnos", "Tendance de l'OEE sur plusieurs équipes, analyse de Pareto des arrêts et historique des équipes", "OEE-Trend über mehrere Schichten, Pareto-Analyse der Stillstände und Schichtverlauf", "Tendência do OEE em vários turnos, análise de Pareto das paradas e histórico de turnos", "跨多个班次的 OEE 趋势、停机帕累托分析和班次历史", "複数シフトにわたるOEEトレンド、ダウンタイムのパレート分析、シフト履歴"],
+    ["Operator", "Operador", "Opérateur", "Bediener", "Operador", "操作员", "オペレーター"],
+    ["Other", "Otro", "Autre", "Sonstiges", "Outro", "其他", "その他"],
+    ["Overall Equipment Effectiveness. Measures how well your line is running vs its full potential. Target is 85%. OEE = Availability × Performance × Quality.", "Eficiencia General de los Equipos. Mide qué tan bien funciona su línea frente a su potencial total. El objetivo es el 85 %. OEE = Disponibilidad × Rendimiento × Calidad.", "Taux de rendement synthétique. Mesure les performances de votre ligne par rapport à son plein potentiel. L'objectif est de 85 %. OEE = Disponibilité × Performance × Qualité.", "Gesamtanlageneffektivität. Misst, wie gut Ihre Linie im Vergleich zu ihrem vollen Potenzial läuft. Das Ziel liegt bei 85 %. OEE = Verfügbarkeit × Leistung × Qualität.", "Eficiência Global do Equipamento. Mede o desempenho da sua linha em relação ao seu potencial máximo. A meta é 85%. OEE = Disponibilidade × Desempenho × Qualidade.", "设备综合效率。衡量产线相对其全部潜力的运行情况。目标为 85%。OEE = 可用率 × 性能率 × 质量率。", "設備総合効率。ラインが本来の能力に対してどれだけ稼働できているかを示します。目標は85%。OEE = 時間稼働率 × 性能稼働率 × 良品率。"],
+    ["Password", "Contraseña", "Mot de passe", "Passwort", "Senha", "密码", "パスワード"],
+    ["Paste CSV from SAP, MRP, or Excel. First row = headers. Data saves to your company database.", "Pegue CSV de SAP, MRP o Excel. La primera fila son los encabezados. Los datos se guardan en la base de datos de su empresa.", "Collez un CSV issu de SAP, MRP ou Excel. La première ligne contient les en-têtes. Les données sont enregistrées dans la base de données de votre entreprise.", "Fügen Sie CSV aus SAP, MRP oder Excel ein. Erste Zeile = Spaltenüberschriften. Die Daten werden in der Datenbank Ihres Unternehmens gespeichert.", "Cole o CSV do SAP, MRP ou Excel. A primeira linha são os cabeçalhos. Os dados são salvos no banco de dados da sua empresa.", "粘贴来自 SAP、MRP 或 Excel 的 CSV。第一行为表头。数据将保存到贵公司的数据库。", "SAP、MRP、ExcelのCSVを貼り付けてください。1行目は見出しです。データは会社のデータベースに保存されます。"],
+    ["Paste your SAP or MRP CSV export to calculate real OEE from production data", "Pegue su exportación CSV de SAP o MRP para calcular el OEE real a partir de los datos de producción", "Collez votre export CSV SAP ou MRP pour calculer l'OEE réel à partir des données de production", "Fügen Sie Ihren CSV-Export aus SAP oder MRP ein, um die echte OEE aus den Produktionsdaten zu berechnen", "Cole sua exportação CSV do SAP ou MRP para calcular o OEE real a partir dos dados de produção", "粘贴 SAP 或 MRP 的 CSV 导出内容，根据生产数据计算真实 OEE", "SAPまたはMRPのCSVを貼り付けて、生産データから実際のOEEを計算します"],
+    ["Percentage of units that were rejected or scrapped. Spec is ≤ 2.5%. Calculated as: defects ÷ total units produced.", "Porcentaje de unidades rechazadas o desechadas. La especificación es ≤ 2,5 %. Se calcula como: defectos ÷ total de unidades producidas.", "Pourcentage d'unités rejetées ou mises au rebut. La spécification est ≤ 2,5 %. Calculé ainsi : défauts ÷ total des unités produites.", "Anteil der zurückgewiesenen oder verschrotteten Einheiten. Vorgabe ist ≤ 2,5 %. Berechnung: Fehler ÷ insgesamt produzierte Einheiten.", "Porcentagem de unidades rejeitadas ou refugadas. A especificação é ≤ 2,5%. Calculado como: defeitos ÷ total de unidades produzidas.", "被拒收或报废的产品所占百分比。规格为 ≤ 2.5%。计算方式：不良数 ÷ 总产量。", "不合格または廃棄となった数量の割合です。仕様は2.5%以下。計算式：不良数 ÷ 総生産数。"],
+    ["Performance", "Rendimiento", "Performance", "Leistung", "Desempenho", "性能率", "性能稼働率"],
+    ["Planned", "Planificado", "Planifié", "Geplant", "Planejado", "计划内", "計画内"],
+    ["Planned time (min)", "Tiempo planificado (min)", "Temps planifié (min)", "Geplante Zeit (Min.)", "Tempo planejado (min)", "计划时间（分钟）", "計画時間（分）"],
+    ["Production vs defects", "Producción frente a defectos", "Production et défauts", "Produktion vs. Fehler", "Produção x defeitos", "产量与不良对比", "生産量と不良の比較"],
+    ["Quality", "Calidad", "Qualité", "Qualität", "Qualidade", "质量率", "良品率"],
+    ["Quality hold", "Retención por calidad", "Blocage qualité", "Qualitätssperre", "Retenção por qualidade", "质量暂扣", "品質保留"],
+    ["Register", "Registrarse", "S'inscrire", "Registrieren", "Cadastrar", "注册", "登録"],
+    ["Report", "Informe", "Rapport", "Bericht", "Relatório", "报告", "レポート"],
+    ["Reset", "Restablecer", "Réinitialiser", "Zurücksetzen", "Redefinir", "重置", "リセット"],
+    ["Role", "Rol", "Rôle", "Rolle", "Função", "角色", "役割"],
+    ["Root cause flags", "Indicadores de causa raíz", "Alertes de cause racine", "Ursachenhinweise", "Alertas de causa raiz", "根本原因提示", "根本原因フラグ"],
+    ["Save", "Guardar", "Enregistrer", "Speichern", "Salvar", "保存", "保存"],
+    ["Save & calculate", "Guardar y calcular", "Enregistrer et calculer", "Speichern & berechnen", "Salvar e calcular", "保存并计算", "保存して計算"],
+    ["Save event", "Guardar evento", "Enregistrer l'événement", "Ereignis speichern", "Salvar evento", "保存事件", "イベントを保存"],
+    ["Saved to your company account — visible to your whole team.", "Guardado en la cuenta de su empresa: visible para todo su equipo.", "Enregistré dans le compte de votre entreprise — visible par toute votre équipe.", "Im Konto Ihres Unternehmens gespeichert – für Ihr gesamtes Team sichtbar.", "Salvo na conta da sua empresa — visível para toda a equipe.", "已保存到贵公司账户，您的整个团队都能看到。", "会社のアカウントに保存されました。チーム全員が閲覧できます。"],
+    ["Select an action above to generate AI-powered shift intelligence from your logged data.", "Seleccione una acción arriba para generar inteligencia de turno con IA a partir de sus datos registrados.", "Sélectionnez une action ci-dessus pour générer une analyse d'équipe par IA à partir de vos données consignées.", "Wählen Sie oben eine Aktion aus, um KI-gestützte Schichtanalysen aus Ihren erfassten Daten zu erzeugen.", "Selecione uma ação acima para gerar inteligência de turno com IA a partir dos dados registrados.", "请在上方选择一项操作，基于已记录的数据生成 AI 班次分析。", "上のアクションを選択すると、記録済みデータからAIによるシフト分析を生成します。"],
+    ["Send reset link", "Enviar enlace de restablecimiento", "Envoyer le lien de réinitialisation", "Link zum Zurücksetzen senden", "Enviar link de redefinição", "发送重置链接", "リセットリンクを送信"],
+    ["Shift handoff note", "Nota de relevo de turno", "Note de passation d'équipe", "Schichtübergabenotiz", "Nota de passagem de turno", "班次交接记录", "シフト引き継ぎメモ"],
+    ["Shift history", "Historial de turnos", "Historique des équipes", "Schichtverlauf", "Histórico de turnos", "班次历史", "シフト履歴"],
+    ["Shift intelligence powered by your real data", "Inteligencia de turnos basada en sus datos reales", "L'intelligence d'équipe alimentée par vos données réelles", "Schichtintelligenz auf Basis Ihrer echten Daten", "Inteligência de turnos baseada em seus dados reais", "基于您真实数据的班次智能", "実データに基づくシフトインテリジェンス"],
+    ["Shift name", "Nombre del turno", "Nom de l'équipe", "Schichtname", "Nome do turno", "班次名称", "シフト名"],
+    ["Shift progress", "Progreso del turno", "Avancement de l'équipe", "Schichtfortschritt", "Progresso do turno", "班次进度", "シフトの進捗"],
+    ["Shift schedule", "Calendario de turnos", "Planning des équipes", "Schichtplan", "Escala de turnos", "班次安排", "シフトスケジュール"],
+    ["Shift summary report", "Informe resumen del turno", "Rapport de synthèse d'équipe", "Schichtzusammenfassungsbericht", "Relatório resumo do turno", "班次摘要报告", "シフト要約レポート"],
+    ["Shifts", "Turnos", "Équipes", "Schichten", "Turnos", "班次", "シフト"],
+    ["ShiftStar — Manufacturing Shift Intelligence", "ShiftStar — Inteligencia de turnos para manufactura", "ShiftStar — Intelligence d'équipe pour l'industrie", "ShiftStar — Schichtintelligenz für die Fertigung", "ShiftStar — Inteligência de turnos para a manufatura", "ShiftStar — 制造业班次智能", "ShiftStar — 製造業のためのシフトインテリジェンス"],
+    ["Sign in", "Iniciar sesión", "Se connecter", "Anmelden", "Entrar", "登录", "ログイン"],
+    ["Sign in to ShiftStar", "Inicie sesión en ShiftStar", "Connectez-vous à ShiftStar", "Bei ShiftStar anmelden", "Entre no ShiftStar", "登录 ShiftStar", "ShiftStarにログイン"],
+    ["Skip — I'll explore on my own", "Omitir — exploraré por mi cuenta", "Passer — j'explorerai par moi-même", "Überspringen – ich schaue mich selbst um", "Pular — vou explorar por conta própria", "跳过——我自己探索", "スキップ — 自分で見てみる"],
+    ["Spec ≤ 2.5%", "Especificación ≤ 2,5 %", "Spéc. ≤ 2,5 %", "Vorgabe ≤ 2,5 %", "Especificação ≤ 2,5%", "规格 ≤ 2.5%", "仕様 ≤ 2.5%"],
+    ["Start", "Inicio", "Début", "Beginn", "Início", "开始", "開始"],
+    ["Supervisor", "Supervisor", "Superviseur", "Schichtleiter", "Supervisor", "主管", "スーパーバイザー"],
+    ["tab and paste your CSV export from SAP, MRP, or Excel. ShiftStar will calculate your real OEE — Availability × Performance × Quality — instantly.", "y pegue su exportación CSV de SAP, MRP o Excel. ShiftStar calculará su OEE real — Disponibilidad × Rendimiento × Calidad — al instante.", "et collez votre export CSV depuis SAP, MRP ou Excel. ShiftStar calculera votre OEE réel — Disponibilité × Performance × Qualité — instantanément.", "und fügen Sie Ihren CSV-Export aus SAP, MRP oder Excel ein. ShiftStar berechnet sofort Ihre echte OEE — Verfügbarkeit × Leistung × Qualität.", "e cole sua exportação CSV do SAP, MRP ou Excel. O ShiftStar calculará seu OEE real — Disponibilidade × Desempenho × Qualidade — instantaneamente.", "标签页，粘贴来自 SAP、MRP 或 Excel 的 CSV 导出内容。ShiftStar 会立即计算您的真实 OEE——可用率 × 性能率 × 质量率。", "タブに移動し、SAP、MRP、Excelから書き出したCSVを貼り付けます。ShiftStarが実際のOEE（時間稼働率 × 性能稼働率 × 良品率）を即座に計算します。"],
+    ["Target 85%", "Objetivo 85 %", "Objectif 85 %", "Ziel 85 %", "Meta 85%", "目标 85%", "目標 85%"],
+    ["this shift", "este turno", "cette équipe", "diese Schicht", "este turno", "本班次", "このシフト"],
+    ["Throughput", "Producción", "Débit", "Durchsatz", "Produtividade", "产出", "スループット"],
+    ["Time occurred", "Hora del suceso", "Heure de l'événement", "Zeitpunkt", "Horário da ocorrência", "发生时间", "発生時刻"],
+    ["Total good units produced this shift — defects not included. Import your production data from SAP or MRP to calculate this automatically.", "Total de unidades buenas producidas en este turno, sin incluir defectos. Importe sus datos de producción de SAP o MRP para calcularlo automáticamente.", "Total des unités conformes produites pendant cette équipe, défauts exclus. Importez vos données de production depuis SAP ou MRP pour le calculer automatiquement.", "Insgesamt in dieser Schicht produzierte Gutteile – ohne Fehler. Importieren Sie Ihre Produktionsdaten aus SAP oder MRP, um dies automatisch zu berechnen.", "Total de unidades boas produzidas neste turno, sem incluir defeitos. Importe seus dados de produção do SAP ou MRP para calcular automaticamente.", "本班次生产的合格产品总数（不含不良品）。从 SAP 或 MRP 导入生产数据即可自动计算。", "このシフトで生産された良品の合計数（不良品は含みません）。SAPまたはMRPから生産データをインポートすると自動で計算されます。"],
+    ["Total minutes of unplanned and planned downtime logged this shift. Click \"+ Log event\" to record a downtime event with machine, cause, and duration.", "Minutos totales de inactividad planificada y no planificada registrados en este turno. Pulse “+ Registrar evento” para registrar un evento con máquina, causa y duración.", "Total des minutes d'arrêt planifiées et non planifiées consignées pendant cette équipe. Cliquez sur « + Consigner un événement » pour enregistrer un arrêt avec la machine, la cause et la durée.", "Gesamtminuten geplanter und ungeplanter Stillstände, die in dieser Schicht erfasst wurden. Klicken Sie auf „+ Ereignis erfassen“, um einen Stillstand mit Maschine, Ursache und Dauer zu erfassen.", "Total de minutos de parada planejada e não planejada registrados neste turno. Clique em “+ Registrar evento” para registrar uma parada com máquina, causa e duração.", "本班次记录的计划内和计划外停机总分钟数。点击“+ 记录事件”，即可记录包含设备、原因和时长的停机事件。", "このシフトで記録された計画内・計画外ダウンタイムの合計分数です。「+ イベントを記録」を押すと、設備・原因・時間を含むダウンタイムを記録できます。"],
+    ["Trend", "Tendencia", "Tendance", "Trend", "Tendência", "趋势", "トレンド"],
+    ["Trends", "Tendencias", "Tendances", "Trends", "Tendências", "趋势", "トレンド"],
+    ["Type", "Tipo", "Type", "Typ", "Tipo", "类型", "種類"],
+    ["Unplanned", "No planificado", "Non planifié", "Ungeplant", "Não planejado", "计划外", "計画外"],
+    ["Update password", "Actualizar contraseña", "Mettre à jour le mot de passe", "Passwort aktualisieren", "Atualizar senha", "更新密码", "パスワードを更新"],
+    ["Upgrade", "Mejorar plan", "Mettre à niveau", "Upgrade", "Fazer upgrade", "升级", "アップグレード"],
+    ["Welcome to ShiftStar!", "¡Bienvenido a ShiftStar!", "Bienvenue sur ShiftStar !", "Willkommen bei ShiftStar!", "Bem-vindo ao ShiftStar!", "欢迎使用 ShiftStar！", "ShiftStarへようこそ！"],
+    ["What happened, what it means", "Qué pasó y qué significa", "Ce qui s'est passé et ce que cela signifie", "Was passiert ist und was es bedeutet", "O que aconteceu e o que significa", "发生了什么及其含义", "何が起きたか、その意味"],
+    ["What happened, what was done, what to watch", "Qué pasó, qué se hizo y qué vigilar", "Ce qui s'est passé, ce qui a été fait, ce qu'il faut surveiller", "Was passiert ist, was getan wurde, worauf zu achten ist", "O que aconteceu, o que foi feito e o que observar", "发生了什么、做了什么、需要关注什么", "何が起き、何をして、何に注意すべきか"],
+    ["What the next crew needs to know", "Lo que necesita saber el siguiente turno", "Ce que l'équipe suivante doit savoir", "Was die nächste Schicht wissen muss", "O que a próxima equipe precisa saber", "下一班需要了解的信息", "次のシフトが知っておくべきこと"],
+    ["What to do first next shift", "Qué hacer primero en el próximo turno", "Quoi faire en premier à la prochaine équipe", "Was in der nächsten Schicht zuerst zu tun ist", "O que fazer primeiro no próximo turno", "下一班首先要做什么", "次のシフトで最初にやること"],
+    ["What's trending and why", "Qué tendencia hay y por qué", "Ce qui évolue et pourquoi", "Was sich entwickelt und warum", "O que está em tendência e por quê", "趋势如何及其原因", "傾向とその理由"],
+    ["whenever a machine goes down. Enter the machine name, cause, duration, and any notes for the next crew. Takes 10 seconds.", "cada vez que una máquina se detenga. Introduzca el nombre de la máquina, la causa, la duración y cualquier nota para el siguiente turno. Tarda 10 segundos.", "chaque fois qu'une machine s'arrête. Saisissez le nom de la machine, la cause, la durée et toute note pour l'équipe suivante. Cela prend 10 secondes.", "wenn eine Maschine ausfällt. Geben Sie Maschinenname, Ursache, Dauer und Notizen für die nächste Schicht ein. Dauert 10 Sekunden.", "sempre que uma máquina parar. Informe o nome da máquina, a causa, a duração e qualquer nota para a próxima equipe. Leva 10 segundos.", "按钮，每当设备停机时记录。输入设备名称、原因、时长以及给下一班的备注，只需 10 秒。", "を押して、設備が止まるたびに記録します。設備名、原因、時間、次のシフトへのメモを入力します。10秒で完了します。"],
+    ["Why below target?", "¿Por qué está bajo el objetivo?", "Pourquoi sous l'objectif ?", "Warum unter dem Ziel?", "Por que abaixo da meta?", "为什么低于目标？", "なぜ目標未達なのか？"],
+    ["Worst shift", "Peor turno", "Pire équipe", "Schlechteste Schicht", "Pior turno", "最差班次", "最も低いシフト"],
+    ["Your name", "Su nombre", "Votre nom", "Ihr Name", "Seu nome", "您的姓名", "お名前"]
+  ];
+  var D = {};
+  LANGS.forEach(function (l, i) {
+    D[l] = {};
+    ROWS.forEach(function (r) { D[l][r[0]] = r[i + 1]; });
+  });
+  var tmap = new WeakMap(), amap = new WeakMap();
+  var current = 'en', timer = null, mo = null;
+  var SKIP = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, NOSCRIPT: 1 };
+
+  function convert(src, lang) {
+    if (lang === 'en' || !D[lang]) return src;
+    var t = src.trim();
+    if (t && Object.prototype.hasOwnProperty.call(D[lang], t)) {
+      return src.replace(t, function () { return D[lang][t]; });
+    }
+    return src;
+  }
+  function doText(node, lang) {
+    var p = node.parentNode;
+    if (!p || SKIP[p.nodeName]) return;
+    if (p.closest && p.closest('#lang-select')) return;
+    var cur = node.nodeValue;
+    var rec = tmap.get(node);
+    var src = (rec && cur === rec.out) ? rec.src : cur;
+    var out = convert(src, lang);
+    if (!rec && out === cur) return;
+    if (p.nodeName === 'OPTION' && out !== src && !p.hasAttribute('value')) p.setAttribute('value', src.trim());
+    if (out !== cur) node.nodeValue = out;
+    tmap.set(node, { src: src, out: out });
+  }
+  function doAttr(el, lang) {
+    ['placeholder', 'title'].forEach(function (a) {
+      if (!el.hasAttribute(a)) return;
+      var cur = el.getAttribute(a);
+      var recs = amap.get(el) || {};
+      var rec = recs[a];
+      var src = (rec && cur === rec.out) ? rec.src : cur;
+      var out = convert(src, lang);
+      if (!rec && out === cur) return;
+      if (out !== cur) el.setAttribute(a, out);
+      recs[a] = { src: src, out: out };
+      amap.set(el, recs);
+    });
+  }
+  function apply(lang) {
+    if (!document.body) return;
+    mo.disconnect();
+    try {
+      var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+      var nodes = [], n;
+      while ((n = w.nextNode())) nodes.push(n);
+      nodes.forEach(function (x) { doText(x, lang); });
+      document.body.querySelectorAll('[placeholder],[title]').forEach(function (el) { doAttr(el, lang); });
+    } finally {
+      mo.observe(document.body, { childList: true, subtree: true, characterData: true });
+    }
+  }
+  mo = new MutationObserver(function () {
+    if (current === 'en') return;
+    clearTimeout(timer);
+    timer = setTimeout(function () { apply(current); }, 80);
+  });
+  window.setLang = function (lang) {
+    if (lang !== 'en' && !D[lang]) lang = 'en';
+    try { localStorage.setItem('ss_lang', lang); } catch (e) {}
+    current = lang;
+    document.documentElement.lang = lang;
+    apply(lang);
+  };
+  var saved = 'en';
+  try { saved = localStorage.getItem('ss_lang') || 'en'; } catch (e) {}
+  if (saved !== 'en' && !D[saved]) saved = 'en';
+  var sel = document.getElementById('lang-select');
+  if (sel) sel.value = saved;
+  current = saved;
+  document.documentElement.lang = saved;
+  apply(saved);
+})();
+</script>
+<!-- i18n:end -->
 </body>
 </html>
