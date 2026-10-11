@@ -1262,7 +1262,51 @@ function generateReport() {
   events.forEach(e => { ct[e.cause] = (ct[e.cause] || 0) + (parseInt(e.duration) || 0); });
   const cLines = Object.entries(ct).sort((a, b) => b[1] - a[1]).map(([c, m]) => `  ${c}: ${m} min`).join('\n') || '  None logged';
   const eLines = events.length ? [...events].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)).map(e => `  ${fTime(e.timestamp)} | ${e.duration}min | ${e.cause} | ${e.machine}${e.notes ? ' | ' + e.notes : ''}`).join('\n') : '  No events logged';
-  document.getElementById('report-area').textContent = `⭐ SHIFTSTAR — SHIFT SUMMARY REPORT\n${'═'.repeat(44)}\nDate:         ${(now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()}\nShift:        ${a ? a.name : '—'}\nTime:         ${a ? f12(a.start_time) + ' – ' + f12(a.end_time) : '—'}\nSupervisor:   ${currentUser?.name || '—'}\nCompany:      ${currentUser?.company_id || '—'}\n\nPRODUCTION METRICS\n${'─'.repeat(44)}\nOEE:              ${oeeStr}\nThroughput:       ${tpStr} good units\nDefect rate:      ${drStr}\nTotal downtime:   ${dt} min\nEvents logged:    ${events.length}\n\nOEE BREAKDOWN\n${'─'.repeat(44)}\nAvailability:     ${avStr}\nPerformance:      ${pfStr}\nQuality:          ${qlStr}\n\nDOWNTIME BY CAUSE\n${'─'.repeat(44)}\n${cLines}\n\nEVENT LOG\n${'─'.repeat(44)}\n${eLines}\n\nSHIFT HANDOFF NOTES\n${'─'.repeat(44)}\n\n\n${'─'.repeat(44)}\nSupervisor signature: ___________________\n\nPowered by ShiftStar — Built for the floor. Understood in the boardroom.`;
+{ /* i18n-report-line */
+  const R = window.ssRep, thin = '─'.repeat(44);
+  const dateStr = (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear();
+  const tpNum = String(tpStr).replace(/\s*good units\s*$/i, '');
+  document.getElementById('report-area').textContent = [
+    '⭐ ' + R.t('title'),
+    '═'.repeat(44),
+    R.row('Date', dateStr, 14),
+    R.row('Shift', a ? a.name : '—', 14),
+    R.row('Time', a ? f12(a.start_time) + ' – ' + f12(a.end_time) : '—', 14),
+    R.row('Supervisor', currentUser?.name || '—', 14),
+    R.row('Company', currentUser?.company_id || '—', 14),
+    '',
+    R.t('PRODUCTION METRICS'),
+    thin,
+    R.row('OEE', R.val(oeeStr), 18),
+    R.row('Throughput', tpNum === '—' ? '—' : tpNum + ' ' + R.t('good units'), 18),
+    R.row('Defect rate', drStr, 18),
+    R.row('Total downtime', dt + ' ' + R.t('min'), 18),
+    R.row('Events logged', events.length, 18),
+    '',
+    R.t('OEE BREAKDOWN'),
+    thin,
+    R.row('Availability', avStr, 18),
+    R.row('Performance', pfStr, 18),
+    R.row('Quality', qlStr, 18),
+    '',
+    R.t('DOWNTIME BY CAUSE'),
+    thin,
+    R.fixCauses(cLines),
+    '',
+    R.t('EVENT LOG'),
+    thin,
+    R.fixEvents(eLines),
+    '',
+    R.t('SHIFT HANDOFF NOTES'),
+    thin,
+    '',
+    '',
+    thin,
+    R.t('Supervisor signature') + ': ___________________',
+    '',
+    R.t('Powered')
+  ].join('\n');
+}
 }
 
 function copyReport() {
@@ -1775,5 +1819,78 @@ window.alert = function (m) { var t = m; try { t = convert(String(m), current); 
 })();
 </script>
 <!-- i18n:end -->
+<!-- i18n-report:start -->
+<script>
+(function () {
+  var ROWS = [
+    ["title", "SHIFTSTAR — SHIFT SUMMARY REPORT", "SHIFTSTAR — INFORME RESUMEN DEL TURNO", "SHIFTSTAR — RAPPORT DE SYNTHÈSE D'ÉQUIPE", "SHIFTSTAR — SCHICHTZUSAMMENFASSUNG", "SHIFTSTAR — RELATÓRIO RESUMO DO TURNO", "SHIFTSTAR — 班次摘要报告", "SHIFTSTAR — シフト要約レポート"],
+    ["Date", "Date", "Fecha", "Date", "Datum", "Data", "日期", "日付"],
+    ["Shift", "Shift", "Turno", "Équipe", "Schicht", "Turno", "班次", "シフト"],
+    ["Time", "Time", "Horario", "Horaire", "Zeit", "Horário", "时间", "時間"],
+    ["Supervisor", "Supervisor", "Supervisor", "Superviseur", "Schichtleiter", "Supervisor", "主管", "スーパーバイザー"],
+    ["Company", "Company", "Empresa", "Entreprise", "Unternehmen", "Empresa", "公司", "会社"],
+    ["PRODUCTION METRICS", "PRODUCTION METRICS", "MÉTRICAS DE PRODUCCIÓN", "INDICATEURS DE PRODUCTION", "PRODUKTIONSKENNZAHLEN", "MÉTRICAS DE PRODUÇÃO", "生产指标", "生産指標"],
+    ["OEE", "OEE", "OEE", "OEE", "OEE", "OEE", "OEE", "OEE"],
+    ["Throughput", "Throughput", "Producción", "Débit", "Durchsatz", "Produtividade", "产出", "スループット"],
+    ["Defect rate", "Defect rate", "Tasa de defectos", "Taux de défauts", "Fehlerquote", "Taxa de defeitos", "不良率", "不良率"],
+    ["Total downtime", "Total downtime", "Inactividad total", "Arrêt total", "Gesamtstillstand", "Parada total", "总停机时间", "ダウンタイム合計"],
+    ["Events logged", "Events logged", "Eventos registrados", "Événements consignés", "Erfasste Ereignisse", "Eventos registrados", "已记录事件", "記録イベント数"],
+    ["OEE BREAKDOWN", "OEE BREAKDOWN", "DESGLOSE DE OEE", "DÉTAIL DE L'OEE", "OEE-AUFSCHLÜSSELUNG", "DETALHAMENTO DO OEE", "OEE 分解", "OEEの内訳"],
+    ["Availability", "Availability", "Disponibilidad", "Disponibilité", "Verfügbarkeit", "Disponibilidade", "可用率", "時間稼働率"],
+    ["Performance", "Performance", "Rendimiento", "Performance", "Leistung", "Desempenho", "性能率", "性能稼働率"],
+    ["Quality", "Quality", "Calidad", "Qualité", "Qualität", "Qualidade", "质量率", "良品率"],
+    ["DOWNTIME BY CAUSE", "DOWNTIME BY CAUSE", "INACTIVIDAD POR CAUSA", "ARRÊTS PAR CAUSE", "STILLSTAND NACH URSACHE", "PARADAS POR CAUSA", "按原因划分的停机", "原因別ダウンタイム"],
+    ["EVENT LOG", "EVENT LOG", "REGISTRO DE EVENTOS", "JOURNAL DES ÉVÉNEMENTS", "EREIGNISPROTOKOLL", "REGISTRO DE EVENTOS", "事件日志", "イベントログ"],
+    ["SHIFT HANDOFF NOTES", "SHIFT HANDOFF NOTES", "NOTAS DE RELEVO DEL TURNO", "NOTES DE PASSATION D'ÉQUIPE", "SCHICHTÜBERGABENOTIZEN", "NOTAS DE PASSAGEM DE TURNO", "班次交接记录", "シフト引き継ぎメモ"],
+    ["Supervisor signature", "Supervisor signature", "Firma del supervisor", "Signature du superviseur", "Unterschrift des Schichtleiters", "Assinatura do supervisor", "主管签字", "スーパーバイザー署名"],
+    ["Powered", "Powered by ShiftStar — Built for the floor. Understood in the boardroom.", "Con tecnología de ShiftStar — Hecho para la planta. Entendido en la sala de juntas.", "Propulsé par ShiftStar — Conçu pour l'atelier. Compris en salle de direction.", "Powered by ShiftStar — Für die Fertigung gebaut. Im Vorstand verstanden.", "Desenvolvido pelo ShiftStar — Feito para o chão de fábrica. Entendido na sala de reuniões.", "由 ShiftStar 提供 — 为车间而生，让管理层一目了然。", "Powered by ShiftStar — 現場のために作られ、経営会議でも伝わる。"],
+    ["Not calculated", "Not calculated", "No calculado", "Non calculé", "Nicht berechnet", "Não calculado", "未计算", "未計算"],
+    ["No events logged", "No events logged", "Sin eventos registrados", "Aucun événement consigné", "Keine Ereignisse erfasst", "Nenhum evento registrado", "未记录事件", "イベントは記録されていません"],
+    ["good units", "good units", "unidades buenas", "unités conformes", "Gutteile", "unidades boas", "合格数量", "良品数"],
+    ["min", "min", "min", "min", "Min.", "min", "分钟", "分"],
+    ["c:Mechanical", "Mechanical", "Mecánico", "Mécanique", "Mechanisch", "Mecânico", "机械", "機械"],
+    ["c:Electrical", "Electrical", "Eléctrico", "Électrique", "Elektrisch", "Elétrico", "电气", "電気"],
+    ["c:Changeover", "Changeover", "Cambio de formato", "Changement de série", "Umrüstung", "Troca de produto", "换线", "段取り替え"],
+    ["c:Material", "Material", "Material", "Matériau", "Material", "Material", "物料", "資材"],
+    ["c:Quality hold", "Quality hold", "Retención por calidad", "Blocage qualité", "Qualitätssperre", "Retenção por qualidade", "质量暂扣", "品質保留"],
+    ["c:Operator", "Operator", "Operador", "Opérateur", "Bediener", "Operador", "操作员", "オペレーター"],
+    ["c:Other", "Other", "Otro", "Autre", "Sonstiges", "Outro", "其他", "その他"]
+  ];
+  var LI = { en: 1, es: 2, fr: 3, de: 4, pt: 5, zh: 6, ja: 7 };
+  var T = {};
+  ROWS.forEach(function (r) { T[r[0]] = r; });
+  function lang() { try { return localStorage.getItem('ss_lang') || 'en'; } catch (e) { return 'en'; } }
+  function t(k) { var r = T[k]; if (!r) return k; return r[LI[lang()] || 1] || r[1]; }
+  function row(k, v, w) {
+    var L = lang(), lab = t(k);
+    if (L === 'zh' || L === 'ja') return lab + '：' + v;
+    var head = lab + ':', pad = Math.max(w, head.length + 1);
+    while (head.length < pad) head += ' ';
+    return head + v;
+  }
+  function val(s) { return s === 'Not calculated' ? t('Not calculated') : s; }
+  function fixCauses(s) {
+    s = String(s);
+    if (lang() === 'en') return s;
+    s = s.replace(/No events logged/g, t('No events logged'));
+    Object.keys(T).forEach(function (k) {
+      if (k.indexOf('c:') !== 0) return;
+      var name = k.slice(2);
+      s = s.replace(new RegExp('(^|[^A-Za-z])' + name + '(?![A-Za-z])', 'g'), function (m, p) { return p + t(k); });
+    });
+    return s;
+  }
+  function fixEvents(s) {
+    s = String(s);
+    if (lang() === 'en') return s;
+    s = s.replace(/No events logged/g, t('No events logged'));
+    s = s.replace(/(\d)min\b/g, function (m, d) { return d + ' ' + t('min'); });
+    s = s.replace(/\| ([^|\n]+?)(?= \|)/g, function (m, c) { var k = 'c:' + c.trim(); return T[k] ? '| ' + t(k) : m; });
+    return s;
+  }
+  window.ssRep = { t: t, row: row, val: val, fixCauses: fixCauses, fixEvents: fixEvents };
+})();
+</script>
+<!-- i18n-report:end -->
 </body>
 </html>
