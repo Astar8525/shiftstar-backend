@@ -1177,7 +1177,7 @@ async function importCSV() {
     ideal_cycle_sec: (cC && g.good) ? Math.round(g.cycW / g.good * 10) / 10 : null
   }));
   if (recs.length === 1 && !cDt) { recs[0].downtime_min = events.reduce((a, e) => a + (parseInt(e.duration) || 0), 0); }
-  const days = new Set(recs.map(r => r.date)).size;
+  const days = new Set(recs.map(r => r.date)).size; const fmt = (headers.includes('confirmed.qty') || headers.includes('scrap.qty') || headers.includes('prod.order')) ? 'SAP' : (cPh || headers.includes('resource_id') || headers.includes('production_date')) ? 'MRP' : 'CSV';
   let saved = 0;
   try {
     for (const rec of recs) {
@@ -1189,7 +1189,7 @@ async function importCSV() {
     prodData = await api('POST', '/production/', recs[recs.length - 1]);
     if (typeof loadShifts === 'function') { try { await loadShifts(); } catch (e) {} }
     updateDashboard();
-    showMsg('Imported ' + rows.length + ' rows as ' + recs.length + ' shifts across ' + days + ' day(s). OEE calculated and saved.', 'ok');
+    showMsg('Imported ' + rows.length + ' rows (' + fmt + ' format) as ' + recs.length + ' shifts across ' + days + ' day(s), ' + recs[0].date + ' to ' + recs[recs.length - 1].date + '. OEE calculated and saved.', 'ok');
     setTimeout(() => showTab('dashboard'), 1200);
   } catch (e) {
     showMsg('Could not save to database after ' + saved + ' shifts: ' + e.message, 'err');
