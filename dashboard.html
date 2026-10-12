@@ -766,7 +766,7 @@ function doLogout() {
   localStorage.removeItem('ss_token');
   localStorage.removeItem('ss_user');
   document.getElementById('app').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-screen').style.display = 'flex'; /* ss-logout-reload */ location.reload();
 }
 
 async function launchApp() {
