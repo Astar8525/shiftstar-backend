@@ -1016,5 +1016,25 @@ checkCookie();
 })();
 </script>
 <!-- lp-i18n-p3g:end -->
+<!-- lp-banner-lift:start -->
+<script>
+(function(){
+  function fix(){
+    var b = document.getElementById('cookie-banner');
+    var off = 24;
+    if (b) {
+      var r = b.getBoundingClientRect();
+      if (r.top < window.innerHeight - 1) { off = Math.round(window.innerHeight - r.top) + 16; }
+    }
+    ['lang-bar','zoom-bar'].forEach(function(id){
+      var e = document.getElementById(id);
+      if (e) { e.style.zIndex = '2100'; e.style.bottom = off + 'px'; }
+    });
+  }
+  setInterval(fix, 250);
+  fix();
+})();
+</script>
+<!-- lp-banner-lift:end -->
 </body>
 </html>
