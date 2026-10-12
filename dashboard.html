@@ -2194,8 +2194,11 @@ window.ssHistNote = async function () {
         var t = d.textContent.trim();
         var shiftTxt = { en: 'this shift', es: 'este turno', fr: 'cette équipe', de: 'diese Schicht', pt: 'este turno', zh: '本班次', ja: 'このシフト' }[L];
         var perTxt = { en: 'this period', es: 'este período', fr: 'cette période', de: 'dieser Zeitraum', pt: 'este período', zh: '本周期', ja: 'この期間' }[L];
-        if (p !== 'shift' && (t === shiftTxt || t === 'this shift')) d.textContent = perTxt;
-        if (p === 'shift' && t === perTxt) d.textContent = shiftTxt;
+        /* ss-final-fix */ var allShift = ['this shift', 'este turno', 'cette équipe', 'diese Schicht', '本班次', 'このシフト'];
+        var allPer = ['this period', 'este período', 'cette période', 'dieser Zeitraum', '本周期', 'この期間'];
+        if (p !== 'shift' && (allShift.indexOf(t) >= 0 || (allPer.indexOf(t) >= 0 && t !== perTxt))) { d.textContent = perTxt; }
+        else if (p === 'shift' && (allPer.indexOf(t) >= 0 || (allShift.indexOf(t) >= 0 && t !== shiftTxt))) { d.textContent = shiftTxt; }
+        
       });
     }
     var ttl = document.querySelector('#pane-report .panel-title');
