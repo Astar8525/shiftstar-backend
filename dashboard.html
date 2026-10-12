@@ -735,7 +735,7 @@ async function doForgotPassword() {
   try {
     await api('POST', '/reset/request', { email });
     document.getElementById('forgot-err').style.color = 'var(--success)';
-    document.getElementById('forgot-err').textContent = '✓ Reset link sent. Check your email — or contact support at anthonynorman85@gmail.com';
+    document.getElementById('forgot-err').textContent = '✓ Reset link sent. Check your email — or contact support at anthonynorman101985@gmail.com';
   } catch (e) {
     document.getElementById('forgot-err').textContent = e.message || 'Request failed';
   }
