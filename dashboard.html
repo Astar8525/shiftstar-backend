@@ -2079,5 +2079,89 @@ window.ssHistNote = async function () {
 })();
 </script>
 <!-- i18n-period:end -->
+<!-- i18n-report2:start -->
+<script>
+(function () {
+  var LI = { en: 0, es: 1, fr: 2, de: 3, pt: 4, zh: 5, ja: 6 };
+  var P = {
+    ptitle: ["SHIFTSTAR — PERIOD SUMMARY REPORT", "SHIFTSTAR — INFORME RESUMEN DEL PERÍODO", "SHIFTSTAR — RAPPORT DE SYNTHÈSE DE LA PÉRIODE", "SHIFTSTAR — ZUSAMMENFASSUNG DES ZEITRAUMS", "SHIFTSTAR — RELATÓRIO RESUMO DO PERÍODO", "SHIFTSTAR — 周期摘要报告", "SHIFTSTAR — 期間要約レポート"],
+    period: ["Period", "Período", "Période", "Zeitraum", "Período", "周期", "期間"],
+    shifts: ["Shifts in period", "Turnos en el período", "Équipes de la période", "Schichten im Zeitraum", "Turnos no período", "周期内班次", "期間内のシフト数"],
+    avgoee: ["Average OEE", "OEE promedio", "OEE moyen", "Durchschn. OEE", "OEE médio", "平均 OEE", "平均OEE"],
+    goodtot: ["Good units (total)", "Unidades buenas (total)", "Unités conformes (total)", "Gutteile (gesamt)", "Unidades boas (total)", "合格数量（合计）", "良品数（合計）"],
+    avgdown: ["Avg downtime per shift", "Inactividad prom. por turno", "Arrêt moyen par équipe", "Ø Stillstand je Schicht", "Parada média por turno", "每班平均停机", "シフト平均ダウンタイム"],
+    below: ["Shifts below target", "Turnos bajo el objetivo", "Équipes sous l'objectif", "Schichten unter Ziel", "Turnos abaixo da meta", "低于目标的班次", "目標未達のシフト"],
+    best: ["Best shift", "Mejor turno", "Meilleure équipe", "Beste Schicht", "Melhor turno", "最佳班次", "最良のシフト"],
+    worst: ["Worst shift", "Peor turno", "Pire équipe", "Schlechteste Schicht", "Pior turno", "最差班次", "最も低いシフト"],
+    nocause: ["No cause data", "Sin datos de causas", "Aucune donnée de cause", "Keine Ursachendaten", "Sem dados de causas", "无原因数据", "原因データなし"]
+  };
+  function lang() { try { return localStorage.getItem('ss_lang') || 'en'; } catch (e) { return 'en'; } }
+  function tp(k) { var r = P[k]; if (!r) return k; return r[LI[lang()]] || r[0]; }
+  function row2(k, v, w) {
+    var L = lang(), lab = tp(k);
+    if (L === 'zh' || L === 'ja') return lab + '：' + v;
+    var head = lab + ':', pad = Math.max(w, head.length + 1);
+    while (head.length < pad) head += ' ';
+    return head + v;
+  }
+  var DAYS = { day: 1, week: 7, month: 30 };
+  var _gr = window.generateReport;
+  window.generateReport = async function () {
+    var p = window.ssPeriod;
+    if (!p || p === 'shift' || !DAYS[p] || !window.ssPeriodStats || !window.ssRep) { return _gr ? _gr.apply(this, arguments) : undefined; }
+    var el = document.getElementById('report-area');
+    if (!el) return;
+    var S = null;
+    try { S = await window.ssPeriodStats(DAYS[p]); } catch (e) { S = null; }
+    if (!S) { return _gr ? _gr.apply(this, arguments) : undefined; }
+    var R = window.ssRep, thin = '─'.repeat(44), W = 30;
+    var now = new Date();
+    var dateStr = (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear();
+    var fd = function (x) { return (typeof fDate === 'function') ? fDate(x) : x; };
+    var pc = function (v) { v = Number(v) || 0; return v <= 1.5 ? v * 100 : v; };
+    var causes = [];
+    try {
+      var pr = await api('GET', '/history/pareto?range=' + DAYS[p]);
+      if (pr && pr.pareto && pr.pareto.length) causes = pr.pareto.map(function (x) { return '  ' + x.cause + ': ' + x.minutes + ' ' + R.t('min'); });
+    } catch (e) {}
+    var causeText = causes.length ? R.fixCauses(causes.join('\n')) : '  ' + tp('nocause');
+    var lines = [
+      '⭐ ' + tp('ptitle'),
+      '═'.repeat(44),
+      R.row('Date', dateStr, W),
+      row2('period', fd(S.d1) + ' – ' + fd(S.d2), W),
+      R.row('Supervisor', (typeof currentUser !== 'undefined' && currentUser && currentUser.name) || '—', W),
+      R.row('Company', (typeof currentUser !== 'undefined' && currentUser && currentUser.company_id) || '—', W),
+      '',
+      R.t('PRODUCTION METRICS'),
+      thin,
+      row2('shifts', S.n, W),
+      row2('avgoee', Math.round(S.oee * 100) + '%', W),
+      row2('goodtot', S.good.toLocaleString(), W),
+      R.row('Defect rate', (Math.round(S.rate * 1000) / 10) + '%', W),
+      R.row('Total downtime', S.down.toLocaleString() + ' ' + R.t('min'), W),
+      row2('avgdown', Math.round(S.down / S.n) + ' ' + R.t('min'), W),
+      row2('below', S.below + ' / ' + S.n, W),
+      row2('best', S.best.shift_name + ' ' + fd(S.best.date) + ' (' + Math.round(pc(S.best.oee)) + '%)', W),
+      row2('worst', S.worst.shift_name + ' ' + fd(S.worst.date) + ' (' + Math.round(pc(S.worst.oee)) + '%)', W),
+      '',
+      R.t('DOWNTIME BY CAUSE'),
+      thin,
+      causeText,
+      '',
+      R.t('SHIFT HANDOFF NOTES'),
+      thin,
+      '',
+      '',
+      thin,
+      R.t('Supervisor signature') + ': ___________________',
+      '',
+      R.t('Powered')
+    ];
+    el.textContent = lines.join('\n');
+  };
+})();
+</script>
+<!-- i18n-report2:end -->
 </body>
 </html>
