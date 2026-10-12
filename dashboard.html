@@ -1685,6 +1685,11 @@ var EXTRA2 = [
   ["off target", "fuera del objetivo", "hors objectif", "außerhalb des Ziels", "fora da meta", "未达标", "目標外"]
 ];
 ROWS = ROWS.concat(EXTRA, EXTRA2, [
+    ["Good", "Buenas", "Conformes", "Gut", "Boas", "合格", "良品"],
+    ["Defects", "Defectos", "Défauts", "Fehler", "Defeitos", "不良", "不良"],
+    ["No events logged.", "Sin eventos registrados.", "Aucun événement consigné.", "Keine Ereignisse erfasst.", "Nenhum evento registrado.", "未记录事件。", "イベントは記録されていません。"],
+    ["this period", "este período", "cette période", "dieser Zeitraum", "este período", "本周期", "この期間"],
+    ["Period summary report", "Informe resumen del período", "Rapport de synthèse de la période", "Zeitraumbericht", "Relatório resumo do período", "周期摘要报告", "期間要約レポート"],
     ["Latest shift", "Último turno", "Dernière équipe", "Letzte Schicht", "Último turno", "最近班次", "直近のシフト"]
   ]);
 var X = {
@@ -2163,5 +2168,60 @@ window.ssHistNote = async function () {
 })();
 </script>
 <!-- i18n-report2:end -->
+<!-- i18n-final:start -->
+<script>
+(function () {
+  function lang() { try { return localStorage.getItem('ss_lang') || 'en'; } catch (e) { return 'en'; } }
+  var MIN = { en: 'min', es: 'min', fr: 'min', de: 'Min.', pt: 'min', zh: '分钟', ja: '分' };
+  function chartLabels() {
+    try {
+      if (typeof charts === 'undefined' || !charts || !charts.prod || !charts.prod.data) return;
+      var ch = charts.prod, L = ch.data.labels;
+      if (!L || L.length !== 2) return;
+      var g = { en: ['Good', 'Defects'], es: ['Buenas', 'Defectos'], fr: ['Conformes', 'Défauts'], de: ['Gut', 'Fehler'], pt: ['Boas', 'Defeitos'], zh: ['合格', '不良'], ja: ['良品', '不良'] }[lang()] || ['Good', 'Defects'];
+      if (L[0] !== g[0] || L[1] !== g[1]) { L[0] = g[0]; L[1] = g[1]; ch.update('none'); }
+    } catch (e) {}
+  }
+  function cardLabels() {
+    var sub = document.querySelector('#m-dt');
+    var card = sub && sub.closest ? sub.closest('.metric-card') : null;
+    var p = window.ssPeriod || 'shift';
+    var L = lang();
+    if (card) {
+      var subs = card.querySelectorAll('.metric-sub, .metric-note, div:not(.metric-label):not(.tooltip-box)');
+      subs.forEach(function (d) {
+        if (d.id || d.children.length) return;
+        var t = d.textContent.trim();
+        var shiftTxt = { en: 'this shift', es: 'este turno', fr: 'cette équipe', de: 'diese Schicht', pt: 'este turno', zh: '本班次', ja: 'このシフト' }[L];
+        var perTxt = { en: 'this period', es: 'este período', fr: 'cette période', de: 'dieser Zeitraum', pt: 'este período', zh: '本周期', ja: 'この期間' }[L];
+        if (p !== 'shift' && (t === shiftTxt || t === 'this shift')) d.textContent = perTxt;
+        if (p === 'shift' && t === perTxt) d.textContent = shiftTxt;
+      });
+    }
+    var ttl = document.querySelector('#pane-report .panel-title');
+    if (ttl) {
+      var T = {
+        shift: { en: 'Shift summary report', es: 'Informe resumen del turno', fr: "Rapport de synthèse d'équipe", de: 'Schichtzusammenfassungsbericht', pt: 'Relatório resumo do turno', zh: '班次摘要报告', ja: 'シフト要約レポート' },
+        period: { en: 'Period summary report', es: 'Informe resumen del período', fr: 'Rapport de synthèse de la période', de: 'Zeitraumbericht', pt: 'Relatório resumo do período', zh: '周期摘要报告', ja: '期間要約レポート' }
+      };
+      var want = (p === 'shift' ? T.shift : T.period)[L];
+      if (ttl.textContent.trim() !== want) ttl.textContent = want;
+    }
+  }
+  function minUnits() {
+    var el = document.getElementById('m-dt');
+    if (!el) return;
+    var m = /^([\d,.]+) (min|分钟|分|Min\.)$/.exec(el.textContent.trim());
+    if (m) { var u = MIN[lang()] || 'min'; if (m[2] !== u) el.textContent = m[1] + ' ' + u; }
+  }
+  var busy = false;
+  function run() { if (busy) return; busy = true; try { chartLabels(); cardLabels(); minUnits(); } finally { busy = false; } }
+  setInterval(run, 400);
+  var _sl = window.setLang;
+  if (typeof _sl === 'function') window.setLang = function (l) { _sl(l); setTimeout(run, 100); };
+  run();
+})();
+</script>
+<!-- i18n-final:end -->
 </body>
 </html>
