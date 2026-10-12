@@ -43,7 +43,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:cen
 .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 80px;position:relative;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(83,74,183,.08) 0%,transparent 70%);pointer-events:none}
 .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--brand-light);color:var(--brand);font-size:13px;font-weight:500;padding:6px 14px;border-radius:40px;margin-bottom:28px;border:1px solid var(--brand-mid)}
-.hero-eyebrow span{width:6px;height:6px;border-radius:50%;background:var(--brand);animation:pulse 2s infinite}
+.hero-eyebrow span:first-child{flex:none;width:6px;height:6px;border-radius:50%;background:var(--brand);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .hero h1{font-family:'Syne',sans-serif;font-size:clamp(40px,6vw,76px);font-weight:800;line-height:1.08;color:var(--text);max-width:900px;margin-bottom:24px;letter-spacing:-1.5px}
 .hero h1 em{font-style:normal;color:var(--brand)}
