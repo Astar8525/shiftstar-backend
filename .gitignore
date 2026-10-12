@@ -1,0 +1,13 @@
+
+# ShiftStar local scratch files
+*.bak*
+aicode.txt
+aicode2.txt
+codetext.txt
+found.txt
+leftovers.txt
+lines.txt
+panel.txt
+prod.txt
+strings.txt
+users_code.txt
