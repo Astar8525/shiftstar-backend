@@ -842,6 +842,7 @@ async function loadTodayProduction() {
     if (active) params.append('shift_name', active.name);
     const results = await api('GET', '/production/?' + params.toString());
     prodData = results.length > 0 ? results[0] : null;
+    if (!prodData) { try { const all = await api('GET', '/production/'); prodData = (all && all.length) ? all[0] : null; } catch (e2) {} }
     updateDashboard();
   } catch (e) {
     console.error('Could not load production data:', e.message);
@@ -2226,5 +2227,23 @@ window.ssHistNote = async function () {
 })();
 </script>
 <!-- i18n-final:end -->
+<!-- i18n-latest:start -->
+<script>
+(function () {
+  var _ud = window.updateDashboard;
+  if (typeof _ud !== 'function') return;
+  window.updateDashboard = function () {
+    var r = _ud.apply(this, arguments);
+    try {
+      if ((window.ssPeriod || 'shift') === 'shift' && !prodData) {
+        var s = document.getElementById('m-oee-sub');
+        if (s) s.textContent = '';
+      }
+    } catch (e) {}
+    return r;
+  };
+})();
+</script>
+<!-- i18n-latest:end -->
 </body>
 </html>
