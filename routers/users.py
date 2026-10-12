@@ -1,14 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from database import get_db
 from auth import hash_password, verify_password, create_access_token, get_current_user
+from notify import send_signup_alert
 import models
 import schemas
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/register", response_model=schemas.Token)
-def register(user_data: schemas.UserRegister, db: Session = Depends(get_db)):
+def register(user_data: schemas.UserRegister, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     existing = db.query(models.User).filter(
         models.User.email == user_data.email
     ).first()
@@ -34,6 +35,8 @@ def register(user_data: schemas.UserRegister, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     db.refresh(user)
+
+    background_tasks.add_task(send_signup_alert, user.name, user.email, company.name, user.role)
 
     token = create_access_token({"sub": str(user.id)})
     return {
