@@ -2,7 +2,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from database import get_db
 from auth import hash_password, verify_password, create_access_token, get_current_user
-from notify import send_signup_alert
+from notify import send_signup_alert, alert_check
 import models
 import schemas
 
@@ -66,3 +66,8 @@ def login(credentials: schemas.UserLogin, db: Session = Depends(get_db)):
 @router.get("/me", response_model=schemas.UserOut)
 def get_me(current_user: models.User = Depends(get_current_user)):
     return current_user
+
+@router.get("/alert-check")
+def alert_check_route():
+    # TEMPORARY diagnostic. Remove after the signup alert works.
+    return alert_check()
