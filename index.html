@@ -673,5 +673,137 @@ function checkCookie() {
   }
 }
 checkCookie();
-</script></body>
+</script><!-- lp-i18n-engine:start -->
+<script>
+(function () {
+  var LANGS = ['es', 'fr', 'de', 'pt', 'zh', 'ja'];
+  var D = {};
+  LANGS.forEach(function (l) { D[l] = {}; });
+  var tmap = new WeakMap(), amap = new WeakMap();
+  var current = 'en';
+  var origTitle = document.title;
+  var SKIP = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, NOSCRIPT: 1 };
+
+  function convert(src, lang) {
+    if (lang === 'en' || !D[lang]) return src;
+    var t = src.trim();
+    if (t && Object.prototype.hasOwnProperty.call(D[lang], t)) {
+      var v = D[lang][t];
+      return src.replace(t, function () { return v; });
+    }
+    return src;
+  }
+  function doText(node, lang) {
+    var p = node.parentNode;
+    if (!p || SKIP[p.nodeName]) return;
+    if (p.closest && p.closest('#lang-select')) return;
+    var cur = node.nodeValue;
+    var rec = tmap.get(node);
+    var src = (rec && cur === rec.out) ? rec.src : cur;
+    var out = convert(src, lang);
+    if (!rec && out === cur) return;
+    if (out !== cur) node.nodeValue = out;
+    tmap.set(node, { src: src, out: out });
+  }
+  function doAttr(el, lang) {
+    ['placeholder', 'title', 'alt', 'aria-label'].forEach(function (a) {
+      if (!el.hasAttribute(a)) return;
+      var cur = el.getAttribute(a);
+      var recs = amap.get(el) || {};
+      var rec = recs[a];
+      var src = (rec && cur === rec.out) ? rec.src : cur;
+      var out = convert(src, lang);
+      if (!rec && out === cur) return;
+      if (out !== cur) el.setAttribute(a, out);
+      recs[a] = { src: src, out: out };
+      amap.set(el, recs);
+    });
+  }
+  function apply(lang) {
+    if (!document.body) return;
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+    var nodes = [], n;
+    while ((n = w.nextNode())) nodes.push(n);
+    nodes.forEach(function (x) { doText(x, lang); });
+    document.body.querySelectorAll('[placeholder],[title],[alt],[aria-label]').forEach(function (el) { doAttr(el, lang); });
+    var tag = (lang !== 'en' && D[lang]) ? D[lang]['Built for the floor. Understood in the boardroom.'] : null;
+    document.title = tag ? 'ShiftStar — ' + tag : origTitle;
+    document.documentElement.lang = lang;
+  }
+  window.ssLpAdd = function (rows) {
+    rows.forEach(function (r) { LANGS.forEach(function (l, i) { D[l][r[0]] = r[i + 1]; }); });
+    if (current !== 'en') apply(current);
+  };
+  window.setLang = function (lang) {
+    if (lang !== 'en' && !D[lang]) lang = 'en';
+    try { localStorage.setItem('ss_lp_lang', lang); localStorage.setItem('ss_lang', lang); } catch (e) {}
+    current = lang;
+    apply(lang);
+  };
+
+  window.ssLpAdd([
+    ["Products", "Productos", "Produits", "Produkte", "Produtos", "产品", "製品"],
+    ["Features", "Funciones", "Fonctionnalités", "Funktionen", "Recursos", "功能", "機能"],
+    ["AI Helper", "Asistente de IA", "Assistant IA", "KI-Assistent", "Assistente de IA", "AI 助手", "AIアシスタント"],
+    ["Pricing", "Precios", "Tarifs", "Preise", "Preços", "价格", "料金"],
+    ["FAQ", "Preguntas", "FAQ", "FAQ", "Perguntas", "常见问题", "よくある質問"],
+    ["Get started free", "Empiece gratis", "Commencer gratuitement", "Kostenlos starten", "Comece grátis", "免费开始", "無料で始める"],
+    ["Manufacturing shift intelligence — live and connected", "Inteligencia de turnos para manufactura — en vivo y conectada", "L'intelligence d'équipe pour l'industrie — en direct et connectée", "Schichtintelligenz für die Fertigung — live und vernetzt", "Inteligência de turnos para a manufatura — ao vivo e conectada", "制造业班次智能 — 实时联网", "製造業のシフトインテリジェンス — リアルタイムで連携"],
+    ["Built for the", "Hecho para la", "Pensé pour le", "Für die", "Feito para o", "为车间而生，", "現場のために作られ、"],
+    ["floor.", "planta.", "terrain.", "Fertigung gebaut.", "chão de fábrica.", "", ""],
+    ["Understood in the", "Entendido en la", "Compris en", "Im", "Entendido na", "让管理层一目了然。", "経営会議でも伝わる。"],
+    ["boardroom.", "sala de juntas.", "salle de direction.", "Vorstand verstanden.", "sala de reuniões.", "", ""],
+    ["ShiftStar is a cloud-based shift intelligence platform that tracks OEE, logs downtime, surfaces trends, and generates AI-powered reports your whole team can access in real time.", "ShiftStar es una plataforma de inteligencia de turnos en la nube que mide el OEE, registra la inactividad, muestra tendencias y genera informes con IA a los que todo su equipo accede en tiempo real.", "ShiftStar est une plateforme d'intelligence d'équipe dans le cloud qui suit l'OEE, consigne les arrêts, fait ressortir les tendances et génère des rapports par IA accessibles en temps réel à toute votre équipe.", "ShiftStar ist eine cloudbasierte Plattform für Schichtintelligenz, die die OEE verfolgt, Stillstände erfasst, Trends sichtbar macht und KI-gestützte Berichte erstellt, auf die Ihr gesamtes Team in Echtzeit zugreifen kann.", "O ShiftStar é uma plataforma de inteligência de turnos na nuvem que acompanha o OEE, registra paradas, mostra tendências e gera relatórios com IA que toda a sua equipe acessa em tempo real.", "ShiftStar 是一个基于云的班次智能平台，可跟踪 OEE、记录停机、呈现趋势，并生成 AI 报告，您的整个团队都能实时访问。", "ShiftStarは、OEEの追跡、ダウンタイムの記録、トレンドの可視化、AIレポートの生成を行うクラウド型のシフトインテリジェンス基盤で、チーム全員がリアルタイムに利用できます。"],
+    ["Start free — no credit card", "Empiece gratis — sin tarjeta", "Commencez gratuitement — sans carte bancaire", "Kostenlos starten — ohne Kreditkarte", "Comece grátis — sem cartão", "免费开始 — 无需信用卡", "無料で始める — クレジットカード不要"],
+    ["See how it works", "Vea cómo funciona", "Voir comment ça marche", "So funktioniert es", "Veja como funciona", "了解工作原理", "仕組みを見る"],
+    ["Built for the floor. Understood in the boardroom.", "Hecho para la planta. Entendido en la sala de juntas.", "Conçu pour l'atelier. Compris en salle de direction.", "Für die Fertigung gebaut. Im Vorstand verstanden.", "Feito para o chão de fábrica. Entendido na sala de reuniões.", "为车间而生，让管理层一目了然。", "現場のために作られ、経営会議でも伝わる。"],
+    ["Reset", "Restablecer", "Réinitialiser", "Zurücksetzen", "Redefinir", "重置", "リセット"],
+    ["Shift A — 68% complete", "Turno A — 68 % completado", "Équipe A — 68 % effectué", "Schicht A — 68 % abgeschlossen", "Turno A — 68% concluído", "A 班 — 已完成 68%", "Aシフト — 68%完了"],
+    ["✓ On target", "✓ En objetivo", "✓ Dans l'objectif", "✓ Im Ziel", "✓ Na meta", "✓ 达标", "✓ 目標達成"],
+    ["Throughput", "Producción", "Débit", "Durchsatz", "Produtividade", "产出", "スループット"],
+    ["good units", "unidades buenas", "unités conformes", "Gutteile", "unidades boas", "合格数量", "良品数"],
+    ["Defect rate", "Tasa de defectos", "Taux de défauts", "Fehlerquote", "Taxa de defeitos", "不良率", "不良率"],
+    ["Spec ≤ 2.5%", "Especificación ≤ 2,5 %", "Spéc. ≤ 2,5 %", "Vorgabe ≤ 2,5 %", "Especificação ≤ 2,5%", "规格 ≤ 2.5%", "仕様 ≤ 2.5%"],
+    ["Downtime", "Inactividad", "Arrêts", "Stillstand", "Paradas", "停机", "ダウンタイム"],
+    ["22 min", "22 min", "22 min", "22 Min.", "22 min", "22 分钟", "22分"],
+    ["this shift", "este turno", "cette équipe", "diese Schicht", "este turno", "本班次", "このシフト"],
+    ["Downtime by cause", "Inactividad por causa", "Arrêts par cause", "Stillstand nach Ursache", "Paradas por causa", "按原因划分的停机", "原因別ダウンタイム"],
+    ["Mechanical", "Mecánico", "Mécanique", "Mechanisch", "Mecânico", "机械", "機械"],
+    ["Changeover", "Cambio de formato", "Changement de série", "Umrüstung", "Troca de produto", "换线", "段取り替え"],
+    ["Material", "Material", "Matériau", "Material", "Material", "物料", "資材"],
+    ["Line 3 mechanical fault — 3rd occurrence this week. Check PM schedule.", "Falla mecánica en la Línea 3 — 3.ª vez esta semana. Revise el plan de mantenimiento preventivo.", "Défaut mécanique sur la ligne 3 — 3e occurrence cette semaine. Vérifiez le planning de maintenance préventive.", "Mechanischer Fehler an Linie 3 — dritter Vorfall diese Woche. Wartungsplan prüfen.", "Falha mecânica na Linha 3 — 3.ª ocorrência esta semana. Verifique o plano de manutenção preventiva.", "3 号线机械故障 — 本周第 3 次。请检查预防性维护计划。", "ライン3の機械故障 — 今週3回目。予防保全の計画を確認してください。"],
+    ["OEE trending up +4.2% vs last 7 shifts.", "OEE al alza +4,2 % frente a los últimos 7 turnos.", "OEE en hausse de +4,2 % par rapport aux 7 dernières équipes.", "OEE steigt um +4,2 % gegenüber den letzten 7 Schichten.", "OEE em alta de +4,2% em relação aos últimos 7 turnos.", "OEE 较最近 7 个班次上升 4.2%。", "OEEは直近7シフトと比べて+4.2%上昇しています。"],
+    ["Handoff note ready for incoming supervisor.", "Nota de relevo lista para el supervisor entrante.", "Note de passation prête pour le superviseur entrant.", "Übergabenotiz für den nachfolgenden Schichtleiter bereit.", "Nota de passagem pronta para o supervisor que assume.", "交接记录已准备好，供接班主管查看。", "引き継ぎメモは、次のスーパーバイザー向けに準備できています。"],
+    ["● Connected — data syncing across your team in real time", "● Conectado — datos sincronizados con todo su equipo en tiempo real", "● Connecté — données synchronisées en temps réel dans toute votre équipe", "● Verbunden — Daten werden in Echtzeit im ganzen Team synchronisiert", "● Conectado — dados sincronizados com toda a sua equipe em tempo real", "● 已连接 — 数据在您的团队中实时同步", "● 接続済み — チーム全体でデータをリアルタイムに同期中"],
+    ["The ShiftStar platform", "La plataforma ShiftStar", "La plateforme ShiftStar", "Die ShiftStar-Plattform", "A plataforma ShiftStar", "ShiftStar 平台", "ShiftStarプラットフォーム"],
+    ["One brand. Multiple tools. One industry.", "Una marca. Varias herramientas. Una industria.", "Une marque. Plusieurs outils. Un secteur.", "Eine Marke. Mehrere Werkzeuge. Eine Branche.", "Uma marca. Várias ferramentas. Um setor.", "一个品牌，多种工具，一个行业。", "ひとつのブランド。複数のツール。ひとつの業界。"],
+    ["ShiftStar is built for operations teams who need real visibility into what's happening on the floor.", "ShiftStar está hecho para equipos de operaciones que necesitan visibilidad real de lo que ocurre en planta.", "ShiftStar est conçu pour les équipes d'exploitation qui ont besoin d'une vraie visibilité sur ce qui se passe dans l'atelier.", "ShiftStar wurde für Betriebsteams entwickelt, die echten Einblick in das Geschehen in der Fertigung brauchen.", "O ShiftStar foi criado para equipes de operações que precisam de visibilidade real do que acontece no chão de fábrica.", "ShiftStar 专为需要真正掌握车间动态的运营团队打造。", "ShiftStarは、現場で何が起きているかを本当に把握したい運用チームのために作られています。"],
+    ["Live now", "Disponible ahora", "Disponible maintenant", "Jetzt verfügbar", "Disponível agora", "现已上线", "提供中"],
+    ["Coming soon", "Próximamente", "Bientôt disponible", "Demnächst", "Em breve", "即将推出", "近日公開"],
+    ["The manufacturing shift intelligence platform. Real-time OEE, downtime event logging, AI-powered handoff notes, trend analysis, and shift summary reports — all connected to a shared database your whole team can access.", "La plataforma de inteligencia de turnos para manufactura. OEE en tiempo real, registro de eventos de inactividad, notas de relevo con IA, análisis de tendencias e informes resumen de turno, todo conectado a una base de datos compartida a la que accede todo su equipo.", "La plateforme d'intelligence d'équipe pour l'industrie. OEE en temps réel, consignation des arrêts, notes de passation par IA, analyse des tendances et rapports de synthèse d'équipe — le tout relié à une base de données partagée accessible à toute votre équipe.", "Die Plattform für Schichtintelligenz in der Fertigung. OEE in Echtzeit, Erfassung von Stillständen, KI-gestützte Übergabenotizen, Trendanalyse und Schichtberichte — alles verbunden mit einer gemeinsamen Datenbank, auf die Ihr ganzes Team zugreifen kann.", "A plataforma de inteligência de turnos para a manufatura. OEE em tempo real, registro de eventos de parada, notas de passagem com IA, análise de tendências e relatórios resumo de turno — tudo conectado a um banco de dados compartilhado que toda a sua equipe acessa.", "制造业班次智能平台。实时 OEE、停机事件记录、AI 交接记录、趋势分析和班次摘要报告——全部连接到整个团队都能访问的共享数据库。", "製造業向けのシフトインテリジェンス基盤。リアルタイムOEE、ダウンタイムの記録、AIによる引き継ぎメモ、トレンド分析、シフト要約レポートを、チーム全員が使える共有データベースに接続します。"],
+    ["Live shift detection and progress tracking", "Detección de turno en vivo y seguimiento del progreso", "Détection de l'équipe en cours et suivi de l'avancement", "Live-Schichterkennung und Fortschrittsverfolgung", "Detecção de turno ao vivo e acompanhamento do progresso", "实时班次识别与进度跟踪", "稼働中シフトの自動判別と進捗の追跡"],
+    ["Real OEE from SAP / MRP data imports", "OEE real a partir de importaciones de datos de SAP / MRP", "OEE réel à partir des imports de données SAP / MRP", "Echte OEE aus SAP- / MRP-Datenimporten", "OEE real a partir de importações de dados do SAP / MRP", "基于 SAP / MRP 数据导入的真实 OEE", "SAP／MRPのデータ取り込みから算出する実際のOEE"],
+    ["Downtime event logging with cause categories", "Registro de eventos de inactividad con categorías de causa", "Consignation des arrêts avec catégories de cause", "Stillstandserfassung mit Ursachenkategorien", "Registro de eventos de parada com categorias de causa", "按原因分类记录停机事件", "原因カテゴリ付きのダウンタイム記録"],
+    ["AI shift digest, handoff notes, and corrective actions", "Resumen de turno con IA, notas de relevo y acciones correctivas", "Synthèse d'équipe par IA, notes de passation et actions correctives", "KI-Schichtzusammenfassung, Übergabenotizen und Korrekturmaßnahmen", "Resumo de turno com IA, notas de passagem e ações corretivas", "AI 班次摘要、交接记录和纠正措施", "AIによるシフト要約、引き継ぎメモ、是正措置"],
+    ["Multi-shift trend analysis and Pareto breakdown", "Análisis de tendencias de varios turnos y desglose Pareto", "Analyse des tendances multi-équipes et détail de Pareto", "Trendanalyse über mehrere Schichten und Pareto-Aufschlüsselung", "Análise de tendências de vários turnos e detalhamento de Pareto", "多班次趋势分析与帕累托分解", "複数シフトのトレンド分析とパレート分解"],
+    ["Multi-user with role-based access", "Multiusuario con acceso por roles", "Multi-utilisateur avec accès selon les rôles", "Mehrbenutzerbetrieb mit rollenbasiertem Zugriff", "Multiusuário com acesso por função", "多用户，按角色授权访问", "ロールベースのアクセス制御によるマルチユーザー対応"],
+    ["Intelligent workforce scheduling for operations teams. Rotating shifts, coverage alerts, approval workflows — built for any industry with complex staffing needs.", "Programación inteligente de personal para equipos de operaciones. Turnos rotativos, alertas de cobertura y flujos de aprobación, pensado para cualquier industria con necesidades de personal complejas.", "Planification intelligente des effectifs pour les équipes d'exploitation. Équipes tournantes, alertes de couverture, circuits de validation — conçu pour tout secteur aux besoins de personnel complexes.", "Intelligente Personaleinsatzplanung für Betriebsteams. Schichtrotation, Besetzungswarnungen, Freigabe-Workflows — gebaut für jede Branche mit komplexem Personalbedarf.", "Escalonamento inteligente de pessoal para equipes de operações. Turnos rotativos, alertas de cobertura e fluxos de aprovação — feito para qualquer setor com necessidades complexas de pessoal.", "面向运营团队的智能人员排班。轮班、覆盖提醒、审批流程——适用于任何有复杂用工需求的行业。", "運用チーム向けのインテリジェントな人員スケジューリング。交替勤務、人員カバーのアラート、承認ワークフローを備え、複雑な人員配置が必要なあらゆる業界に対応します。"],
+    ["Dynamic shift scheduling and rotation management", "Programación dinámica de turnos y gestión de rotaciones", "Planification dynamique des équipes et gestion des rotations", "Dynamische Schichtplanung und Rotationsverwaltung", "Escalonamento dinâmico de turnos e gestão de rodízios", "动态排班与轮换管理", "動的なシフトスケジューリングとローテーション管理"],
+    ["Coverage gap alerts and auto-fill suggestions", "Alertas de huecos de cobertura y sugerencias de relleno automático", "Alertes de manque de couverture et suggestions de remplacement automatique", "Warnungen bei Besetzungslücken und automatische Vorschläge zum Auffüllen", "Alertas de lacunas de cobertura e sugestões de preenchimento automático", "覆盖缺口提醒与自动补位建议", "人員不足アラートと自動補充の提案"],
+    ["Manager approval workflows", "Flujos de aprobación del gerente", "Circuits de validation du responsable", "Freigabe-Workflows für Manager", "Fluxos de aprovação do gerente", "经理审批流程", "マネージャーの承認ワークフロー"],
+    ["Works for manufacturing, healthcare, retail, logistics", "Sirve para manufactura, salud, comercio minorista y logística", "Convient à l'industrie, à la santé, au commerce de détail et à la logistique", "Geeignet für Fertigung, Gesundheitswesen, Einzelhandel und Logistik", "Serve para manufatura, saúde, varejo e logística", "适用于制造业、医疗、零售和物流", "製造、医療、小売、物流に対応"],
+    ["Integrates with ShiftStar Operations", "Se integra con ShiftStar Operations", "S'intègre à ShiftStar Operations", "Lässt sich in ShiftStar Operations integrieren", "Integra-se ao ShiftStar Operations", "可与 ShiftStar Operations 集成", "ShiftStar Operationsと連携"]
+  ]);
+
+  var saved = 'en';
+  try { saved = localStorage.getItem('ss_lp_lang') || 'en'; } catch (e) {}
+  if (saved !== 'en' && !D[saved]) saved = 'en';
+  var sel = document.getElementById('lang-select');
+  if (sel) sel.value = saved;
+  current = saved;
+  apply(saved);
+})();
+</script>
+<!-- lp-i18n-engine:end -->
+</body>
 </html>
