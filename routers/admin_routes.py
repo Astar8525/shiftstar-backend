@@ -1,3 +1,4 @@
+import os
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
@@ -6,10 +7,18 @@ import models
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
+
+def _platform_admins():
+    raw = os.getenv("PLATFORM_ADMIN_EMAILS", "")
+    return {e.strip().lower() for e in raw.split(",") if e.strip()}
+
+
 def require_admin(current_user: models.User = Depends(get_current_user)):
-    if current_user.role != "admin":
+    # Platform owner only. A company "admin" role is NOT enough here.
+    if (current_user.email or "").strip().lower() not in _platform_admins():
         raise HTTPException(status_code=403, detail="Admin access required")
     return current_user
+
 
 @router.get("/stats")
 def get_stats(
@@ -26,6 +35,7 @@ def get_stats(
         "total_events": total_events,
         "total_shift_history": total_history
     }
+
 
 @router.get("/companies")
 def get_companies(
@@ -46,6 +56,7 @@ def get_companies(
             "users": [{"id": u.id, "name": u.name, "email": u.email, "role": u.role, "created_at": str(u.created_at)} for u in users]
         })
     return result
+
 
 @router.get("/serve")
 def serve_admin(current_user: models.User = Depends(require_admin)):
