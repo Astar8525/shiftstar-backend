@@ -16,17 +16,18 @@ def create_checkout_session(
 ):
     key = os.getenv("STRIPE_SECRET_KEY")
     if not key:
-        raise HTTPException(status_code=500, detail="Stripe not configured - key: " + str(os.environ.keys()))
-    
+        raise HTTPException(status_code=500, detail="Payments are not configured yet")
+
     stripe.api_key = key
-    
+
     if tier not in ["pro", "team"]:
         raise HTTPException(status_code=400, detail="Invalid tier")
-    
+
     try:
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             mode="subscription",
+            payment_method_collection="if_required",
             line_items=[{
                 "price_data": {
                     "currency": "usd",
@@ -38,6 +39,13 @@ def create_checkout_session(
                 },
                 "quantity": 1,
             }],
+            subscription_data={
+                "trial_period_days": 14,
+                "trial_settings": {
+                    "end_behavior": {"missing_payment_method": "cancel"}
+                },
+                "metadata": {"user_id": str(current_user.id), "tier": tier},
+            },
             success_url="https://web-production-f21c8.up.railway.app/dashboard?payment=success",
             cancel_url="https://web-production-f21c8.up.railway.app/dashboard?payment=cancelled",
             customer_email=current_user.email,
