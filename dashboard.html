@@ -311,14 +311,7 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
       <div class="login-field"><label>Email</label><input type="email" id="r-email" placeholder="your@email.com"/></div>
       <div class="login-field"><label>Password</label><input type="password" id="r-password" placeholder="••••••••"/></div>
       <div class="login-field"><label>Company name</label><input type="text" id="r-company" placeholder="Acme Manufacturing"/></div>
-      <div class="login-field">
-        <label>Role</label>
-        <select id="r-role" style="width:100%;font-size:13px;font-family:'Inter',sans-serif;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text)">
-          <option value="supervisor">Supervisor</option>
-          <option value="manager">Manager</option>
-          <option value="admin">Admin</option>
-        </select>
-      </div>
+      <div class="login-field"><label>Company invite code (only to join an existing company)</label><input type="text" id="r-invite" placeholder="Leave blank to create a new company" autocomplete="off"/></div>
       <button class="login-btn" onclick="doRegister()">Create account</button>
       <div class="login-err" id="register-err"></div>
     </div>
@@ -696,14 +689,14 @@ async function doRegister() {
   const email = document.getElementById('r-email').value.trim();
   const password = document.getElementById('r-password').value;
   const company_name = document.getElementById('r-company').value.trim();
-  const role = document.getElementById('r-role').value;
+  const invite_code = (document.getElementById('r-invite').value || '').trim();
   document.getElementById('register-err').textContent = '';
   if (!name || !email || !password || !company_name) {
     document.getElementById('register-err').textContent = 'All fields are required';
     return;
   }
   try {
-    const data = await api('POST', '/auth/register', { name, email, password, company_name, role });
+    const data = await api('POST', '/auth/register', { name, email, password, company_name, invite_code });
     token = data.access_token;
     currentUser = data.user;
     localStorage.setItem('ss_token', token);
