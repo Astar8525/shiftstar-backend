@@ -1513,6 +1513,24 @@ init();
 (function () {
   var LANGS = ['es', 'fr', 'de', 'pt', 'zh', 'ja'];
   var ROWS = [
+    /* team-i18n:start */
+    ["Company invite code (only to join an existing company)", "Código de invitación de la empresa (solo para unirse a una empresa existente)", "Code d'invitation de l'entreprise (uniquement pour rejoindre une entreprise existante)", "Einladungscode des Unternehmens (nur zum Beitritt zu einem bestehenden Unternehmen)", "Código de convite da empresa (apenas para entrar em uma empresa existente)", "公司邀请码（仅用于加入已有公司）", "会社の招待コード（既存の会社に参加する場合のみ）"],
+    ["Leave blank to create a new company", "Déjelo en blanco para crear una empresa nueva", "Laissez vide pour créer une nouvelle entreprise", "Leer lassen, um ein neues Unternehmen zu erstellen", "Deixe em branco para criar uma nova empresa", "留空即可创建新公司", "新しい会社を作成する場合は空欄のままにしてください"],
+    ["Team", "Equipo", "Équipe", "Team", "Equipe", "团队", "チーム"],
+    ["Your team", "Su equipo", "Votre équipe", "Ihr Team", "Sua equipe", "您的团队", "あなたのチーム"],
+    ["Invite code - share it with people who should join your company", "Código de invitación: compártalo con quienes deban unirse a su empresa", "Code d'invitation : partagez-le avec les personnes qui doivent rejoindre votre entreprise", "Einladungscode – teilen Sie ihn mit Personen, die Ihrem Unternehmen beitreten sollen", "Código de convite: compartilhe com as pessoas que devem entrar na sua empresa", "邀请码——分享给需要加入贵公司的人", "招待コード：会社に参加してほしい人と共有してください"],
+    ["Copy", "Copiar", "Copier", "Kopieren", "Copiar", "复制", "コピー"],
+    ["Reset", "Restablecer", "Réinitialiser", "Zurücksetzen", "Redefinir", "重置", "リセット"],
+    ["Members", "Miembros", "Membres", "Mitglieder", "Membros", "成员", "メンバー"],
+    ["Loading...", "Cargando...", "Chargement...", "Wird geladen...", "Carregando...", "加载中...", "読み込み中..."],
+    ["Close", "Cerrar", "Fermer", "Schließen", "Fechar", "关闭", "閉じる"],
+    ["Remove", "Quitar", "Retirer", "Entfernen", "Remover", "移除", "削除"],
+    ["Restore", "Restaurar", "Restaurer", "Wiederherstellen", "Restaurar", "恢复", "復元"],
+    ["(removed)", "(eliminado)", "(retiré)", "(entfernt)", "(removido)", "（已移除）", "（削除済み）"],
+    ["Code copied", "Código copiado", "Code copié", "Code kopiert", "Código copiado", "已复制代码", "コードをコピーしました"],
+    ["New code created", "Nuevo código creado", "Nouveau code créé", "Neuer Code erstellt", "Novo código criado", "已生成新代码", "新しいコードを作成しました"],
+    ["A company with that name already exists. To join it, enter the invite code from your company admin. Otherwise, choose a different company name.", "Ya existe una empresa con ese nombre. Para unirse, introduzca el código de invitación del administrador de su empresa. De lo contrario, elija otro nombre de empresa.", "Une entreprise portant ce nom existe déjà. Pour la rejoindre, saisissez le code d'invitation de l'administrateur de votre entreprise. Sinon, choisissez un autre nom d'entreprise.", "Ein Unternehmen mit diesem Namen existiert bereits. Um beizutreten, geben Sie den Einladungscode Ihres Unternehmensadministrators ein. Andernfalls wählen Sie einen anderen Unternehmensnamen.", "Já existe uma empresa com esse nome. Para entrar nela, informe o código de convite do administrador da sua empresa. Caso contrário, escolha outro nome de empresa.", "已存在同名公司。如需加入，请输入公司管理员提供的邀请码；否则请选择其他公司名称。", "その名前の会社はすでに存在します。参加するには、会社の管理者から受け取った招待コードを入力してください。そうでない場合は、別の会社名を選んでください。"],
+    /* team-i18n:end */
     ["(Planned time − Downtime) ÷ Planned time. How much of your scheduled time was the machine actually available to run.", "(Tiempo planificado − Tiempo de inactividad) ÷ Tiempo planificado. Qué parte de su tiempo programado estuvo realmente disponible la máquina para funcionar.", "(Temps planifié − Temps d'arrêt) ÷ Temps planifié. La part de votre temps programmé pendant laquelle la machine était réellement disponible pour tourner.", "(Geplante Zeit − Stillstandszeit) ÷ Geplante Zeit. Wie viel Ihrer geplanten Zeit die Maschine tatsächlich zum Laufen verfügbar war.", "(Tempo planejado − Tempo parado) ÷ Tempo planejado. Quanto do seu tempo programado a máquina esteve realmente disponível para operar.", "（计划时间 − 停机时间）÷ 计划时间。在您的计划时间内，设备实际可用于运行的比例。", "（計画時間 − 停止時間）÷ 計画時間。計画した時間のうち、設備が実際に稼働可能だった割合です。"],
     ["+ Add shift", "+ Añadir turno", "+ Ajouter une équipe", "+ Schicht hinzufügen", "+ Adicionar turno", "+ 添加班次", "+ シフトを追加"],
     ["+ Log event", "+ Registrar evento", "+ Consigner un événement", "+ Ereignis erfassen", "+ Registrar evento", "+ 记录事件", "+ イベントを記録"],
@@ -2284,7 +2302,8 @@ async function ssLoadTeam() {
       row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)';
       var info = document.createElement('div');
       info.style.opacity = m.is_active ? '1' : '.5';
-      info.textContent = m.name + ' \u00b7 ' + m.role + ' \u2014 ' + m.email + (m.is_active ? '' : ' (removed)');
+      info.textContent = m.name + ' \u00b7 ' + m.role + ' \u2014 ' + m.email;
+      if (!m.is_active) { var tag = document.createElement('span'); tag.textContent = '(removed)'; tag.style.marginLeft = '6px'; info.appendChild(tag); }
       row.appendChild(info);
       if (m.id !== currentUser.id) {
         var btn = document.createElement('button');
