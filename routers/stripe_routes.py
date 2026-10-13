@@ -25,7 +25,6 @@ def create_checkout_session(
 
     try:
         session = stripe.checkout.Session.create(
-            payment_method_types=["card"],
             mode="subscription",
             payment_method_collection="if_required",
             line_items=[{
