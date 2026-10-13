@@ -27,10 +27,24 @@ def create_checkout_session(
     if tier not in ["pro", "team"]:
         raise HTTPException(status_code=400, detail="Invalid tier")
 
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Only a company admin can manage billing")
+
+    company = db.query(models.Company).filter(models.Company.id == current_user.company_id).first()
+    if company is not None and company.subscription_status in ("trialing", "active", "past_due"):
+        raise HTTPException(status_code=400, detail="Your company already has an active subscription")
+
+    used_trial = bool(company is not None and company.stripe_subscription_id)
+
+    sub_data = {"metadata": {"user_id": str(current_user.id), "tier": tier}}
+    if not used_trial:
+        sub_data["trial_period_days"] = 14
+        sub_data["trial_settings"] = {"end_behavior": {"missing_payment_method": "cancel"}}
+
     try:
         session = stripe.checkout.Session.create(
             mode="subscription",
-            payment_method_collection="if_required",
+            payment_method_collection="always" if used_trial else "if_required",
             line_items=[{
                 "price_data": {
                     "currency": "usd",
@@ -42,13 +56,7 @@ def create_checkout_session(
                 },
                 "quantity": 1,
             }],
-            subscription_data={
-                "trial_period_days": 14,
-                "trial_settings": {
-                    "end_behavior": {"missing_payment_method": "cancel"}
-                },
-                "metadata": {"user_id": str(current_user.id), "tier": tier},
-            },
+            subscription_data=sub_data,
             success_url="https://web-production-f21c8.up.railway.app/dashboard?payment=success",
             cancel_url="https://web-production-f21c8.up.railway.app/dashboard?payment=cancelled",
             customer_email=current_user.email,
@@ -101,7 +109,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
         tier = meta.get("tier")
         if company is not None and tier in PLAN_TIERS:
             company.plan = tier
-            company.subscription_status = "trialing"
+            company.subscription_status = "active" if obj.get("payment_status") == "paid" else "trialing"
             company.stripe_customer_id = obj.get("customer")
             company.stripe_subscription_id = obj.get("subscription")
             db.commit()
@@ -121,7 +129,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             company = _company_from_user_id(db, meta.get("user_id"))
         if company is not None:
             current = company.stripe_subscription_id
-            if current and current != sub_id:
+            if current and current != sub_id and company.subscription_status in ("trialing", "active", "past_due"):
                 return {"received": True}
             company.stripe_subscription_id = sub_id
             company.stripe_customer_id = obj.get("customer")
