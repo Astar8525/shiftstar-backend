@@ -19,6 +19,7 @@ class UserRegister(BaseModel):
     password: str
     company_name: str
     role: Optional[str] = "supervisor"
+    invite_code: Optional[str] = None
 
 class UserLogin(BaseModel):
     email: str

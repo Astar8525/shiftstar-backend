@@ -6,6 +6,10 @@ import models
 from routers import users, shifts, events, production, history, stripe_routes, ai_routes, reset_routes, admin_routes
 
 models.Base.metadata.create_all(bind=engine)
+from sqlalchemy import inspect as _inspect, text as _text
+if 'invite_code' not in [c['name'] for c in _inspect(engine).get_columns('companies')]:
+    with engine.begin() as _conn:
+        _conn.execute(_text('ALTER TABLE companies ADD COLUMN invite_code VARCHAR'))
 
 app = FastAPI(
     title="ShiftStar API",
