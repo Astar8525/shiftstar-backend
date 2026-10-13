@@ -10,6 +10,10 @@ from sqlalchemy import inspect as _inspect, text as _text
 if 'invite_code' not in [c['name'] for c in _inspect(engine).get_columns('companies')]:
     with engine.begin() as _conn:
         _conn.execute(_text('ALTER TABLE companies ADD COLUMN invite_code VARCHAR'))
+for _n, _d in [('plan', "VARCHAR DEFAULT 'starter'"), ('subscription_status', 'VARCHAR'), ('stripe_customer_id', 'VARCHAR'), ('stripe_subscription_id', 'VARCHAR')]:
+    if _n not in [c['name'] for c in _inspect(engine).get_columns('companies')]:
+        with engine.begin() as _conn:
+            _conn.execute(_text('ALTER TABLE companies ADD COLUMN ' + _n + ' ' + _d))
 
 app = FastAPI(
     title="ShiftStar API",

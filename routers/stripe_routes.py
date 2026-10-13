@@ -1,12 +1,16 @@
-from fastapi import APIRouter, Depends, HTTPException
+import json
+import os
+import stripe
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from database import get_db
 from auth import get_current_user
 import models
-import stripe
-import os
 
 router = APIRouter(prefix="/stripe", tags=["stripe"])
+
+PLAN_TIERS = ("pro", "team")
+
 
 @router.post("/create-checkout-session")
 def create_checkout_session(
@@ -54,9 +58,79 @@ def create_checkout_session(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
 @router.get("/success")
 def payment_success(
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     return {"message": "Payment successful", "user": current_user.email}
+
+
+def _company_from_user_id(db, user_id):
+    try:
+        uid = int(user_id)
+    except (TypeError, ValueError):
+        return None
+    user = db.query(models.User).filter(models.User.id == uid).first()
+    if not user:
+        return None
+    return db.query(models.Company).filter(models.Company.id == user.company_id).first()
+
+
+@router.post("/webhook")
+async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
+    secret = os.getenv("STRIPE_WEBHOOK_SECRET")
+    if not secret:
+        raise HTTPException(status_code=500, detail="Webhook not configured")
+
+    payload = await request.body()
+    sig = request.headers.get("stripe-signature", "")
+    try:
+        stripe.Webhook.construct_event(payload, sig, secret)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid signature")
+
+    event = json.loads(payload)
+    etype = event.get("type")
+    obj = (event.get("data") or {}).get("object") or {}
+
+    if etype == "checkout.session.completed":
+        meta = obj.get("metadata") or {}
+        company = _company_from_user_id(db, meta.get("user_id"))
+        tier = meta.get("tier")
+        if company is not None and tier in PLAN_TIERS:
+            company.plan = tier
+            company.subscription_status = "trialing"
+            company.stripe_customer_id = obj.get("customer")
+            company.stripe_subscription_id = obj.get("subscription")
+            db.commit()
+
+    elif etype in (
+        "customer.subscription.created",
+        "customer.subscription.updated",
+        "customer.subscription.deleted",
+    ):
+        sub_id = obj.get("id")
+        status = obj.get("status")
+        meta = obj.get("metadata") or {}
+        company = db.query(models.Company).filter(
+            models.Company.stripe_subscription_id == sub_id
+        ).first()
+        if company is None:
+            company = _company_from_user_id(db, meta.get("user_id"))
+        if company is not None:
+            current = company.stripe_subscription_id
+            if current and current != sub_id:
+                return {"received": True}
+            company.stripe_subscription_id = sub_id
+            company.stripe_customer_id = obj.get("customer")
+            company.subscription_status = status
+            tier = meta.get("tier")
+            if status in ("trialing", "active", "past_due") and tier in PLAN_TIERS:
+                company.plan = tier
+            elif status in ("canceled", "unpaid", "incomplete_expired"):
+                company.plan = "starter"
+            db.commit()
+
+    return {"received": True}
