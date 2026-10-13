@@ -334,6 +334,7 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
     <div class="live-time" id="live-clock"></div>
     <div class="user-pill" id="user-pill">—</div>
     <button class="hdr-btn" onclick="toggleConfig()"><i class="ti ti-settings"></i> Shifts</button>
+    <button class="hdr-btn" id="team-btn" style="display:none" onclick="ssOpenTeam()"><i class="ti ti-users"></i> Team</button>
     <button class="hdr-btn" onclick="startCheckout('pro')" style="background:rgba(29,158,117,.25);border-color:rgba(29,158,117,.4)"><i class="ti ti-star"></i> Upgrade</button>
     <button class="hdr-btn hdr-btn-accent" onclick="openModal()"><i class="ti ti-plus"></i> Log event</button>
     <button class="hdr-btn" onclick="doLogout()"><i class="ti ti-logout"></i></button>
@@ -587,6 +588,25 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
 </div>
 
 <!-- EVENT MODAL -->
+<div class="modal-overlay" id="team-modal">
+  <div class="modal">
+    <div class="modal-title">Your team</div>
+    <div class="modal-field">
+      <label>Invite code - share it with people who should join your company</label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="team-code" readonly style="font-family:monospace;letter-spacing:2px"/>
+        <button class="btn" onclick="ssCopyCode()">Copy</button>
+        <button class="btn" onclick="ssResetCode()">Reset</button>
+      </div>
+    </div>
+    <div class="modal-field">
+      <label>Members</label>
+      <div id="team-list">Loading...</div>
+    </div>
+    <div id="team-msg" style="font-size:12px;opacity:.75;min-height:16px"></div>
+    <div class="modal-actions"><button class="btn" onclick="ssCloseTeam()">Close</button></div>
+  </div>
+</div>
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-title">Log downtime event</div>
@@ -2238,5 +2258,73 @@ window.ssHistNote = async function () {
 })();
 </script>
 <!-- i18n-latest:end -->
+<script>
+/* team:start */
+function ssTeamBtnTick() {
+  try {
+    var show = (typeof currentUser !== 'undefined') && currentUser && String(currentUser.role || '').toLowerCase() === 'admin';
+    var b = document.getElementById('team-btn');
+    if (b) b.style.display = show ? '' : 'none';
+  } catch (e) {}
+}
+setInterval(ssTeamBtnTick, 1000);
+function ssOpenTeam() { document.getElementById('team-modal').classList.add('open'); ssLoadTeam(); }
+function ssCloseTeam() { document.getElementById('team-modal').classList.remove('open'); }
+async function ssLoadTeam() {
+  var msg = document.getElementById('team-msg');
+  msg.textContent = '';
+  try {
+    var c = await api('GET', '/auth/invite-code');
+    document.getElementById('team-code').value = c.invite_code;
+    var list = await api('GET', '/auth/team');
+    var box = document.getElementById('team-list');
+    box.textContent = '';
+    list.forEach(function (m) {
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)';
+      var info = document.createElement('div');
+      info.style.opacity = m.is_active ? '1' : '.5';
+      info.textContent = m.name + ' \u00b7 ' + m.role + ' \u2014 ' + m.email + (m.is_active ? '' : ' (removed)');
+      row.appendChild(info);
+      if (m.id !== currentUser.id) {
+        var btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.textContent = m.is_active ? 'Remove' : 'Restore';
+        btn.onclick = function () { ssTeamAction(m, m.is_active ? 'remove' : 'restore'); };
+        row.appendChild(btn);
+      }
+      box.appendChild(row);
+    });
+  } catch (e) {
+    msg.textContent = e.message || 'Could not load team';
+  }
+}
+async function ssTeamAction(m, action) {
+  if (action === 'remove' && !confirm('Remove ' + m.name + ' from your company? They will no longer be able to sign in.')) return;
+  try {
+    await api('POST', '/auth/team/' + m.id + '/' + action);
+    ssLoadTeam();
+  } catch (e) {
+    document.getElementById('team-msg').textContent = e.message || 'Failed';
+  }
+}
+function ssCopyCode() {
+  var i = document.getElementById('team-code');
+  i.select();
+  try { navigator.clipboard.writeText(i.value); } catch (e) { document.execCommand('copy'); }
+  document.getElementById('team-msg').textContent = 'Code copied';
+}
+async function ssResetCode() {
+  if (!confirm('Make a new invite code? The old code will stop working. People already in your company stay.')) return;
+  try {
+    var c = await api('POST', '/auth/invite-code/reset');
+    document.getElementById('team-code').value = c.invite_code;
+    document.getElementById('team-msg').textContent = 'New code created';
+  } catch (e) {
+    document.getElementById('team-msg').textContent = e.message || 'Failed';
+  }
+}
+/* team:end */
+</script>
 </body>
 </html>

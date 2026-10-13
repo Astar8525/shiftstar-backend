@@ -125,3 +125,44 @@ def reset_invite_code(current_user: models.User = Depends(get_current_user), db:
     company.invite_code = _new_invite_code(db)
     db.commit()
     return {"company": company.name, "invite_code": company.invite_code}
+
+@router.get("/team")
+def list_team(current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
+    _require_admin(current_user)
+    members = db.query(models.User).filter(
+        models.User.company_id == current_user.company_id
+    ).order_by(models.User.id).all()
+    return [
+        {"id": m.id, "name": m.name, "email": m.email, "role": m.role, "is_active": m.is_active is not False}
+        for m in members
+    ]
+
+
+def _team_member(user_id: int, current_user: models.User, db: Session) -> models.User:
+    member = db.query(models.User).filter(
+        models.User.id == user_id,
+        models.User.company_id == current_user.company_id
+    ).first()
+    if not member:
+        raise HTTPException(status_code=404, detail="Member not found")
+    return member
+
+
+@router.post("/team/{user_id}/remove")
+def remove_member(user_id: int, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
+    _require_admin(current_user)
+    if user_id == current_user.id:
+        raise HTTPException(status_code=400, detail="You cannot remove yourself")
+    member = _team_member(user_id, current_user, db)
+    member.is_active = False
+    db.commit()
+    return {"removed": member.id}
+
+
+@router.post("/team/{user_id}/restore")
+def restore_member(user_id: int, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
+    _require_admin(current_user)
+    member = _team_member(user_id, current_user, db)
+    member.is_active = True
+    db.commit()
+    return {"restored": member.id}
