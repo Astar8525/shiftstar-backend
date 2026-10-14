@@ -85,3 +85,12 @@ class ShiftHistory(Base):
     cause_totals_json = Column(Text)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     company = relationship("Company", back_populates="shift_history")
+
+
+
+class AIUsage(Base):
+    __tablename__ = "ai_usage"
+    id = Column(Integer, primary_key=True, index=True)
+    company_id = Column(Integer, index=True)
+    day = Column(String, index=True)
+    count = Column(Integer, default=0)
