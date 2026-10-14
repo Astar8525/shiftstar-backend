@@ -26,6 +26,21 @@ def _require_admin(user: models.User):
         raise HTTPException(status_code=403, detail="Only a company admin can manage the invite code")
 
 
+SEAT_LIMITS = {"starter": 1, "pro": 3, "team": 10}
+
+
+def _seat_limit(company):
+    plan = ((company.plan if company is not None else None) or "starter").lower()
+    if plan == "plant":
+        return 10 ** 9
+    return SEAT_LIMITS.get(plan, 1)
+
+
+def _active_count(db, company_id):
+    members = db.query(models.User).filter(models.User.company_id == company_id).all()
+    return sum(1 for m in members if m.is_active is not False)
+
+
 @router.post("/register", response_model=schemas.Token)
 def register(user_data: schemas.UserRegister, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     existing = db.query(models.User).filter(
@@ -52,6 +67,8 @@ def register(user_data: schemas.UserRegister, background_tasks: BackgroundTasks,
                 status_code=403,
                 detail="A company with that name already exists. To join it, enter the invite code from your company admin. Otherwise, choose a different company name."
             )
+        if _active_count(db, company.id) >= _seat_limit(company):
+            raise HTTPException(status_code=403, detail="This company has reached the user limit for its plan. Ask your company admin to upgrade.")
         role = "supervisor"
     else:
         company = models.Company(name=company_name, invite_code=_new_invite_code(db))
@@ -163,6 +180,9 @@ def remove_member(user_id: int, current_user: models.User = Depends(get_current_
 def restore_member(user_id: int, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
     _require_admin(current_user)
     member = _team_member(user_id, current_user, db)
+    company = db.query(models.Company).filter(models.Company.id == current_user.company_id).first()
+    if member.is_active is False and _active_count(db, current_user.company_id) >= _seat_limit(company):
+        raise HTTPException(status_code=400, detail="User limit reached for your plan. Upgrade to restore this member.")
     member.is_active = True
     db.commit()
     return {"restored": member.id}
