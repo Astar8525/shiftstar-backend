@@ -109,7 +109,13 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
         tier = meta.get("tier")
         if company is not None and tier in PLAN_TIERS:
             company.plan = tier
-            company.subscription_status = "active" if obj.get("payment_status") == "paid" else "trialing"
+            sub_status = "trialing"
+            try:
+                stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+                sub_status = stripe.Subscription.retrieve(obj.get("subscription"))["status"]
+            except Exception as e:
+                print("Could not read subscription status", repr(e))
+            company.subscription_status = sub_status
             company.stripe_customer_id = obj.get("customer")
             company.stripe_subscription_id = obj.get("subscription")
             db.commit()
