@@ -1,5 +1,8 @@
 import os
+import json
+import datetime
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 from database import get_db
 from auth import get_current_user
@@ -56,6 +59,30 @@ def get_companies(
             "users": [{"id": u.id, "name": u.name, "email": u.email, "role": u.role, "created_at": str(u.created_at)} for u in users]
         })
     return result
+
+
+@router.get("/export")
+def export_all(
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(require_admin)
+):
+    # Full data backup as one JSON file. Password hashes are left out.
+    data = {
+        "exported_at": datetime.datetime.utcnow().isoformat() + "Z",
+        "tables": {}
+    }
+    for table in models.Base.metadata.sorted_tables:
+        keep = [c.name for c in table.columns
+                if "password" not in c.name.lower() and "hash" not in c.name.lower()]
+        rows = db.execute(table.select()).mappings().all()
+        data["tables"][table.name] = [{k: row[k] for k in keep} for row in rows]
+    body = json.dumps(data, default=str, indent=1)
+    filename = "shiftstar-backup-" + datetime.datetime.utcnow().strftime("%Y-%m-%d") + ".json"
+    return Response(
+        content=body,
+        media_type="application/json",
+        headers={"Content-Disposition": 'attachment; filename="' + filename + '"'}
+    )
 
 
 @router.get("/serve")
