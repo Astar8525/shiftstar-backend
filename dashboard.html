@@ -335,7 +335,7 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
     <div class="user-pill" id="user-pill">—</div>
     <button class="hdr-btn" onclick="toggleConfig()"><i class="ti ti-settings"></i> Shifts</button>
     <button class="hdr-btn" id="team-btn" style="display:none" onclick="ssOpenTeam()"><i class="ti ti-users"></i> Team</button>
-    <button class="hdr-btn" onclick="startCheckout('pro')" style="background:rgba(29,158,117,.25);border-color:rgba(29,158,117,.4)"><i class="ti ti-star"></i> Upgrade</button>
+    <button class="hdr-btn" id="upgrade-btn" onclick="startCheckout('pro')" style="background:rgba(29,158,117,.25);border-color:rgba(29,158,117,.4)"><i class="ti ti-star"></i> Upgrade</button>
     <button class="hdr-btn hdr-btn-accent" onclick="openModal()"><i class="ti ti-plus"></i> Log event</button>
     <button class="hdr-btn" onclick="doLogout()"><i class="ti ti-logout"></i></button>
   </div>
@@ -595,8 +595,8 @@ header{background:var(--brand);padding:12px 24px;display:flex;align-items:center
       <label>Invite code - share it with people who should join your company</label>
       <div style="display:flex;gap:8px;align-items:center">
         <input id="team-code" readonly style="font-family:monospace;letter-spacing:2px"/>
-        <button class="btn" onclick="ssCopyCode()">Copy</button>
-        <button class="btn" onclick="ssResetCode()">Reset</button>
+        <button class="btn" style="white-space:nowrap;flex-shrink:0" onclick="ssCopyCode()">Copy</button>
+        <button class="btn" style="white-space:nowrap;flex-shrink:0" onclick="ssResetCode()">Reset</button>
       </div>
     </div>
     <div class="modal-field">
@@ -2292,6 +2292,9 @@ function ssTeamBtnTick() {
     var show = (typeof currentUser !== 'undefined') && currentUser && String(currentUser.role || '').toLowerCase() === 'admin';
     var b = document.getElementById('team-btn');
     if (b) b.style.display = show ? '' : 'none';
+    var ub = document.getElementById('upgrade-btn');
+    if (ub && !show) { ub.style.display = 'none'; ub.dataset.ssHid = '1'; }
+    else if (ub && ub.dataset.ssHid) { ub.style.display = ''; delete ub.dataset.ssHid; }
   } catch (e) {}
 }
 setInterval(ssTeamBtnTick, 1000);
