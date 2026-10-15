@@ -2304,7 +2304,7 @@ async function ssLoadTeam() {
     box.textContent = '';
     list.forEach(function (m) {
       var row = document.createElement('div');
-      row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)';
+      row.style.cssText = 'display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)';
       var info = document.createElement('div');
       info.style.opacity = m.is_active ? '1' : '.5';
       info.textContent = m.name + ((m.id !== currentUser.id && m.is_active) ? '' : ' \u00b7 ' + m.role) + ' \u2014 ' + m.email;
@@ -2316,7 +2316,7 @@ async function ssLoadTeam() {
         btn.textContent = m.is_active ? 'Remove' : 'Restore';
         if (m.is_active) {
           var sel = document.createElement('select');
-          sel.style.cssText = 'margin-left:auto;padding:4px 6px;';
+          sel.style.cssText = 'margin-left:auto;padding:4px 6px;min-width:120px;flex-shrink:0;';
           ['supervisor', 'manager', 'admin'].forEach(function (r) {
             var o = document.createElement('option');
             o.value = r;
