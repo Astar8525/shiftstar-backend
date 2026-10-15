@@ -94,3 +94,14 @@ class AIUsage(Base):
     company_id = Column(Integer, index=True)
     day = Column(String, index=True)
     count = Column(Integer, default=0)
+
+
+class PasswordReset(Base):
+    __tablename__ = "password_resets"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), index=True)
+    token_hash = Column(String, unique=True, index=True)
+    expires_at = Column(DateTime(timezone=True))
+    used_at = Column(DateTime(timezone=True), nullable=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
