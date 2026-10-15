@@ -2307,13 +2307,37 @@ async function ssLoadTeam() {
       row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)';
       var info = document.createElement('div');
       info.style.opacity = m.is_active ? '1' : '.5';
-      info.textContent = m.name + ' \u00b7 ' + m.role + ' \u2014 ' + m.email;
+      info.textContent = m.name + ((m.id !== currentUser.id && m.is_active) ? '' : ' \u00b7 ' + m.role) + ' \u2014 ' + m.email;
       if (!m.is_active) { var tag = document.createElement('span'); tag.textContent = '(removed)'; tag.style.marginLeft = '6px'; info.appendChild(tag); }
       row.appendChild(info);
       if (m.id !== currentUser.id) {
         var btn = document.createElement('button');
         btn.className = 'btn';
         btn.textContent = m.is_active ? 'Remove' : 'Restore';
+        if (m.is_active) {
+          var sel = document.createElement('select');
+          sel.style.cssText = 'margin-left:auto;padding:4px 6px;';
+          ['supervisor', 'manager', 'admin'].forEach(function (r) {
+            var o = document.createElement('option');
+            o.value = r;
+            o.textContent = r.charAt(0).toUpperCase() + r.slice(1);
+            if (r === (m.role || '').toLowerCase()) o.selected = true;
+            sel.appendChild(o);
+          });
+          sel.onchange = async function () {
+            var msgEl = document.getElementById('team-msg');
+            if (sel.value === 'admin' && !confirm('Make ' + m.name + ' an admin? Admins can manage the team and billing.')) { ssLoadTeam(); return; }
+            try {
+              await api('POST', '/auth/team/' + m.id + '/role', { role: sel.value });
+              m.role = sel.value;
+              msgEl.textContent = 'Role updated';
+            } catch (e) {
+              ssLoadTeam();
+              msgEl.textContent = e.message || 'Failed';
+            }
+          };
+          row.appendChild(sel);
+        }
         btn.onclick = function () { ssTeamAction(m, m.is_active ? 'remove' : 'restore'); };
         row.appendChild(btn);
       }

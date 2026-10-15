@@ -186,3 +186,28 @@ def restore_member(user_id: int, current_user: models.User = Depends(get_current
     member.is_active = True
     db.commit()
     return {"restored": member.id}
+
+
+from pydantic import BaseModel
+
+
+class RoleChange(BaseModel):
+    role: str
+
+
+VALID_ROLES = ("supervisor", "manager", "admin")
+
+
+@router.post("/team/{user_id}/role")
+def change_member_role(user_id: int, body: RoleChange, current_user: models.User = Depends(get_current_user), db: Session = Depends(get_db)):
+    if (current_user.role or "").lower() != "admin":
+        raise HTTPException(status_code=403, detail="Only a company admin can change roles")
+    if user_id == current_user.id:
+        raise HTTPException(status_code=400, detail="You can't change your own role. Ask another admin.")
+    new_role = (body.role or "").strip().lower()
+    if new_role not in VALID_ROLES:
+        raise HTTPException(status_code=400, detail="Invalid role")
+    member = _team_member(user_id, current_user, db)
+    member.role = new_role
+    db.commit()
+    return {"id": member.id, "role": member.role}
