@@ -25,7 +25,7 @@ def send_signup_alert(name, email, company, role):
             "https://api.resend.com/emails",
             headers={"Authorization": "Bearer " + key},
             json={
-                "from": "ShiftStar <onboarding@resend.dev>",
+                "from": "ShiftStar <noreply@getshiftstar.com>",
                 "to": [to],
                 "subject": "New ShiftStar signup: " + str(name)[:80],
                 "html": body,
