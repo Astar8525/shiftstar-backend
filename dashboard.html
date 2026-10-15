@@ -746,9 +746,9 @@ async function doForgotPassword() {
   document.getElementById('forgot-err').textContent = '';
   if (!email) { document.getElementById('forgot-err').textContent = 'Email required'; return; }
   try {
-    await api('POST', '/reset/request', { email });
+    await api('POST', '/reset/request', { email, lang: (function () { try { return localStorage.getItem('ss_lang') || ''; } catch (e) { return ''; } })() });
     document.getElementById('forgot-err').style.color = 'var(--success)';
-    document.getElementById('forgot-err').textContent = '✓ Reset link sent. Check your email — or contact support at anthonynorman101985@gmail.com';
+    document.getElementById('forgot-err').textContent = '\u2713 Reset link sent. Check your email \u2014 or contact support at support@getshiftstar.com';
   } catch (e) {
     document.getElementById('forgot-err').textContent = e.message || 'Request failed';
   }
@@ -761,7 +761,7 @@ async function doResetPassword() {
   document.getElementById('reset-err').textContent = '';
   if (!password) { document.getElementById('reset-err').textContent = 'Password required'; return; }
   if (password !== confirm) { document.getElementById('reset-err').textContent = 'Passwords do not match'; return; }
-  if (password.length < 6) { document.getElementById('reset-err').textContent = 'Password must be at least 6 characters'; return; }
+  if (password.length < 8) { document.getElementById('reset-err').textContent = 'Password must be at least 8 characters'; return; }
   try {
     await api('POST', '/reset/confirm', { token, password });
     document.getElementById('reset-err').style.color = 'var(--success)';
@@ -1526,6 +1526,15 @@ init();
     ["Manager", "Gerente", "Responsable", "Manager", "Gerente", "\u7ecf\u7406", "\u30de\u30cd\u30fc\u30b8\u30e3\u30fc"],
     ["Admin", "Administrador", "Administrateur", "Administrator", "Administrador", "\u7ba1\u7406\u5458", "\u7ba1\u7406\u8005"],
     ["Role updated", "Rol actualizado", "R\u00f4le mis \u00e0 jour", "Rolle aktualisiert", "Fun\u00e7\u00e3o atualizada", "\u89d2\u8272\u5df2\u66f4\u65b0", "\u30ed\u30fc\u30eb\u3092\u66f4\u65b0\u3057\u307e\u3057\u305f"],
+    ["\u2713 Reset link sent. Check your email \u2014 or contact support at support@getshiftstar.com", "\u2713 Enlace de restablecimiento enviado. Revisa tu correo \u2014 o contacta con soporte en support@getshiftstar.com", "\u2713 Lien de r\u00e9initialisation envoy\u00e9. V\u00e9rifiez votre e-mail \u2014 ou contactez le support \u00e0 support@getshiftstar.com", "\u2713 Link zum Zur\u00fccksetzen gesendet. Pr\u00fcfen Sie Ihre E-Mails \u2014 oder kontaktieren Sie den Support unter support@getshiftstar.com", "\u2713 Link de redefini\u00e7\u00e3o enviado. Verifique seu e-mail \u2014 ou entre em contato com o suporte em support@getshiftstar.com", "\u2713 \u91cd\u7f6e\u94fe\u63a5\u5df2\u53d1\u9001\u3002\u8bf7\u67e5\u770b\u60a8\u7684\u90ae\u7bb1\u2014\u2014\u6216\u901a\u8fc7 support@getshiftstar.com \u8054\u7cfb\u652f\u6301\u3002", "\u2713 \u30ea\u30bb\u30c3\u30c8\u7528\u30ea\u30f3\u30af\u3092\u9001\u4fe1\u3057\u307e\u3057\u305f\u3002\u30e1\u30fc\u30eb\u3092\u3054\u78ba\u8a8d\u304f\u3060\u3055\u3044\u3002\u307e\u305f\u306f support@getshiftstar.com \u307e\u3067\u30b5\u30dd\u30fc\u30c8\u306b\u304a\u554f\u3044\u5408\u308f\u305b\u304f\u3060\u3055\u3044\u3002"],
+    ["Password must be at least 8 characters", "La contrase\u00f1a debe tener al menos 8 caracteres", "Le mot de passe doit contenir au moins 8 caract\u00e8res", "Das Passwort muss mindestens 8 Zeichen lang sein", "A senha deve ter pelo menos 8 caracteres", "\u5bc6\u7801\u81f3\u5c11\u9700\u8981 8 \u4e2a\u5b57\u7b26", "\u30d1\u30b9\u30ef\u30fc\u30c9\u306f 8 \u6587\u5b57\u4ee5\u4e0a\u3067\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044"],
+    ["\u2713 Password updated! Redirecting to login...", "\u2713 \u00a1Contrase\u00f1a actualizada! Redirigiendo al inicio de sesi\u00f3n...", "\u2713 Mot de passe mis \u00e0 jour ! Redirection vers la connexion...", "\u2713 Passwort aktualisiert! Weiterleitung zur Anmeldung...", "\u2713 Senha atualizada! Redirecionando para o login...", "\u2713 \u5bc6\u7801\u5df2\u66f4\u65b0\uff01\u6b63\u5728\u8df3\u8f6c\u5230\u767b\u5f55\u9875\u9762...", "\u2713 \u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u66f4\u65b0\u3057\u307e\u3057\u305f\u3002\u30ed\u30b0\u30a4\u30f3\u753b\u9762\u306b\u79fb\u52d5\u3057\u3066\u3044\u307e\u3059..."],
+    ["Passwords do not match", "Las contrase\u00f1as no coinciden", "Les mots de passe ne correspondent pas", "Die Passw\u00f6rter stimmen nicht \u00fcberein", "As senhas n\u00e3o coincidem", "\u4e24\u6b21\u8f93\u5165\u7684\u5bc6\u7801\u4e0d\u4e00\u81f4", "\u30d1\u30b9\u30ef\u30fc\u30c9\u304c\u4e00\u81f4\u3057\u307e\u305b\u3093"],
+    ["Invalid or expired reset link", "Enlace de restablecimiento no v\u00e1lido o caducado", "Lien de r\u00e9initialisation invalide ou expir\u00e9", "Ung\u00fcltiger oder abgelaufener Link zum Zur\u00fccksetzen", "Link de redefini\u00e7\u00e3o inv\u00e1lido ou expirado", "\u91cd\u7f6e\u94fe\u63a5\u65e0\u6548\u6216\u5df2\u8fc7\u671f", "\u30ea\u30bb\u30c3\u30c8\u7528\u30ea\u30f3\u30af\u304c\u7121\u52b9\u307e\u305f\u306f\u671f\u9650\u5207\u308c\u3067\u3059"],
+    ["Reset link has expired. Please request a new one.", "El enlace de restablecimiento ha caducado. Solicita uno nuevo.", "Le lien de r\u00e9initialisation a expir\u00e9. Veuillez en demander un nouveau.", "Der Link zum Zur\u00fccksetzen ist abgelaufen. Bitte fordern Sie einen neuen an.", "O link de redefini\u00e7\u00e3o expirou. Solicite um novo.", "\u91cd\u7f6e\u94fe\u63a5\u5df2\u8fc7\u671f\uff0c\u8bf7\u91cd\u65b0\u7533\u8bf7\u3002", "\u30ea\u30bb\u30c3\u30c8\u7528\u30ea\u30f3\u30af\u306e\u6709\u52b9\u671f\u9650\u304c\u5207\u308c\u307e\u3057\u305f\u3002\u65b0\u3057\u3044\u30ea\u30f3\u30af\u3092\u30ea\u30af\u30a8\u30b9\u30c8\u3057\u3066\u304f\u3060\u3055\u3044\u3002"],
+    ["Password is too long", "La contrase\u00f1a es demasiado larga", "Le mot de passe est trop long", "Das Passwort ist zu lang", "A senha \u00e9 muito longa", "\u5bc6\u7801\u592a\u957f", "\u30d1\u30b9\u30ef\u30fc\u30c9\u304c\u9577\u3059\u304e\u307e\u3059"],
+    ["Email required", "Se requiere el correo electr\u00f3nico", "L'adresse e-mail est requise", "E-Mail erforderlich", "E-mail obrigat\u00f3rio", "\u8bf7\u8f93\u5165\u90ae\u7bb1", "\u30e1\u30fc\u30eb\u30a2\u30c9\u30ec\u30b9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044"],
+    ["Password required", "Se requiere la contrase\u00f1a", "Mot de passe requis", "Passwort erforderlich", "Senha obrigat\u00f3ria", "\u8bf7\u8f93\u5165\u5bc6\u7801", "\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044"],
     ["Your team", "Su equipo", "Votre équipe", "Ihr Team", "Sua equipe", "您的团队", "あなたのチーム"],
     ["Invite code - share it with people who should join your company", "Código de invitación: compártalo con quienes deban unirse a su empresa", "Code d'invitation : partagez-le avec les personnes qui doivent rejoindre votre entreprise", "Einladungscode – teilen Sie ihn mit Personen, die Ihrem Unternehmen beitreten sollen", "Código de convite: compartilhe com as pessoas que devem entrar na sua empresa", "邀请码——分享给需要加入贵公司的人", "招待コード：会社に参加してほしい人と共有してください"],
     ["Copy", "Copiar", "Copier", "Kopieren", "Copiar", "复制", "コピー"],
