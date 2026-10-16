@@ -13,6 +13,16 @@ router = APIRouter(prefix="/ai", tags=["ai"])
 DAILY_LIMITS = {"starter": 10, "pro": 50, "team": 200, "plant": 500}
 MAX_PROMPT_CHARS = 20000
 
+# Reply languages the dashboard can ask for (everything else stays English)
+LANG_NAMES = {
+    "es": "Spanish",
+    "fr": "French",
+    "de": "German",
+    "pt": "Brazilian Portuguese",
+    "zh": "Simplified Chinese",
+    "ja": "Japanese",
+}
+
 
 def _refund(db, usage):
     try:
@@ -38,6 +48,9 @@ async def ai_chat(
     if not isinstance(prompt, str) or len(prompt) > MAX_PROMPT_CHARS:
         raise HTTPException(status_code=400, detail="Prompt is too long")
 
+    lang = request.get("lang")
+    lang_name = LANG_NAMES.get(lang) if isinstance(lang, str) else None
+
     company = db.query(models.Company).filter(models.Company.id == current_user.company_id).first()
     plan = ((company.plan if company is not None else None) or "starter").lower()
     limit = DAILY_LIMITS.get(plan, DAILY_LIMITS["starter"])
@@ -59,6 +72,18 @@ async def ai_chat(
     usage.count += 1
     db.commit()
 
+    body = {
+        "model": "claude-sonnet-4-6",
+        "max_tokens": 1000,
+        "messages": [{"role": "user", "content": prompt}]
+    }
+    if lang_name:
+        body["system"] = (
+            "You are ShiftStar AI. Always write your entire reply in " + lang_name +
+            ", even if the question or the data below is in English. "
+            "Keep technical abbreviations such as OEE, SAP and MRP unchanged."
+        )
+
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
@@ -68,11 +93,7 @@ async def ai_chat(
                     "anthropic-version": "2023-06-01",
                     "content-type": "application/json"
                 },
-                json={
-                    "model": "claude-sonnet-4-6",
-                    "max_tokens": 1000,
-                    "messages": [{"role": "user", "content": prompt}]
-                },
+                json=body,
                 timeout=30.0
             )
         data = response.json()

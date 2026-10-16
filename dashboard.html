@@ -1048,7 +1048,7 @@ async function runAI(type) {
     actions: `You are ShiftStar AI. Give the top 3 corrective actions for next shift, numbered by priority. Each must be specific and actionable. Under 150 words.\n\n${ctx}`
   };
   try {
-    const res = await api('POST', '/ai/chat', { prompt: p[type] + (await ssHistNote()) + ssLangNote() });
+    const res = await api('POST', '/ai/chat', { prompt: p[type] + (await ssHistNote()) + ssLangNote(), lang: (function () { try { return localStorage.getItem('ss_lang') || 'en'; } catch (e) { return 'en'; } })() });
     ssShowAI(el, res.response || 'No response.');
   } catch (e) {
     el.textContent = 'AI request failed: ' + e.message;
@@ -1062,7 +1062,7 @@ async function runCustom() {
   el.textContent = 'Analyzing...';
   const ctx = buildCtx();
   try {
-    const res = await api('POST', '/ai/chat', { prompt: `You are ShiftStar AI. Answer using the shift data. Be direct.\n\nQuestion: ${q}\n\n${ctx}` + (await ssHistNote()) + ssLangNote() });
+    const res = await api('POST', '/ai/chat', { prompt: `You are ShiftStar AI. Answer using the shift data. Be direct.\n\nQuestion: ${q}\n\n${ctx}` + (await ssHistNote()) + ssLangNote(), lang: (function () { try { return localStorage.getItem('ss_lang') || 'en'; } catch (e) { return 'en'; } })() });
     ssShowAI(el, res.response || 'No response.');
   } catch (e) {
     el.textContent = 'Request failed: ' + e.message;
