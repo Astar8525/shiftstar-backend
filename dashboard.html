@@ -1809,7 +1809,7 @@ function rxConvert(src, lang) {
   else if ((m = /^Need units produced and planned time columns\. Columns found: ([\s\S]*)$/.exec(s))) out = fill(F.cols, { c: m[1] });
   else if ((m = /^Could not save to database after (\d+) shifts: ([\s\S]*)$/.exec(s))) out = fill(F.fail, { n: m[1], m: m[2] });
   else if ((m = /^Could not save: ([\s\S]*)$/.exec(s))) out = fill(F.fail2, { m: m[1] });
-  if (out === null && (m = /^Connected \u2014 data syncing with (.+) company database$/.exec(s))) out = fill(F.conn, { c: m[1] });
+  if (out === null && (m = /^Connected \u2014 data syncing with (.+) company database$/.exec(s)) && m[1] !== 'your') out = fill(F.conn, { c: m[1] });
 if (out === null && (m = /^(.+) \u00B7 (admin|manager|supervisor|operator)$/i.exec(s))) { var _r = m[2].charAt(0).toUpperCase() + m[2].slice(1).toLowerCase(); if (D[lang][_r]) out = m[1] + " \u00B7 " + D[lang][_r]; }
 if (out === null && (m = /^(Sun|Mon|Tue|Wed|Thu|Fri|Sat) (\d{1,2})\/(\d{1,2})\/(\d{4}) (\d{1,2}):(\d{2}):(\d{2}) (AM|PM)$/.exec(s))) { try { var _h = parseInt(m[5], 10) % 12 + (m[8] === "PM" ? 12 : 0); var _d = new Date(+m[4], +m[2] - 1, +m[3], _h, +m[6], +m[7]); var _loc = { es: "es", fr: "fr", de: "de", pt: "pt-BR", zh: "zh-CN", ja: "ja" }[lang]; out = new Intl.DateTimeFormat(_loc, { weekday: "short", year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "2-digit", second: "2-digit" }).format(_d); } catch (e) {} }
 if (out === null) return null;
