@@ -757,7 +757,7 @@ async function doForgotPassword() {
 async function doResetPassword() {
   const password = document.getElementById('rp-password').value;
   const confirm = document.getElementById('rp-confirm').value;
-  const token = new URLSearchParams(window.location.search).get('reset_token');
+  const token = window.__ssResetToken || new URLSearchParams(window.location.search).get('reset_token');
   document.getElementById('reset-err').textContent = '';
   if (!password) { document.getElementById('reset-err').textContent = 'Password required'; return; }
   if (password !== confirm) { document.getElementById('reset-err').textContent = 'Passwords do not match'; return; }
@@ -1513,13 +1513,18 @@ function init() {
   const mn = document.getElementById('man-date');
   if (mn) mn.value = today;
 
+  // Opened from a reset link: sign out any old session so the reset form shows
+  if (new URLSearchParams(window.location.search).get('reset_token')) {
+    token = null; currentUser = null;
+    try { localStorage.removeItem('ss_token'); localStorage.removeItem('ss_user'); } catch (e) {}
+  }
   // Auto-login if token exists
   if (token && currentUser) {
     launchApp();
   }
 
   // Check for password reset token in URL
-  const resetToken = new URLSearchParams(window.location.search).get('reset_token');
+  const resetToken = new URLSearchParams(window.location.search).get('reset_token'); if (resetToken) { window.__ssResetToken = resetToken; try { window.history.replaceState({}, '', window.location.pathname); } catch (e) {} }
   if (resetToken) {
     document.getElementById('login-form').style.display = 'none';
     document.getElementById('register-form').style.display = 'none';
