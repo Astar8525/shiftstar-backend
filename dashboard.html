@@ -2176,12 +2176,56 @@ window.ssHistNote = async function () {
     var _sa = window.ssShowAI;
     window.ssShowAI = function (el, md) {
       md = String(md).replace(/(^|[^*])\*(?!\s)([^*\n]+?)(?<!\s)\*(?!\*)/g, '$1$2');
-      _sa(el, md);
+      _sa(el, md); try { window.ssTables(el); } catch (e) {}
     };
   }
 })();
 </script>
 <!-- i18n-period:end -->
+<script>
+window.ssTables = function (el) {
+  var kids = Array.prototype.slice.call(el.children);
+  var run = [];
+  function isRow(n) {
+    if (!n || n.tagName !== 'DIV') return false;
+    var t = (n.textContent || '').trim();
+    return t.length > 2 && t.charAt(0) === '|' && t.charAt(t.length - 1) === '|';
+  }
+  function flush() {
+    if (run.length >= 2) {
+      var rows = run.map(function (n) {
+        var h = n.innerHTML.trim().replace(/^\|/, '').replace(/\|$/, '');
+        return h.split('|').map(function (c) { return c.trim(); });
+      });
+      var hasHead = rows.length > 1 && rows[1].every(function (c) {
+        return /^:?-+:?$/.test(c.replace(/<[^>]*>/g, ''));
+      });
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'overflow-x:auto;margin:8px 0';
+      var tb = document.createElement('table');
+      tb.style.cssText = 'border-collapse:collapse;font-size:13px;min-width:50%';
+      rows.forEach(function (cells, i) {
+        if (hasHead && i === 1) return;
+        var isHead = hasHead && i === 0;
+        var tr = document.createElement('tr');
+        cells.forEach(function (c) {
+          var td = document.createElement(isHead ? 'th' : 'td');
+          td.innerHTML = c;
+          td.style.cssText = 'border:1px solid var(--border);padding:6px 10px;text-align:left;' + (isHead ? 'background:var(--bg2);font-weight:700' : '');
+          tr.appendChild(td);
+        });
+        tb.appendChild(tr);
+      });
+      wrap.appendChild(tb);
+      run[0].parentNode.insertBefore(wrap, run[0]);
+      run.forEach(function (n) { if (n.parentNode) n.parentNode.removeChild(n); });
+    }
+    run = [];
+  }
+  kids.forEach(function (n) { if (isRow(n)) { run.push(n); } else { flush(); } });
+  flush();
+};
+</script>
 <!-- i18n-report2:start -->
 <script>
 (function () {
