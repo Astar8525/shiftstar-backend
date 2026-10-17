@@ -43,6 +43,10 @@ def _active_count(db, company_id):
 
 @router.post("/register", response_model=schemas.Token)
 def register(user_data: schemas.UserRegister, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    if len(user_data.password or "") < 8:
+        raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
+    if len(user_data.password) > 128:
+        raise HTTPException(status_code=400, detail="Password is too long")
     existing = db.query(models.User).filter(
         models.User.email == user_data.email
     ).first()

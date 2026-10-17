@@ -711,6 +711,7 @@ async function doRegister() {
   const company_name = document.getElementById('r-company').value.trim();
   const invite_code = (document.getElementById('r-invite').value || '').trim();
   document.getElementById('register-err').textContent = '';
+  if (password && password.length < 8) { document.getElementById('register-err').textContent = 'Password must be at least 8 characters'; return; }
   if (!name || !email || !password || !company_name) {
     document.getElementById('register-err').textContent = 'All fields are required';
     return;
@@ -1579,7 +1580,8 @@ init();
     ["Password is too long", "La contrase\u00f1a es demasiado larga", "Le mot de passe est trop long", "Das Passwort ist zu lang", "A senha \u00e9 muito longa", "\u5bc6\u7801\u592a\u957f", "\u30d1\u30b9\u30ef\u30fc\u30c9\u304c\u9577\u3059\u304e\u307e\u3059"],
     ["Email required", "Se requiere el correo electr\u00f3nico", "L'adresse e-mail est requise", "E-Mail erforderlich", "E-mail obrigat\u00f3rio", "\u8bf7\u8f93\u5165\u90ae\u7bb1", "\u30e1\u30fc\u30eb\u30a2\u30c9\u30ec\u30b9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044"],
     ["Password required", "Se requiere la contrase\u00f1a", "Mot de passe requis", "Passwort erforderlich", "Senha obrigat\u00f3ria", "\u8bf7\u8f93\u5165\u5bc6\u7801", "\u30d1\u30b9\u30ef\u30fc\u30c9\u3092\u5165\u529b\u3057\u3066\u304f\u3060\u3055\u3044"],
-    ["Your team", "Su equipo", "Votre équipe", "Ihr Team", "Sua equipe", "您的团队", "あなたのチーム"],
+    ["your@email.com", "tu@correo.com", "votre@email.com", "ihre@email.com", "seu@email.com", "name@example.com", "name@example.com"],
+["Your team", "Su equipo", "Votre équipe", "Ihr Team", "Sua equipe", "您的团队", "あなたのチーム"],
     ["Invite code - share it with people who should join your company", "Código de invitación: compártalo con quienes deban unirse a su empresa", "Code d'invitation : partagez-le avec les personnes qui doivent rejoindre votre entreprise", "Einladungscode – teilen Sie ihn mit Personen, die Ihrem Unternehmen beitreten sollen", "Código de convite: compartilhe com as pessoas que devem entrar na sua empresa", "邀请码——分享给需要加入贵公司的人", "招待コード：会社に参加してほしい人と共有してください"],
     ["Copy", "Copiar", "Copier", "Kopieren", "Copiar", "复制", "コピー"],
     ["Reset", "Restablecer", "Réinitialiser", "Zurücksetzen", "Redefinir", "重置", "リセット"],
